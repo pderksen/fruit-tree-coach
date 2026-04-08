@@ -1,6 +1,3 @@
 {
-  "enabledPlugins": {
-    "supabase@claude-plugins-official": true,
-    "expo@expo-plugins": true
-  }
+  "enabledPlugins": {}
 }
