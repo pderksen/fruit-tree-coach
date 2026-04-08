@@ -25,15 +25,12 @@ do this week, what to wait on, and how to avoid common mistakes.
 - ESLint (latest stable) + Prettier for linting and formatting
 
 ## Project structure
-- `app/` Expo Router screens, file-based routes
-- `components/` reusable UI, co-locate tests as `Foo.test.tsx`
-- `lib/api/` all Supabase calls live here, never inline in components
-- `lib/schemas/` Zod schemas, shared between forms and API validation
-- `lib/care/` fruit tree care logic: week-by-week task generation,
-  climate zone rules, species-specific guidance
+- `app/` screens and navigation
+- `components/` reusable UI components
+- `lib/` shared logic, helpers, and app services
+- `lib/care/` fruit tree care logic and recommendation generation
 - `hooks/` custom React hooks
-- `stores/` Zustand stores
-- `docs/decisions/` one ADR per significant choice
+- `stores/` local app state
 
 ## Domain concepts
 - **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
