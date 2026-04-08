@@ -36,12 +36,11 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `docs/decisions/` one ADR per significant choice
 
 ## Domain concepts
-- **Tree**: a user's individual fruit tree (species, variety, planted date, location)
-- **Task**: a recommended action for a tree at a point in time (prune, fertilize, thin, spray, harvest)
-- **Care plan**: the generated schedule of tasks for a tree across the year
-- **Climate zone**: USDA hardiness zone, derived from user location, drives task timing
-- **Chill hours**: cumulative cold exposure, relevant for many fruit species
-- Tasks should always answer: what, why, when, and what happens if skipped
+- **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
+- **Task**: a recommended action for a tree, such as pruning, fertilizing, thinning, or waiting
+- **Care plan**: the set of recommended tasks and timing for a tree
+- **Location**: the user’s area, used to adjust timing and recommendations
+- Tasks should clearly answer: what to do, when to do it, and why it matters
 
 ## Conventions
 - Functional components only
