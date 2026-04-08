@@ -9,7 +9,10 @@ export type FruitTreeType =
   | "Peach"
   | "Cherry"
   | "Plum"
-  | "Fig";
+  | "Fig"
+  | "Lemon"
+  | "Orange"
+  | "Lime";
 
 export const FRUIT_TREE_TYPES: FruitTreeType[] = [
   "Apple",
@@ -18,7 +21,24 @@ export const FRUIT_TREE_TYPES: FruitTreeType[] = [
   "Cherry",
   "Plum",
   "Fig",
+  "Lemon",
+  "Orange",
+  "Lime",
 ];
+
+export type TreeCategory = "Pome Fruit" | "Stone Fruit" | "Citrus" | "Ficus";
+
+export const TREE_CATEGORY_MAP: Record<FruitTreeType, TreeCategory> = {
+  Apple: "Pome Fruit",
+  Pear: "Pome Fruit",
+  Peach: "Stone Fruit",
+  Cherry: "Stone Fruit",
+  Plum: "Stone Fruit",
+  Fig: "Ficus",
+  Lemon: "Citrus",
+  Orange: "Citrus",
+  Lime: "Citrus",
+};
 
 export interface Tree {
   id: string;
@@ -27,6 +47,10 @@ export interface Tree {
   variety?: string;
   plantedYear?: number;
   zipCode: string;
+  /** Short status label shown on collection cards */
+  statusLabel?: string;
+  /** Brief description of current care state */
+  statusDescription?: string;
 }
 
 export interface Task {
