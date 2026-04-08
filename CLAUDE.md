@@ -27,6 +27,8 @@ do this week, what to wait on, and how to avoid common mistakes.
 
 ## Project structure
 - `app/` screens and navigation
+- `app/(tabs)/` tab-based screens (home, trees, advice, calendar, settings)
+- `app/tree/` tree detail and creation routes
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
 - `lib/types.ts` shared domain types (Tree, Task, FruitTreeType) and constants (`TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`, `AGE_BRACKET_LABELS`)
@@ -85,8 +87,16 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `npm run typecheck` TypeScript check
 - `npm test` run Vitest
 - `npm run lint` ESLint
+- `npm run format` Prettier format all files
 - `eas build --profile preview` cloud build for testing
 - `eas build --profile production` production build
+
+## Environment setup
+1. `npm install`
+2. Create `.env` with:
+   - `EXPO_PUBLIC_SUPABASE_URL`
+   - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+3. `npm run dev` to start
 
 ## Gotchas
 - ESLint 9+ flat config: use `eslint.config.js`, not `.eslintrc.*`
