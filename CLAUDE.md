@@ -28,6 +28,8 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `app/` screens and navigation
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
+- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType)
+- `lib/mocks/` hardcoded mock data for UI development
 - `lib/care/` fruit tree care logic and recommendation generation
 - `hooks/` custom React hooks
 - `stores/` local app state
@@ -98,3 +100,5 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `eslint-import-resolver-typescript` must be a direct devDependency for lint to resolve `@/` imports
 - Expo SDK dictates compatible versions of `react`, `react-native`, and `typescript` — always check with `npx expo install --fix`
 - When changing Expo SDK versions, also align `react-test-renderer` to the matching React version
+- ESLint `react/no-unescaped-entities`: use `&apos;` for apostrophes in JSX text (e.g. "You're" → `You&apos;re`)
+- Zod v4 works with `@hookform/resolvers/zod` v5 — no special import path needed
