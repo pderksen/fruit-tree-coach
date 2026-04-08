@@ -9,6 +9,12 @@ module.exports = [
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
     },
+    settings: {
+      "import/resolver": {
+        typescript: true,
+        node: true,
+      },
+    },
   },
   {
     ignores: [
