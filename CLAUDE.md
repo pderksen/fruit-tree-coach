@@ -12,7 +12,7 @@ understand, action-oriented, and focused on telling the user what to
 do this week, what to wait on, and how to avoid common mistakes.
 
 ## Stack
-- Expo SDK (latest stable) with React Native
+- Expo SDK 54 with React Native (pinned — see Gotchas)
 - TypeScript, strict mode, no `any` without a comment
 - Expo Router (latest stable) for file-based navigation
 - Supabase for auth, database, storage
@@ -90,8 +90,11 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `@testing-library/jest-native` is deprecated; use built-in matchers from `@testing-library/react-native`
 - Supabase env vars: `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 - NativeWind v4+ requires metro plugin (`withNativeWind`), babel preset, and `global.css` import in root layout
+- NativeWind v4 requires `react-native-css-interop` as a direct dependency — without it, Metro fails to resolve `jsx-runtime`
+- Expo Go (App Store) supports SDK 54 as of April 2026 — do not upgrade past SDK 54 until Expo Go catches up
 - Expo SDK upgrades: run `npx expo install --fix` after updating to align ecosystem packages
 - NativeWind v4 requires Tailwind CSS v3 — do not upgrade to Tailwind v4
 - `eslint-config-expo` does not yet support ESLint 10 — stay on ESLint 9.x
 - `eslint-import-resolver-typescript` must be a direct devDependency for lint to resolve `@/` imports
 - Expo SDK dictates compatible versions of `react`, `react-native`, and `typescript` — always check with `npx expo install --fix`
+- When changing Expo SDK versions, also align `react-test-renderer` to the matching React version
