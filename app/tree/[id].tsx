@@ -1,27 +1,23 @@
 import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
+import { ExpertTipsCard } from "@/components/ExpertTipsCard";
+import { LaterTaskList } from "@/components/LaterTaskList";
+import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
-import { TaskCard } from "@/components/TaskCard";
-import { MOCK_TASKS } from "@/lib/mocks/tasks";
+import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
+import { TreeDetailHeader } from "@/components/TreeDetailHeader";
+import { VideoCard } from "@/components/VideoCard";
+import {
+  CURRENT_SEASON_STAGE,
+  MOCK_DETAILED_TASKS,
+  MOCK_EXPERT_TIPS,
+} from "@/lib/mocks/care-details";
 import { MOCK_TREES } from "@/lib/mocks/trees";
-import type { Task } from "@/lib/types";
 
 export default function TreeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-
   const tree = MOCK_TREES.find((t) => t.id === id);
-
-  const [tasks, setTasks] = useState<Task[]>(
-    MOCK_TASKS.filter((t) => t.treeId === id),
-  );
-
-  function handleMarkDone(taskId: string) {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, done: true } : t)),
-    );
-  }
 
   if (!tree) {
     return (
@@ -33,45 +29,66 @@ export default function TreeDetailScreen() {
     );
   }
 
-  const pending = tasks.filter((t) => !t.done);
+  const allTasks = MOCK_DETAILED_TASKS[tree.id] ?? [];
+  const priorityTask = allTasks.find((t) => t.priority);
+  const laterTasks = allTasks.filter((t) => !t.priority);
+  const tips = MOCK_EXPERT_TIPS[tree.type] ?? [];
+  const currentStage = CURRENT_SEASON_STAGE[tree.type] ?? "dormant";
 
   return (
-    <Screen>
-      <View className="mb-6">
-        <Text className="text-2xl font-bold text-gray-900">{tree.name}</Text>
-        <Text className="mt-1 text-base text-gray-500">{tree.type}</Text>
-        {tree.variety && (
-          <Text className="text-sm text-gray-500">
-            Variety: {tree.variety}
-          </Text>
-        )}
-        {tree.plantedYear && (
-          <Text className="text-sm text-gray-500">
-            Planted: {tree.plantedYear}
-          </Text>
-        )}
-        <Text className="text-sm text-gray-500">Zip: {tree.zipCode}</Text>
-      </View>
+    <Screen bg="bg-cream-50">
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <TreeDetailHeader tree={tree} />
 
-      <Text className="mb-3 text-lg font-semibold text-gray-900">
-        Upcoming care
-      </Text>
+        {/* What to do now */}
+        {priorityTask ? (
+          <View className="mt-6">
+            <View className="mb-3 flex-row items-center gap-2">
+              <Text className="text-lg font-bold text-gray-900">
+                What to do now
+              </Text>
+            </View>
+            <PriorityTaskCard
+              task={priorityTask}
+              onViewGuide={() => {
+                // TODO: navigate to step-by-step guide
+              }}
+            />
+          </View>
+        ) : null}
 
-      {pending.length === 0 ? (
-        <Text className="text-sm text-gray-500">
-          No upcoming tasks for this tree.
-        </Text>
-      ) : (
-        <FlatList
-          data={pending}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TaskCard task={item} onMarkDone={handleMarkDone} />
-          )}
-          contentContainerStyle={{ paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+        {/* What to do later */}
+        {laterTasks.length > 0 ? (
+          <View className="mt-6">
+            <Text className="mb-3 text-lg font-bold text-gray-900">
+              What to do later
+            </Text>
+            <LaterTaskList tasks={laterTasks} />
+          </View>
+        ) : null}
+
+        {/* Expert Tips */}
+        {tips.length > 0 ? (
+          <View className="mt-6">
+            <ExpertTipsCard tips={tips} />
+          </View>
+        ) : null}
+
+        {/* Seasonal Life Cycle */}
+        <View className="mt-6">
+          <SeasonalLifeCycle currentStage={currentStage} />
+        </View>
+
+        {/* Video */}
+        <View className="mt-6">
+          <VideoCard
+            title={`Watch: How to care for your ${tree.type.toLowerCase()} tree`}
+          />
+        </View>
+      </ScrollView>
     </Screen>
   );
 }

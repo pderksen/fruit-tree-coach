@@ -1,19 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 
 import type { Tree, TreeCategory } from "@/lib/types";
-import { TREE_CATEGORY_MAP } from "@/lib/types";
-
-const TREE_EMOJI: Record<string, string> = {
-  Apple: "\uD83C\uDF4E",
-  Peach: "\uD83C\uDF51",
-  Lemon: "\uD83C\uDF4B",
-  Fig: "\uD83C\uDF43",
-  Pear: "\uD83C\uDF50",
-  Cherry: "\uD83C\uDF52",
-  Plum: "\uD83C\uDF51",
-  Orange: "\uD83C\uDF4A",
-  Lime: "\uD83C\uDF4B",
-};
+import { TREE_CATEGORY_MAP, TREE_EMOJI } from "@/lib/types";
 
 const CATEGORY_COLOR: Record<TreeCategory, string> = {
   "Pome Fruit": "bg-red-50 text-red-700",

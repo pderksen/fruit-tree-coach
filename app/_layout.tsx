@@ -28,7 +28,7 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="tree/new"
-          options={{ title: "Add a tree" }}
+          options={{ title: "New Tree", headerBackTitle: "Back" }}
         />
       </Stack>
     </QueryClientProvider>

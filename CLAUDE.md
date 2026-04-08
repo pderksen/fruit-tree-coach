@@ -22,13 +22,14 @@ do this week, what to wait on, and how to avoid common mistakes.
 - React Hook Form + Zod for forms and runtime validation
 - Vitest + React Native Testing Library (latest stable) for tests
 - Expo Location for location-aware guidance
+- `@react-native-community/datetimepicker` for native date pickers
 - ESLint (latest stable) + Prettier for linting and formatting
 
 ## Project structure
 - `app/` screens and navigation
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
-- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType)
+- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType) and constants (`TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`, `AGE_BRACKET_LABELS`)
 - `lib/mocks/` hardcoded mock data for UI development
 - `lib/care/` fruit tree care logic and recommendation generation
 - `hooks/` custom React hooks
@@ -43,6 +44,8 @@ do this week, what to wait on, and how to avoid common mistakes.
 
 ## Conventions
 - Functional components only
+- Custom Tailwind colors: `brand-*` (green scale, primary is brand-700 #15803d), `cream-*` (warm backgrounds)
+- Custom font: `font-serif` maps to Georgia (used for quotes/tips)
 - Absolute imports from `@/`
 - Server state goes through TanStack Query, never useState + useEffect
 - Every Supabase response is parsed through a Zod schema
@@ -102,3 +105,4 @@ do this week, what to wait on, and how to avoid common mistakes.
 - When changing Expo SDK versions, also align `react-test-renderer` to the matching React version
 - ESLint `react/no-unescaped-entities`: use `&apos;` for apostrophes in JSX text (e.g. "You're" → `You&apos;re`)
 - Zod v4 works with `@hookform/resolvers/zod` v5 — no special import path needed
+- `@react-native-community/datetimepicker`: on Android the picker auto-dismisses on selection; on iOS it stays visible — handle with `Platform.OS` check
