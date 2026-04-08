@@ -90,3 +90,8 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `@testing-library/jest-native` is deprecated; use built-in matchers from `@testing-library/react-native`
 - Supabase env vars: `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 - NativeWind v4+ requires metro plugin (`withNativeWind`), babel preset, and `global.css` import in root layout
+- Expo SDK upgrades: run `npx expo install --fix` after updating to align ecosystem packages
+- NativeWind v4 requires Tailwind CSS v3 — do not upgrade to Tailwind v4
+- `eslint-config-expo` does not yet support ESLint 10 — stay on ESLint 9.x
+- `eslint-import-resolver-typescript` must be a direct devDependency for lint to resolve `@/` imports
+- Expo SDK dictates compatible versions of `react`, `react-native`, and `typescript` — always check with `npx expo install --fix`
