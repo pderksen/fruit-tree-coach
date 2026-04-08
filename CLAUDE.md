@@ -14,14 +14,15 @@ do this week, what to wait on, and how to avoid common mistakes.
 ## Stack
 - Expo SDK (latest stable) with React Native
 - TypeScript, strict mode, no `any` without a comment
-- Expo Router for file-based navigation
+- Expo Router (latest stable) for file-based navigation
 - Supabase for auth, database, storage
 - TanStack Query for all server state
 - Zustand for local UI state only
-- NativeWind for styling (Tailwind classes)
+- NativeWind (latest stable) for styling (Tailwind classes)
 - React Hook Form + Zod for forms and runtime validation
-- Vitest + React Native Testing Library for tests
+- Vitest + React Native Testing Library (latest stable) for tests
 - Expo Location for location-aware guidance
+- ESLint (latest stable) + Prettier for linting and formatting
 
 ## Project structure
 - `app/` Expo Router screens, file-based routes
@@ -85,3 +86,11 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `npm run lint` ESLint
 - `eas build --profile preview` cloud build for testing
 - `eas build --profile production` production build
+
+## Gotchas
+- ESLint 9+ flat config: use `eslint.config.js`, not `.eslintrc.*`
+- ESLint: `eslint-config-expo/flat` is the correct import for flat config
+- ESLint: `@typescript-eslint/*` rules must be scoped to `files: ["**/*.ts", "**/*.tsx"]`
+- `@testing-library/jest-native` is deprecated; use built-in matchers from `@testing-library/react-native`
+- Supabase env vars: `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- NativeWind v4+ requires metro plugin (`withNativeWind`), babel preset, and `global.css` import in root layout
