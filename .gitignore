@@ -38,6 +38,9 @@ android/
 .idea/
 *.code-workspace
 
+# Claude Code
+skills-lock.json
+
 # OS
 .DS_Store
 Thumbs.db
