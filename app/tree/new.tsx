@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useForm, useController } from "react-hook-form";
 import {
@@ -9,9 +8,6 @@ import {
   Platform,
   Pressable,
 } from "react-native";
-import DateTimePicker, {
-  type DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,9 +21,8 @@ import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
 import type { AgeBracket, FruitTreeType } from "@/lib/types";
 
 const addTreeSchema = z.object({
-  name: z.string().min(1, "Give your tree a nickname"),
+  name: z.string().optional(),
   type: z.string().min(1, "Pick a tree type"),
-  plantedDate: z.string().optional(),
   ageBracket: z.string().optional(),
 });
 
@@ -35,27 +30,14 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 
 export default function AddTreeScreen() {
   const router = useRouter();
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
-    defaultValues: { name: "", type: "", plantedDate: "", ageBracket: "" },
+    defaultValues: { name: "", type: "", ageBracket: "" },
   });
 
   const typeField = useController({ name: "type", control });
   const selectedType = typeField.field.value as FruitTreeType | "";
-
-  const plantedDateValue = watch("plantedDate");
-  const displayDate = plantedDateValue
-    ? new Date(plantedDateValue).toLocaleDateString()
-    : "";
-
-  function handleDateChange(_event: DateTimePickerEvent, date?: Date) {
-    setShowDatePicker(Platform.OS === "ios");
-    if (date) {
-      setValue("plantedDate", date.toISOString());
-    }
-  }
 
   function onSubmit(data: AddTreeForm) {
     // TODO: persist to Supabase via TanStack Query mutation
@@ -106,44 +88,9 @@ export default function AddTreeScreen() {
             <FormField<AddTreeForm>
               control={control}
               name="name"
-              label="Tree Nickname"
-              placeholder="e.g. My Backyard Meyer"
+              label="Varietal (optional)"
+              placeholder="e.g. Honeycrisp, Meyer, Elberta"
             />
-
-            {/* Date picker */}
-            <View className="mb-4">
-              <Text className="mb-1 text-sm font-medium text-gray-700">
-                Planting Date
-              </Text>
-              <Pressable
-                className="flex-row items-center justify-between rounded-xl border border-gray-300 px-4 py-3.5"
-                onPress={() => setShowDatePicker(true)}
-              >
-                <Text
-                  className={
-                    displayDate
-                      ? "text-base text-gray-900"
-                      : "text-base text-gray-400"
-                  }
-                >
-                  {displayDate || "mm/dd/yyyy"}
-                </Text>
-                <Text className="text-gray-400">&#x1F4C5;</Text>
-              </Pressable>
-              {showDatePicker ? (
-                <DateTimePicker
-                  value={
-                    plantedDateValue
-                      ? new Date(plantedDateValue)
-                      : new Date()
-                  }
-                  mode="date"
-                  display="default"
-                  maximumDate={new Date()}
-                  onChange={handleDateChange}
-                />
-              ) : null}
-            </View>
 
             <AgePicker
               label="Est. Age (Years)"

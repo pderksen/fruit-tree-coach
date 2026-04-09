@@ -27,11 +27,12 @@ do this week, what to wait on, and how to avoid common mistakes.
 
 ## Project structure
 - `app/` screens and navigation
-- `app/(tabs)/` tab-based screens (home, trees, advice, calendar, settings)
-- `app/tree/` tree detail and creation routes
+- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, tips; `trees`/`advice`/`settings` hidden)
+- `app/tree/` tree detail, creation, and step-by-step guide routes
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
-- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType) and constants (`TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`, `AGE_BRACKET_LABELS`)
+- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
+- `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
 - `lib/mocks/` hardcoded mock data for UI development
 - `lib/care/` fruit tree care logic and recommendation generation
 - `hooks/` custom React hooks
@@ -56,6 +57,7 @@ do this week, what to wait on, and how to avoid common mistakes.
 - User-facing copy is plain English, no jargon without a tooltip
 - Care recommendations must cite their source in a code comment
   (extension service, university guide, etc.) so claims stay defensible
+- Use `Partial<Record<K, V>>` for mock data maps that don't need entries for every union member
 
 ## Before declaring a task done
 1. `npm run typecheck` passes
@@ -116,3 +118,5 @@ do this week, what to wait on, and how to avoid common mistakes.
 - ESLint `react/no-unescaped-entities`: use `&apos;` for apostrophes in JSX text (e.g. "You're" → `You&apos;re`)
 - Zod v4 works with `@hookform/resolvers/zod` v5 — no special import path needed
 - `@react-native-community/datetimepicker`: on Android the picker auto-dismisses on selection; on iOS it stays visible — handle with `Platform.OS` check
+- Expo Router typed routes: after adding/removing route files, run `npx expo customize tsconfig.json` to regenerate `.expo/types/router.d.ts`
+- Ionicons: `tree-outline` does not exist — use `leaf-outline` for tree-related icons

@@ -25,7 +25,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Orchard",
+          title: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -53,16 +53,31 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="advice"
+        name="orchard"
         options={{
-          title: "Advice",
+          title: "Orchard",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bulb-outline" size={size} color={color} />
+            <Ionicons name="leaf-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="tips"
+        options={{
+          title: "Tips",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="trees"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="advice"
         options={{
           href: null,
         }}

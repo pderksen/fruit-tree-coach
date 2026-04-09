@@ -12,33 +12,36 @@ export type FruitTreeType =
   | "Fig"
   | "Lemon"
   | "Orange"
-  | "Lime";
-
-export const FRUIT_TREE_TYPES: FruitTreeType[] = [
-  "Apple",
-  "Pear",
-  "Peach",
-  "Cherry",
-  "Plum",
-  "Fig",
-  "Lemon",
-  "Orange",
-  "Lime",
-];
-
-export type TreeCategory = "Pome Fruit" | "Stone Fruit" | "Citrus" | "Ficus";
-
-export const TREE_CATEGORY_MAP: Record<FruitTreeType, TreeCategory> = {
-  Apple: "Pome Fruit",
-  Pear: "Pome Fruit",
-  Peach: "Stone Fruit",
-  Cherry: "Stone Fruit",
-  Plum: "Stone Fruit",
-  Fig: "Ficus",
-  Lemon: "Citrus",
-  Orange: "Citrus",
-  Lime: "Citrus",
-};
+  | "Lime"
+  | "Crabapple"
+  | "Quince"
+  | "Medlar"
+  | "Apricot"
+  | "Nectarine"
+  | "Grapefruit"
+  | "Tangerine"
+  | "Kumquat"
+  | "Avocado"
+  | "Pomegranate"
+  | "Persimmon"
+  | "Olive"
+  | "Jujube"
+  | "Loquat"
+  | "Mango"
+  | "Guava"
+  | "Papaya"
+  | "Banana"
+  | "Passion Fruit"
+  | "Dragon Fruit"
+  | "Kiwi"
+  | "Jackfruit"
+  | "Starfruit"
+  | "Coconut"
+  | "Date Palm"
+  | "Mulberry"
+  | "Pawpaw"
+  | "Gooseberry"
+  | "Elderberry";
 
 export interface Tree {
   id: string;
@@ -88,26 +91,5 @@ export const AGE_BRACKET_LABELS: Record<AgeBracket, string> = {
   mature: "Mature (8+ yr)",
 };
 
-export const SCIENTIFIC_NAME_MAP: Record<FruitTreeType, string> = {
-  Apple: "Malus domestica",
-  Pear: "Pyrus communis",
-  Peach: "Prunus persica",
-  Cherry: "Prunus avium",
-  Plum: "Prunus domestica",
-  Fig: "Ficus carica",
-  Lemon: "Citrus limon",
-  Orange: "Citrus sinensis",
-  Lime: "Citrus aurantiifolia",
-};
-
-export const TREE_EMOJI: Record<FruitTreeType, string> = {
-  Apple: "\uD83C\uDF4E",
-  Peach: "\uD83C\uDF51",
-  Lemon: "\uD83C\uDF4B",
-  Fig: "\uD83C\uDF43",
-  Pear: "\uD83C\uDF50",
-  Cherry: "\uD83C\uDF52",
-  Plum: "\uD83C\uDF51",
-  Orange: "\uD83C\uDF4A",
-  Lime: "\uD83C\uDF4B",
-};
+// Data tables (TREE_EMOJI, SCIENTIFIC_NAME_MAP, TREE_CATEGORY_MAP, etc.)
+// are in @/lib/fruit-tree-data to keep this file under 200 lines.

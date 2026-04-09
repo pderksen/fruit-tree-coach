@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { View, Text, ScrollView } from "react-native";
 
 import { ExpertTipsCard } from "@/components/ExpertTipsCard";
@@ -17,6 +17,7 @@ import { MOCK_TREES } from "@/lib/mocks/trees";
 
 export default function TreeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const tree = MOCK_TREES.find((t) => t.id === id);
 
   if (!tree) {
@@ -54,7 +55,10 @@ export default function TreeDetailScreen() {
             <PriorityTaskCard
               task={priorityTask}
               onViewGuide={() => {
-                // TODO: navigate to step-by-step guide
+                router.push({
+                  pathname: "/tree/guide/[taskId]",
+                  params: { taskId: priorityTask.id },
+                });
               }}
             />
           </View>

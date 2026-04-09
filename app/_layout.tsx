@@ -30,6 +30,10 @@ export default function RootLayout() {
           name="tree/new"
           options={{ title: "New Tree", headerBackTitle: "Back" }}
         />
+        <Stack.Screen
+          name="tree/guide/[taskId]"
+          options={{ title: "Step-by-Step Guide", headerBackTitle: "Back" }}
+        />
       </Stack>
     </QueryClientProvider>
   );

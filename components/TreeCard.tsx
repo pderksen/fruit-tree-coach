@@ -1,13 +1,18 @@
 import { View, Text, Pressable } from "react-native";
 
-import type { Tree, TreeCategory } from "@/lib/types";
-import { TREE_CATEGORY_MAP, TREE_EMOJI } from "@/lib/types";
+import type { Tree } from "@/lib/types";
+import type { TreeCategory } from "@/lib/fruit-tree-data";
+import { TREE_CATEGORY_MAP, TREE_EMOJI } from "@/lib/fruit-tree-data";
 
 const CATEGORY_COLOR: Record<TreeCategory, string> = {
   "Pome Fruit": "bg-red-50 text-red-700",
   "Stone Fruit": "bg-orange-50 text-orange-700",
   Citrus: "bg-yellow-50 text-yellow-700",
   Ficus: "bg-green-50 text-green-700",
+  Tropical: "bg-emerald-50 text-emerald-700",
+  Subtropical: "bg-amber-50 text-amber-700",
+  Berry: "bg-purple-50 text-purple-700",
+  Other: "bg-gray-50 text-gray-700",
 };
 
 interface TreeCardProps {

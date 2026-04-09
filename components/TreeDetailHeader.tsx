@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 
 import { Badge } from "@/components/Badge";
 import type { Tree } from "@/lib/types";
-import { SCIENTIFIC_NAME_MAP, TREE_EMOJI } from "@/lib/types";
+import { SCIENTIFIC_NAME_MAP, TREE_EMOJI } from "@/lib/fruit-tree-data";
 
 interface TreeDetailHeaderProps {
   tree: Tree;

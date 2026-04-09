@@ -105,7 +105,7 @@ export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
  * Expert tips keyed by fruit tree type.
  * Sources cited inline.
  */
-export const MOCK_EXPERT_TIPS: Record<FruitTreeType, ExpertTip[]> = {
+export const MOCK_EXPERT_TIPS: Partial<Record<FruitTreeType, ExpertTip[]>> = {
   // Source: General horticultural wisdom, widely cited in extension literature
   Apple: [
     { quote: "Pruning helps air circulation. If a bird can't fly through your tree, it's too dense.", attribution: "Master Gardener Pete" },
@@ -148,7 +148,7 @@ export const MOCK_EXPERT_TIPS: Record<FruitTreeType, ExpertTip[]> = {
 /**
  * Coach tips for the new tree form, keyed by fruit type.
  */
-export const MOCK_COACH_TIPS: Record<FruitTreeType, string> = {
+export const MOCK_COACH_TIPS: Partial<Record<FruitTreeType, string>> = {
   Apple: "Apple trees need a pollination partner nearby. Consider planting a second variety within 50 feet for the best fruit set.",
   Peach: "Peach trees are self-fertile — one tree is enough! Plant in a sunny, sheltered spot with good air drainage to prevent frost damage.",
   Lemon: "Lemon trees love at least 6–8 hours of direct sunlight. Ensure your chosen spot is the sunniest patch in your orchard.",
@@ -163,7 +163,7 @@ export const MOCK_COACH_TIPS: Record<FruitTreeType, string> = {
 /**
  * Current season stage per fruit type (mocked for early spring, April 2026).
  */
-export const CURRENT_SEASON_STAGE: Record<FruitTreeType, SeasonStage> = {
+export const CURRENT_SEASON_STAGE: Partial<Record<FruitTreeType, SeasonStage>> = {
   Apple: "bloom",
   Pear: "bloom",
   Peach: "bloom",

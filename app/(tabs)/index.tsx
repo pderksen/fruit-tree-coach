@@ -10,7 +10,7 @@ import { TreeCard } from "@/components/TreeCard";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
 import { MOCK_TREES } from "@/lib/mocks/trees";
 
-export default function OrchardScreen() {
+export default function HomeScreen() {
   const router = useRouter();
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
@@ -81,10 +81,10 @@ export default function OrchardScreen() {
         <View className="px-5 pt-6">
           <View className="flex-row items-center justify-between">
             <Text className="text-xl font-bold text-gray-900">
-              Your Collection
+              Your Fruit Trees
             </Text>
             <Pressable
-              onPress={() => router.push("/(tabs)/trees")}
+              onPress={() => router.push("/(tabs)/orchard")}
               className="flex-row items-center gap-1"
             >
               <Text className="text-sm font-medium text-brand-600">
