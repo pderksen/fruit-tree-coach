@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
 import { View, Text, SectionList } from "react-native";
 
@@ -50,21 +51,33 @@ export default function CalendarScreen() {
         </Text>
       </View>
 
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CalendarTaskRow task={item} />}
-        renderSectionHeader={({ section }) => (
-          <View className="mb-2 mt-4">
-            <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              {section.title}
-            </Text>
-          </View>
-        )}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
-        stickySectionHeadersEnabled={false}
-      />
+      {sections.length > 0 ? (
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <CalendarTaskRow task={item} />}
+          renderSectionHeader={({ section }) => (
+            <View className="mb-2 mt-4">
+              <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                {section.title}
+              </Text>
+            </View>
+          )}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
+        />
+      ) : (
+        <View className="flex-1 items-center justify-center">
+          <Ionicons name="checkmark-circle" size={48} color="#16a34a" />
+          <Text className="mt-3 text-base font-semibold text-gray-900">
+            All caught up!
+          </Text>
+          <Text className="mt-1 text-sm text-gray-500">
+            No upcoming tasks on the calendar. Check back next week.
+          </Text>
+        </View>
+      )}
     </Screen>
   );
 }

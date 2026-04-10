@@ -1,4 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useMemo } from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import { ExpertTipsCard } from "@/components/ExpertTipsCard";
@@ -7,7 +9,10 @@ import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
 import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
 import { TreeDetailHeader } from "@/components/TreeDetailHeader";
-import { VideoCard } from "@/components/VideoCard";
+import {
+  compareByUpcomingSeason,
+  getRotatedSeasonOrder,
+} from "@/lib/care/season-order";
 import {
   CURRENT_SEASON_STAGE,
   MOCK_DETAILED_TASKS,
@@ -20,6 +25,19 @@ export default function TreeDetailScreen() {
   const router = useRouter();
   const tree = MOCK_TREES.find((t) => t.id === id);
 
+  const allTasks = useMemo(
+    () => MOCK_DETAILED_TASKS[id ?? ""] ?? [],
+    [id],
+  );
+  const priorityTask = allTasks.find((t) => t.priority);
+  const laterTasks = useMemo(() => {
+    const raw = allTasks.filter((t) => !t.priority);
+    const rotated = getRotatedSeasonOrder();
+    return [...raw].sort((a, b) =>
+      compareByUpcomingSeason(a.season, b.season, rotated),
+    );
+  }, [allTasks]);
+
   if (!tree) {
     return (
       <Screen>
@@ -30,9 +48,6 @@ export default function TreeDetailScreen() {
     );
   }
 
-  const allTasks = MOCK_DETAILED_TASKS[tree.id] ?? [];
-  const priorityTask = allTasks.find((t) => t.priority);
-  const laterTasks = allTasks.filter((t) => !t.priority);
   const tips = MOCK_EXPERT_TIPS[tree.type] ?? [];
   const currentStage = CURRENT_SEASON_STAGE[tree.type] ?? "dormant";
 
@@ -45,13 +60,13 @@ export default function TreeDetailScreen() {
         <TreeDetailHeader tree={tree} />
 
         {/* What to do now */}
-        {priorityTask ? (
-          <View className="mt-6">
-            <View className="mb-3 flex-row items-center gap-2">
-              <Text className="text-lg font-bold text-gray-900">
-                What to do now
-              </Text>
-            </View>
+        <View className="mt-6">
+          <View className="mb-3 flex-row items-center gap-2">
+            <Text className="text-lg font-bold text-gray-900">
+              What to do now
+            </Text>
+          </View>
+          {priorityTask ? (
             <PriorityTaskCard
               task={priorityTask}
               onViewGuide={() => {
@@ -61,18 +76,34 @@ export default function TreeDetailScreen() {
                 });
               }}
             />
-          </View>
-        ) : null}
+          ) : (
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Ionicons name="checkmark-circle" size={40} color="#16a34a" />
+              <Text className="mt-2 text-base font-semibold text-gray-900">
+                No tasks required right now
+              </Text>
+              <Text className="mt-1 text-center text-sm text-gray-500">
+                Your {tree.name} is looking good. Check back next week.
+              </Text>
+            </View>
+          )}
+        </View>
 
         {/* What to do later */}
-        {laterTasks.length > 0 ? (
-          <View className="mt-6">
-            <Text className="mb-3 text-lg font-bold text-gray-900">
-              What to do later
-            </Text>
+        <View className="mt-6">
+          <Text className="mb-3 text-lg font-bold text-gray-900">
+            What to do later
+          </Text>
+          {laterTasks.length > 0 ? (
             <LaterTaskList tasks={laterTasks} />
-          </View>
-        ) : null}
+          ) : (
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Text className="text-sm text-gray-500">
+                No upcoming tasks on the horizon.
+              </Text>
+            </View>
+          )}
+        </View>
 
         {/* Expert Tips */}
         {tips.length > 0 ? (
@@ -86,12 +117,6 @@ export default function TreeDetailScreen() {
           <SeasonalLifeCycle currentStage={currentStage} />
         </View>
 
-        {/* Video */}
-        <View className="mt-6">
-          <VideoCard
-            title={`Watch: How to care for your ${tree.type.toLowerCase()} tree`}
-          />
-        </View>
       </ScrollView>
     </Screen>
   );

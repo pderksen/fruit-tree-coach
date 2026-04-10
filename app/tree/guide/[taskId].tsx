@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, ScrollView } from "react-native";
+import { useState } from "react";
+import { LayoutAnimation, Pressable, View, Text, ScrollView } from "react-native";
 
 import { Screen } from "@/components/Screen";
 import { MOCK_GUIDES, type Guide } from "@/lib/mocks/guides";
@@ -33,7 +34,7 @@ export default function GuideScreen() {
           {guide.title}
         </Text>
         <Text className="mt-1 text-xs font-medium text-brand-600">
-          {guide.source}
+          Resource: {guide.source}
         </Text>
         <Text className="mt-3 text-sm leading-5 text-gray-600">
           {guide.introduction}
@@ -85,6 +86,11 @@ export default function GuideScreen() {
             ))}
           </View>
         )}
+
+        {/* Research Notes (collapsible) */}
+        {guide.researchNotes ? (
+          <ResearchNotes notes={guide.researchNotes} />
+        ) : null}
       </ScrollView>
     </Screen>
   );
@@ -110,6 +116,52 @@ function StepCard({ step }: { step: Guide["steps"][number] }) {
         <View className="ml-10 mt-2 rounded-xl bg-amber-50 px-3 py-2">
           <Text className="text-xs leading-4 text-amber-800">
             {"\uD83D\uDCA1"} {step.tip}
+          </Text>
+        </View>
+      )}
+      {step.diagramImage && (
+        <View className="ml-10 mt-3 h-48 items-center justify-center rounded-xl bg-gray-100 border border-dashed border-gray-300">
+          <Ionicons name="image-outline" size={32} color="#9ca3af" />
+          <Text className="mt-2 text-xs text-gray-400">
+            TODO: Pruning diagram
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+function ResearchNotes({ notes }: { notes: string }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggle = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpanded((prev) => !prev);
+  };
+
+  return (
+    <View className="mt-6">
+      <Pressable
+        onPress={toggle}
+        className="flex-row items-center justify-between rounded-2xl bg-white p-4"
+      >
+        <View className="flex-row items-center gap-2">
+          <Ionicons name="document-text-outline" size={16} color="#6b7280" />
+          <Text className="text-sm font-bold text-gray-900">
+            Research Notes
+          </Text>
+        </View>
+        <Ionicons
+          name={expanded ? "chevron-up" : "chevron-down"}
+          size={16}
+          color="#9ca3af"
+        />
+      </Pressable>
+      {expanded && (
+        <View className="mt-1 rounded-2xl bg-white px-4 pb-4">
+          <Text className="text-xs leading-5 text-gray-500">{notes}</Text>
+          <Text className="mt-2 text-xs italic text-gray-400">
+            Compiled from multiple extension sources
           </Text>
         </View>
       )}

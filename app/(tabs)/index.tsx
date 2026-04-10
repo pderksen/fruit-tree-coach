@@ -7,6 +7,7 @@ import { GardenerInsight } from "@/components/GardenerInsight";
 import { OrchardHealthCard } from "@/components/OrchardHealthCard";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
+import { WateringInfoCard } from "@/components/WateringInfoCard";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
 import { useTreeStore } from "@/stores/tree-store";
 
@@ -108,6 +109,11 @@ export default function HomeScreen() {
               }
             />
           ))}
+        </View>
+
+        {/* Watering Info */}
+        <View className="px-5 pt-5">
+          <WateringInfoCard />
         </View>
 
         {/* Seasonal Forecast */}
