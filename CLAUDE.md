@@ -27,7 +27,10 @@ do this week, what to wait on, and how to avoid common mistakes.
 
 ## Project structure
 - `app/` screens and navigation
-- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, tips; `trees`/`advice`/`settings` hidden)
+- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` hidden)
+- `app/profile.tsx` user profile/account screen (stack, not tab)
+- `stores/tree-store.ts` Zustand store for user's trees (local state, will migrate to Supabase)
+- `docs/` planning docs — `all-phases.md` (roadmap), `phase-*.md` (per-phase plans)
 - `app/tree/` tree detail, creation, and step-by-step guide routes
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
@@ -58,6 +61,8 @@ do this week, what to wait on, and how to avoid common mistakes.
 - Care recommendations must cite their source in a code comment
   (extension service, university guide, etc.) so claims stay defensible
 - Use `Partial<Record<K, V>>` for mock data maps that don't need entries for every union member
+- Screens read trees from `useTreeStore`, not from `MOCK_TREES` directly
+- New stack screens: register in `app/_layout.tsx` (title only — `headerBackTitle: ""` is set globally)
 
 ## Before declaring a task done
 1. `npm run typecheck` passes
@@ -119,4 +124,7 @@ do this week, what to wait on, and how to avoid common mistakes.
 - Zod v4 works with `@hookform/resolvers/zod` v5 — no special import path needed
 - `@react-native-community/datetimepicker`: on Android the picker auto-dismisses on selection; on iOS it stays visible — handle with `Platform.OS` check
 - Expo Router typed routes: after adding/removing route files, run `npx expo customize tsconfig.json` to regenerate `.expo/types/router.d.ts`
+- Expo Router: the `(tabs)` Stack.Screen in `app/_layout.tsx` must have `title: "Home"` (or similar) — without it, iOS uses the raw route name "(tabs)" as back-button text
 - Ionicons: `tree-outline` does not exist — use `leaf-outline` for tree-related icons
+- Back button text: `headerBackTitle: ""` is set globally in `app/_layout.tsx` `screenOptions` — don't set it per-screen
+- Expo Router auto-registers files in `app/` — deleting a tab file is required when replacing it (hiding via layout isn't enough)

@@ -18,7 +18,8 @@ import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
-import type { AgeBracket, FruitTreeType } from "@/lib/types";
+import { useTreeStore } from "@/stores/tree-store";
+import type { AgeBracket, FruitTreeType, Tree } from "@/lib/types";
 
 const addTreeSchema = z.object({
   name: z.string().optional(),
@@ -30,6 +31,7 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 
 export default function AddTreeScreen() {
   const router = useRouter();
+  const addTree = useTreeStore((s) => s.addTree);
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -40,8 +42,19 @@ export default function AddTreeScreen() {
   const selectedType = typeField.field.value as FruitTreeType | "";
 
   function onSubmit(data: AddTreeForm) {
-    // TODO: persist to Supabase via TanStack Query mutation
-    console.log("New tree:", data);
+    const treeType = data.type as FruitTreeType;
+    const variety = data.name || undefined;
+    const newTree: Tree = {
+      id: Date.now().toString(),
+      name: variety ? `${variety} ${treeType}` : treeType,
+      type: treeType,
+      variety,
+      zipCode: "97201", // TODO: use user's actual zip code
+      ageBracket: (data.ageBracket as AgeBracket) || undefined,
+      statusLabel: "Just planted",
+      statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
+    };
+    addTree(newTree);
     router.back();
   }
 

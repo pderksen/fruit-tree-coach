@@ -8,10 +8,11 @@ import { OrchardHealthCard } from "@/components/OrchardHealthCard";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
-import { MOCK_TREES } from "@/lib/mocks/trees";
+import { useTreeStore } from "@/stores/tree-store";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const trees = useTreeStore((s) => s.trees);
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
@@ -34,7 +35,7 @@ export default function HomeScreen() {
             <Pressable>
               <Ionicons name="search-outline" size={22} color="#374151" />
             </Pressable>
-            <Pressable>
+            <Pressable onPress={() => router.push("/profile")}>
               <View className="h-8 w-8 items-center justify-center rounded-full bg-brand-100">
                 <Ionicons name="person" size={16} color="#15803d" />
               </View>
@@ -62,9 +63,7 @@ export default function HomeScreen() {
         <View className="px-5 pt-5">
           <OrchardHealthCard
             readinessPercent={85}
-            onStartChecklist={() => {
-              // TODO: navigate to checklist
-            }}
+            onStartChecklist={() => router.push("/(tabs)/calendar")}
           />
         </View>
 
@@ -96,7 +95,7 @@ export default function HomeScreen() {
         </View>
 
         <View className="px-5 pt-3">
-          {MOCK_TREES.map((tree) => (
+          {trees.map((tree) => (
             <TreeCard
               key={tree.id}
               tree={tree}

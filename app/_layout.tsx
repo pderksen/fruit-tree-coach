@@ -20,19 +20,25 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack
+        screenOptions={{ headerBackTitle: "" }}
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
         <Stack.Screen
           name="tree/[id]"
           options={{ title: "Tree details" }}
         />
         <Stack.Screen
           name="tree/new"
-          options={{ title: "New Tree", headerBackTitle: "Back" }}
+          options={{ title: "New Tree" }}
         />
         <Stack.Screen
           name="tree/guide/[taskId]"
-          options={{ title: "Step-by-Step Guide", headerBackTitle: "Back" }}
+          options={{ title: "Step-by-Step Guide" }}
+        />
+        <Stack.Screen
+          name="profile"
+          options={{ title: "Profile" }}
         />
       </Stack>
     </QueryClientProvider>
