@@ -5,19 +5,27 @@ import { Ionicons } from "@expo/vector-icons";
 import { FruitIcon } from "@/components/FruitIcon";
 import {
   FRUIT_TREE_TYPES,
-  POPULAR_TYPE_COUNT,
   TREE_CATEGORY_MAP,
+  getPopularTypesForZone,
 } from "@/lib/fruit-tree-data";
 import type { FruitTreeType } from "@/lib/types";
 
 interface FruitTypeGridProps {
   selected: FruitTreeType | null;
   onSelect: (type: FruitTreeType) => void;
+  zone?: string;
 }
 
-export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
+export function FruitTypeGrid({ selected, onSelect, zone = "6" }: FruitTypeGridProps) {
   const [search, setSearch] = useState("");
-  const [showAll, setShowAll] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const popularTypes = useMemo(() => getPopularTypesForZone(zone), [zone]);
+
+  const allNonPopular = useMemo(() => {
+    const popularSet = new Set<FruitTreeType>(popularTypes);
+    return FRUIT_TREE_TYPES.filter((t) => !popularSet.has(t));
+  }, [popularTypes]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -26,44 +34,75 @@ export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
   }, [search]);
 
   const isSearching = search.trim().length > 0;
-  const popular = filtered.slice(0, POPULAR_TYPE_COUNT);
-  const rest = filtered.slice(POPULAR_TYPE_COUNT);
 
   const grouped = useMemo(() => {
+    const types = isSearching
+      ? filtered.filter((t) => !popularTypes.includes(t) || isSearching)
+      : allNonPopular;
     const map = new Map<string, FruitTreeType[]>();
-    for (const t of rest) {
+    for (const t of types) {
       const cat = TREE_CATEGORY_MAP[t];
       if (!map.has(cat)) map.set(cat, []);
       map.get(cat)!.push(t);
     }
     return Array.from(map.entries());
-  }, [rest]);
+  }, [isSearching, filtered, allNonPopular, popularTypes]);
 
   return (
     <View>
-      {/* Search */}
-      <View className="mb-4 flex-row items-center rounded-xl border border-gray-300 bg-white px-3 py-2.5">
-        <Ionicons name="search-outline" size={18} color="#9ca3af" />
-        <TextInput
-          className="ml-2 flex-1 text-base text-gray-900"
-          placeholder="Search tree types..."
-          placeholderTextColor="#9ca3af"
-          value={search}
-          onChangeText={setSearch}
-          autoCorrect={false}
-        />
-      </View>
-
-      {/* Popular / search results */}
-      {!isSearching && popular.length > 0 && (
-        <Text className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">
-          Popular
-        </Text>
+      {/* Popular types (zone-aware) */}
+      {!isSearching && (
+        <>
+          <Text className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+            Popular in your zone
+          </Text>
+          <TypeRow types={popularTypes} selected={selected} onSelect={onSelect} />
+        </>
       )}
-      <TypeRow types={popular} selected={selected} onSelect={onSelect} />
 
-      {/* Expanded categories (shown when "Show all" or searching) */}
-      {(showAll || isSearching) &&
+      {/* "Look for more" prompt or search results */}
+      {!isSearching && !expanded && (
+        <Pressable
+          className="mt-4 flex-row items-center justify-center py-2"
+          onPress={() => setExpanded(true)}
+        >
+          <Ionicons name="search-outline" size={16} color="#16a34a" />
+          <Text className="ml-1.5 text-sm font-semibold text-brand-600">
+            Look for more trees
+          </Text>
+        </Pressable>
+      )}
+
+      {/* Search input — shown when expanded or searching */}
+      {(expanded || isSearching) && (
+        <View className="mt-4 mb-2 flex-row items-center rounded-xl border border-gray-300 bg-white px-3 py-2.5">
+          <Ionicons name="search-outline" size={18} color="#9ca3af" />
+          <TextInput
+            className="ml-2 flex-1 text-base text-gray-900"
+            placeholder="Search all tree types..."
+            placeholderTextColor="#9ca3af"
+            value={search}
+            onChangeText={setSearch}
+            autoCorrect={false}
+            autoFocus={expanded && !isSearching}
+          />
+        </View>
+      )}
+
+      {/* Searching: show all matching results */}
+      {isSearching && (
+        <>
+          <TypeRow types={filtered} selected={selected} onSelect={onSelect} />
+          {filtered.length === 0 && (
+            <Text className="py-6 text-center text-sm text-gray-400">
+              No matching tree types
+            </Text>
+          )}
+        </>
+      )}
+
+      {/* Expanded (not searching): show categorized groups */}
+      {expanded && !isSearching &&
         grouped.map(([category, types]) => (
           <View key={category} className="mt-4">
             <Text className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">
@@ -73,22 +112,17 @@ export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
           </View>
         ))}
 
-      {/* Toggle */}
-      {!isSearching && rest.length > 0 && (
+      {/* Collapse */}
+      {expanded && !isSearching && (
         <Pressable
           className="mt-4 items-center py-2"
-          onPress={() => setShowAll((v) => !v)}
+          onPress={() => {
+            setExpanded(false);
+            setSearch("");
+          }}
         >
-          <Text className="text-sm font-semibold text-brand-600">
-            {showAll ? "Show fewer" : `Show all ${FRUIT_TREE_TYPES.length} types`}
-          </Text>
+          <Text className="text-sm font-semibold text-brand-600">Show fewer</Text>
         </Pressable>
-      )}
-
-      {filtered.length === 0 && (
-        <Text className="py-6 text-center text-sm text-gray-400">
-          No matching tree types
-        </Text>
       )}
     </View>
   );

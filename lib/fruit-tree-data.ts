@@ -73,7 +73,40 @@ export const FRUIT_TREE_TYPES: FruitTreeType[] = [
 ];
 
 /** Number of "popular" types shown before the categorised groups. */
-export const POPULAR_TYPE_COUNT = 9;
+export const POPULAR_TYPE_COUNT = 8;
+
+// ---------------------------------------------------------------------------
+// Zone-aware popular types
+// Recommendations based on USDA hardiness zones and common backyard plantings.
+// Source: University extension service planting guides (various states).
+// ---------------------------------------------------------------------------
+
+type ZoneRange = "cold" | "moderate" | "warm";
+
+const POPULAR_BY_ZONE: Record<ZoneRange, FruitTreeType[]> = {
+  // Zones 3–5: short seasons, cold-hardy varieties
+  cold: ["Apple", "Pear", "Cherry", "Plum", "Peach", "Apricot", "Elderberry", "Mulberry"],
+  // Zones 6–8: widest variety, classic backyard fruit trees
+  moderate: ["Apple", "Peach", "Pear", "Cherry", "Plum", "Fig", "Persimmon", "Pomegranate"],
+  // Zones 9–13: citrus and subtropical thrive
+  warm: ["Orange", "Lemon", "Lime", "Grapefruit", "Fig", "Pomegranate", "Avocado", "Mango"],
+};
+
+function zoneToRange(zone: string): ZoneRange {
+  // Zone string is like "8b", "5a", "10a" — parse the leading number
+  const num = parseInt(zone, 10);
+  if (isNaN(num) || num <= 5) return "cold";
+  if (num <= 8) return "moderate";
+  return "warm";
+}
+
+/**
+ * Returns the 8 most popular fruit tree types for a given USDA zone.
+ * Falls back to the "moderate" list if zone is missing or unparseable.
+ */
+export function getPopularTypesForZone(zone: string): FruitTreeType[] {
+  return POPULAR_BY_ZONE[zoneToRange(zone)];
+}
 
 // ---------------------------------------------------------------------------
 // Category map

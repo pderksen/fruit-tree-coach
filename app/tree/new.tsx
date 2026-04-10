@@ -18,6 +18,7 @@ import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
+import { useProfileStore } from "@/stores/profile-store";
 import { useTreeStore } from "@/stores/tree-store";
 import type { AgeBracket, FruitTreeType, Tree } from "@/lib/types";
 
@@ -32,6 +33,7 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 export default function AddTreeScreen() {
   const router = useRouter();
   const addTree = useTreeStore((s) => s.addTree);
+  const zone = useProfileStore((s) => s.gardeningZone);
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -89,6 +91,7 @@ export default function AddTreeScreen() {
           <FruitTypeGrid
             selected={selectedType || null}
             onSelect={(t) => typeField.field.onChange(t)}
+            zone={zone}
           />
           {typeField.fieldState.error ? (
             <Text className="mt-1 text-xs text-red-500">
