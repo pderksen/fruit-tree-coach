@@ -32,7 +32,7 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `stores/tree-store.ts` Zustand store for user's trees (local state, will migrate to Supabase)
 - `stores/settings-store.ts` notification and app settings
 - `stores/profile-store.ts` user profile state
-- `docs/` planning docs — `all-phases.md` (roadmap), `phase-*.md` (per-phase plans)
+- `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-10/`) with per-phase plans
 - `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
 - `components/` reusable UI components
@@ -44,9 +44,11 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `lib/query-client.ts` TanStack Query client config
 - `lib/notifications.ts` push notification setup
 - `lib/fruit-icons.ts` fruit icon mapping
+- `lib/date-utils.ts` date formatting and calculation helpers
+- `lib/zone-lookup.ts` USDA zone / climate lookup
 - `lib/mocks/` hardcoded mock data for UI development
 - `lib/care/` care logic — `watering.ts`, `season-order.ts`, `research-sources.ts`
-- `hooks/` custom React hooks
+- `hooks/` custom React hooks (currently empty placeholder)
 - `stores/` local app state
 
 ## Key files
@@ -109,6 +111,7 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `npm run ios` run on iOS simulator (Mac only)
 - `npm run typecheck` TypeScript check
 - `npm test` run Vitest
+- `npm run test:watch` run Vitest in watch mode
 - `npm run lint` ESLint
 - `npm run format` Prettier format all files
 - `eas build --profile preview` cloud build for testing
