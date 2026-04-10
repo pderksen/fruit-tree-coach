@@ -10,12 +10,16 @@ interface FormFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
   placeholder?: string;
   keyboardType?: KeyboardTypeOptions;
+  secureTextEntry?: boolean;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
 }
 
 export function FormField<T extends FieldValues>({
   label,
   placeholder,
   keyboardType,
+  secureTextEntry,
+  autoCapitalize,
   ...controllerProps
 }: FormFieldProps<T>) {
   const {
@@ -46,6 +50,8 @@ export function FormField<T extends FieldValues>({
         placeholder={placeholder}
         placeholderTextColor="#9ca3af"
         keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize={autoCapitalize}
       />
       {error?.message && (
         <Text className="mt-1 text-sm text-red-500">{error.message}</Text>

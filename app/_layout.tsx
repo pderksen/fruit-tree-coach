@@ -8,7 +8,7 @@ import { queryClient } from "@/lib/query-client";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "splash",
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +23,9 @@ export default function RootLayout() {
       <Stack
         screenOptions={{ headerBackTitle: "" }}
       >
+        <Stack.Screen name="splash" options={{ headerShown: false }} />
+        <Stack.Screen name="trial" options={{ headerShown: false }} />
+        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
         <Stack.Screen
           name="tree/[id]"
