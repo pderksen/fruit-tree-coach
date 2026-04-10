@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Image, Text, View } from "react-native";
@@ -22,12 +21,9 @@ export default function SplashPage() {
         className="mb-6 h-40 w-40"
         resizeMode="contain"
       />
-      <View className="flex-row items-center gap-2">
-        <Ionicons name="leaf" size={28} color="#15803d" />
-        <Text className="text-2xl font-bold text-brand-700">
-          Fruit Tree Coach
-        </Text>
-      </View>
+      <Text className="text-2xl font-bold text-brand-700">
+        Fruit Tree Coach
+      </Text>
     </View>
   );
 }
