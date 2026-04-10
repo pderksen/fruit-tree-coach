@@ -1,10 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { LayoutAnimation, Pressable, View, Text, ScrollView } from "react-native";
+import { LayoutAnimation, Linking, Pressable, View, Text, ScrollView } from "react-native";
 
 import { Screen } from "@/components/Screen";
-import { MOCK_GUIDES, type Guide } from "@/lib/mocks/guides";
+import { MOCK_GUIDES, type Guide, type ProductRecommendation } from "@/lib/mocks/guides";
 
 export default function GuideScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
@@ -72,18 +72,9 @@ export default function GuideScreen() {
               Recommended Products
             </Text>
             {guide.productRecommendations.map((product, i) => (
-              <View key={i} className="mb-3 rounded-2xl bg-white p-4">
-                <View className="flex-row items-center gap-2">
-                  <CategoryIcon category={product.category} />
-                  <Text className="flex-1 text-sm font-bold text-gray-900">
-                    {product.name}
-                  </Text>
-                </View>
-                <Text className="mt-1 text-xs leading-4 text-gray-500">
-                  {product.description}
-                </Text>
-              </View>
+              <ProductCard key={i} product={product} />
             ))}
+            <AffiliateDisclaimer products={guide.productRecommendations} />
           </View>
         )}
 
@@ -165,6 +156,60 @@ function ResearchNotes({ notes }: { notes: string }) {
           </Text>
         </View>
       )}
+    </View>
+  );
+}
+
+function ProductCard({ product }: { product: ProductRecommendation }) {
+  const handlePress = () => {
+    if (product.affiliateUrl) {
+      Linking.openURL(product.affiliateUrl);
+    }
+  };
+
+  const content = (
+    <>
+      <View className="flex-row items-center gap-2">
+        <CategoryIcon category={product.category} />
+        <Text className="flex-1 text-sm font-bold text-gray-900">
+          {product.name}
+        </Text>
+      </View>
+      <Text className="mt-1 text-xs leading-4 text-gray-500">
+        {product.description}
+      </Text>
+      {product.affiliateUrl && (
+        <View className="mt-2 flex-row items-center gap-1">
+          <Ionicons name="open-outline" size={12} color="#16a34a" />
+          <Text className="text-xs font-medium text-brand-600">
+            View on Amazon
+          </Text>
+        </View>
+      )}
+    </>
+  );
+
+  if (product.affiliateUrl) {
+    return (
+      <Pressable onPress={handlePress} className="mb-3 rounded-2xl bg-white p-4">
+        {content}
+      </Pressable>
+    );
+  }
+
+  return <View className="mb-3 rounded-2xl bg-white p-4">{content}</View>;
+}
+
+function AffiliateDisclaimer({ products }: { products: ProductRecommendation[] }) {
+  const hasAffiliateLinks = products.some((p) => p.affiliateUrl);
+  if (!hasAffiliateLinks) return null;
+
+  return (
+    <View className="mt-3 border-t border-gray-100 pt-3">
+      <Text className="text-xs italic text-gray-400">
+        By shopping through these links, we receive a small commission — at no
+        cost to you. Thank you for supporting us!
+      </Text>
     </View>
   );
 }

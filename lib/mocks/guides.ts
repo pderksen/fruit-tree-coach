@@ -13,6 +13,7 @@ export interface ProductRecommendation {
   name: string;
   category: "fertilizer" | "pruning-tool" | "pest-control" | "other";
   description: string;
+  affiliateUrl?: string;
 }
 
 export interface Guide {
@@ -86,22 +87,39 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     ],
     productRecommendations: [
       {
+        name: "Espoma Tree-tone Organic Fertilizer (6-3-2)",
+        category: "fertilizer",
+        description:
+          "Slow-release granular fertilizer formulated for fruit trees. Bio-tone microbes improve nutrient uptake.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
+      },
+      {
+        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
+        category: "fertilizer",
+        description:
+          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
+      },
+      {
         name: "Felco F-2 Bypass Pruners",
         category: "pruning-tool",
         description:
           "Industry-standard hand pruners with replaceable blades. Comfortable for extended use.",
+        affiliateUrl: "https://www.amazon.com/dp/B00004R9JB?tag=fruittreecoach-20",
       },
       {
         name: "Corona SL 4364 Bypass Loppers",
         category: "pruning-tool",
         description:
           "Lightweight aluminium handles with non-stick blade coating. Good reach for interior branches.",
+        affiliateUrl: "https://www.amazon.com/dp/B00004R9LB?tag=fruittreecoach-20",
       },
       {
         name: "Silky Zubat Curved Pruning Saw",
         category: "pruning-tool",
         description:
           "Razor-sharp curved blade cuts on the pull stroke. Ideal for limbs over 1.5\" diameter.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AX1LC?tag=fruittreecoach-20",
       },
     ],
     source: "Oregon State University Extension — PNW 400",
@@ -148,10 +166,25 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     ],
     productRecommendations: [
       {
+        name: "Espoma Tree-tone Organic Fertilizer (6-3-2)",
+        category: "fertilizer",
+        description:
+          "Slow-release granular fertilizer formulated for fruit trees. Bio-tone microbes improve nutrient uptake.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
+      },
+      {
+        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
+        category: "fertilizer",
+        description:
+          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
+      },
+      {
         name: "ARS Fruit Thinning Scissors",
         category: "pruning-tool",
         description:
           "Narrow-bladed scissors designed for precise fruitlet removal without damaging nearby fruit.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX2JPC?tag=fruittreecoach-20",
       },
     ],
     source: "University of Minnesota Extension — Apple Thinning Guide",
@@ -209,18 +242,21 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         category: "fertilizer",
         description:
           "Organic granular citrus fertilizer with Bio-tone microbes. Gentle, slow-release formula safe for containers.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX3JMA?tag=fruittreecoach-20",
       },
       {
         name: "Dr. Earth Exotic Blend Citrus Fertilizer",
         category: "fertilizer",
         description:
           "OMRI-listed organic option with mycorrhizae. Good micronutrient profile for alkaline soils.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX4KNB?tag=fruittreecoach-20",
       },
       {
         name: "Jobe's Citrus Fertilizer Spikes",
         category: "fertilizer",
         description:
           "Pre-measured spikes for easy container feeding. Convenient if you prefer less mess.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX5LOC?tag=fruittreecoach-20",
       },
     ],
     source: "UC Davis — Citrus for the Home Garden",
@@ -271,16 +307,32 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     ],
     productRecommendations: [
       {
+        name: "Espoma Tree-tone Organic Fertilizer (6-3-2)",
+        category: "fertilizer",
+        description:
+          "Slow-release granular fertilizer ideal for figs. Bio-tone microbes support root health.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
+      },
+      {
+        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
+        category: "fertilizer",
+        description:
+          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees including figs.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
+      },
+      {
         name: "Kellogg Garden Organics Raised Bed Mix",
         category: "other",
         description:
           "Compost-rich amendment ideal for improving heavy clay drainage around fruit trees.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX6MPD?tag=fruittreecoach-20",
       },
       {
         name: "FibreDust Coco Coir Mulch",
         category: "other",
         description:
           "Sustainable coconut coir mulch that retains moisture while maintaining good aeration.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX7NQE?tag=fruittreecoach-20",
       },
     ],
     source: "Texas A&M AgriLife Extension — Figs",
@@ -337,16 +389,32 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     ],
     productRecommendations: [
       {
+        name: "Espoma Tree-tone Organic Fertilizer (6-3-2)",
+        category: "fertilizer",
+        description:
+          "Slow-release granular fertilizer formulated for fruit trees. Apply in early spring as buds swell.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
+      },
+      {
+        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
+        category: "fertilizer",
+        description:
+          "OMRI-listed organic fertilizer with mycorrhizae. Works well for peach trees.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
+      },
+      {
         name: "Bonide All Seasons Horticultural Oil",
         category: "pest-control",
         description:
           "Refined paraffinic oil safe for dormant and growing-season use. Smothers overwintering scale and mite eggs.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX8ORF?tag=fruittreecoach-20",
       },
       {
         name: "Bonide Copper Fungicide Spray",
         category: "pest-control",
         description:
           "Copper-based fungicide for peach leaf curl prevention. Apply at silver-tip stage before bud break.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX9PSG?tag=fruittreecoach-20",
       },
     ],
     source: "Clemson Cooperative Extension — Peach Care Calendar",
@@ -403,16 +471,32 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     ],
     productRecommendations: [
       {
+        name: "Espoma Tree-tone Organic Fertilizer (6-3-2)",
+        category: "fertilizer",
+        description:
+          "Slow-release granular fertilizer formulated for fruit trees. Feed after pruning to support new growth.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
+      },
+      {
+        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
+        category: "fertilizer",
+        description:
+          "OMRI-listed organic fertilizer with mycorrhizae. Works well for peach trees.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
+      },
+      {
         name: "Felco F-2 Bypass Pruners",
         category: "pruning-tool",
         description:
           "Industry-standard hand pruners with replaceable blades. Comfortable for extended use.",
+        affiliateUrl: "https://www.amazon.com/dp/B00004R9JB?tag=fruittreecoach-20",
       },
       {
         name: "Silky Zubat Curved Pruning Saw",
         category: "pruning-tool",
         description:
           "Razor-sharp curved blade cuts on the pull stroke. Ideal for limbs over 1.5\" diameter.",
+        affiliateUrl: "https://www.amazon.com/dp/B0000AX1LC?tag=fruittreecoach-20",
       },
     ],
     source: "University of Georgia Extension — Peach Pruning",
@@ -469,6 +553,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         category: "pest-control",
         description:
           "Refined paraffinic oil safe for dormant and growing-season use. Smothers scale, mites, and aphid eggs.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX8ORF?tag=fruittreecoach-20",
       },
     ],
     source: "Oregon State Extension — Dormant Season Pest Control",
@@ -521,6 +606,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         category: "pest-control",
         description:
           "Ready-to-use copper fungicide effective against peach leaf curl, bacterial spot, and other fungal diseases.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AX9PSG?tag=fruittreecoach-20",
       },
     ],
     source: "UC IPM — Peach Leaf Curl",
@@ -572,6 +658,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         category: "pest-control",
         description:
           "OMRI-listed neem oil concentrate. Works as fungicide, insecticide, and miticide. Safe for food crops.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AXATQH?tag=fruittreecoach-20",
       },
     ],
     source: "UC Davis — Citrus Pest Management",
@@ -622,6 +709,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         category: "other",
         description:
           "Reusable drawstring bags that protect individual fruits from beetles, birds, and wasps.",
+        affiliateUrl: "https://www.amazon.com/dp/B000AXBURI?tag=fruittreecoach-20",
       },
     ],
     source: "Texas A&M Extension — Fig Pests",
