@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
 import { useState } from "react";
 import { View, Text, Modal, Pressable, Switch } from "react-native";
 
@@ -25,6 +24,7 @@ export function NotificationOptInModal({
   const [showDeniedBanner, setShowDeniedBanner] = useState(false);
 
   const handleEnable = async () => {
+    const Notifications = await import("expo-notifications");
     const { status } = await Notifications.requestPermissionsAsync();
     setHasSeenNotificationPrompt(true);
 
