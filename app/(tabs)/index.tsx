@@ -9,11 +9,13 @@ import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
+import { useProfileStore } from "@/stores/profile-store";
 import { useTreeStore } from "@/stores/tree-store";
 
 export default function HomeScreen() {
   const router = useRouter();
   const trees = useTreeStore((s) => s.trees);
+  const gardeningZone = useProfileStore((s) => s.gardeningZone);
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
@@ -45,6 +47,18 @@ export default function HomeScreen() {
                 <Ionicons name="person" size={16} color="#15803d" />
               </View>
             </Pressable>
+          </View>
+        </View>
+
+        {/* Gardening Zone */}
+        <View className="mx-5 mt-3 flex-row items-center justify-between rounded-2xl bg-brand-50 px-4 py-3">
+          <Text className="text-sm font-medium text-brand-800">
+            My Gardening Zone
+          </Text>
+          <View className="rounded-full bg-brand-700 px-3 py-1">
+            <Text className="text-sm font-bold text-white">
+              Zone {gardeningZone}
+            </Text>
           </View>
         </View>
 
