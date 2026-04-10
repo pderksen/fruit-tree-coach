@@ -5,6 +5,7 @@ import { View, Text, Pressable } from "react-native";
 import { FruitIcon } from "@/components/FruitIcon";
 import { TimelineDot } from "@/components/TimelineLine";
 import type { CalendarTask } from "@/lib/mocks/calendar-tasks";
+import { formatWeekRange } from "@/lib/date-utils";
 
 interface TimelineTaskProps {
   task: CalendarTask;
@@ -15,11 +16,7 @@ interface TimelineTaskProps {
 export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
   const router = useRouter();
 
-  const dayLabel = new Date(task.dueDate).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
+  const weekLabel = formatWeekRange(new Date(task.dueDate));
 
   const handlePress = () => {
     if (task.guideTaskId) {
@@ -63,13 +60,7 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
           <Text className="mt-0.5 text-xs font-medium text-brand-600">
             {task.treeName}
           </Text>
-          <Text className="mt-1 text-xs text-gray-400">{dayLabel}</Text>
-          <Text
-            className="mt-1 text-xs leading-4 text-gray-500"
-            numberOfLines={2}
-          >
-            {task.description}
-          </Text>
+          <Text className="mt-1 text-xs text-gray-400">{weekLabel}</Text>
         </View>
 
         <Ionicons

@@ -6,36 +6,30 @@ import { CalendarHeader } from "@/components/CalendarHeader";
 import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
 import { TimelineTask } from "@/components/TimelineTask";
+import { formatWeekRange, getWeekKey, getWeekStart } from "@/lib/date-utils";
 import {
   MOCK_CALENDAR_TASKS,
   type CalendarTask,
 } from "@/lib/mocks/calendar-tasks";
 import { useSettingsStore } from "@/stores/settings-store";
 
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-/** Group tasks by date label and sort chronologically. */
-function groupByDate(tasks: CalendarTask[]) {
+/** Group tasks by week (Monday–Sunday) and sort chronologically. */
+function groupByWeek(tasks: CalendarTask[]) {
   const sorted = [...tasks].sort(
     (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
   );
 
   const groups = new Map<string, CalendarTask[]>();
   for (const task of sorted) {
-    const key = task.dueDate;
+    const key = getWeekKey(new Date(task.dueDate));
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key)!.push(task);
   }
 
-  return Array.from(groups.entries()).map(([dateStr, items]) => ({
-    dateStr,
-    date: new Date(dateStr),
+  return Array.from(groups.entries()).map(([weekKey, items]) => ({
+    weekKey,
+    weekStart: getWeekStart(new Date(weekKey)),
+    label: formatWeekRange(new Date(weekKey)),
     items,
   }));
 }
@@ -56,7 +50,7 @@ export default function CalendarScreen() {
     });
   }, [selectedDate]);
 
-  const groups = useMemo(() => groupByDate(filteredTasks), [filteredTasks]);
+  const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);
 
   const isOverdue = useCallback(
     (task: CalendarTask) => {
@@ -66,6 +60,8 @@ export default function CalendarScreen() {
     },
     [today],
   );
+
+  const currentWeekKey = getWeekKey(today);
 
   const handleDismissNotif = useCallback(() => {
     setShowNotifModal(false);
@@ -93,23 +89,18 @@ export default function CalendarScreen() {
           contentContainerStyle={{ paddingBottom: 120 }}
         >
           {groups.map((group, gi) => {
-            const dateLabel = group.date.toLocaleDateString("en-US", {
-              weekday: "long",
-              month: "short",
-              day: "numeric",
-            });
-            const isToday = isSameDay(group.date, today);
+            const isThisWeek = group.weekKey === currentWeekKey;
 
             return (
-              <View key={group.dateStr} className="mb-2">
+              <View key={group.weekKey} className="mb-2">
                 <View className="mb-2 ml-8 flex-row items-center gap-2">
                   <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                    {dateLabel}
+                    {group.label}
                   </Text>
-                  {isToday && (
+                  {isThisWeek && (
                     <View className="rounded-full bg-brand-700 px-2 py-0.5">
                       <Text className="text-xs font-semibold text-white">
-                        Today
+                        This week
                       </Text>
                     </View>
                   )}
