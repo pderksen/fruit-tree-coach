@@ -4,18 +4,20 @@ import { View, Text, FlatList } from "react-native";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { TreeRow } from "@/components/TreeRow";
+import { useProfileStore } from "@/stores/profile-store";
 import { useTreeStore } from "@/stores/tree-store";
 
 export default function OrchardScreen() {
   const router = useRouter();
   const trees = useTreeStore((s) => s.trees);
+  const { gardeningZone, zipCode } = useProfileStore();
 
   return (
     <Screen>
       <View className="mb-4 mt-2">
         <Text className="text-2xl font-bold text-gray-900">My Orchard</Text>
         <Text className="mt-1 text-sm text-gray-500">
-          Zone 8b · Clovis, CA
+          Zone {gardeningZone} · {zipCode}
         </Text>
       </View>
 

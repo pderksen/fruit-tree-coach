@@ -3,6 +3,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { LayoutAnimation, Linking, Pressable, View, Text, ScrollView } from "react-native";
 
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { Screen } from "@/components/Screen";
 import { MOCK_GUIDES, type Guide, type ProductRecommendation } from "@/lib/mocks/guides";
 
@@ -58,7 +59,7 @@ export default function GuideScreen() {
           <View className="rounded-2xl bg-white p-4">
             {guide.toolsNeeded.map((tool, i) => (
               <View key={i} className="flex-row items-start gap-2 py-1">
-                <Ionicons name="build-outline" size={14} color="#6b7280" />
+                <CategoryIcon category="tool" size={14} />
                 <Text className="flex-1 text-sm text-gray-700">{tool}</Text>
               </View>
             ))}
@@ -214,9 +215,3 @@ function AffiliateDisclaimer({ products }: { products: ProductRecommendation[] }
   );
 }
 
-function CategoryIcon({ category }: { category: string }) {
-  const icon =
-    category === "pruning-tool" ? "cut-outline" : "leaf-outline";
-
-  return <Ionicons name={icon} size={16} color="#15803d" />;
-}
