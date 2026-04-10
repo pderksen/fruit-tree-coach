@@ -27,19 +27,35 @@ do this week, what to wait on, and how to avoid common mistakes.
 
 ## Project structure
 - `app/` screens and navigation
-- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` hidden)
+- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
 - `app/profile.tsx` user profile/account screen (stack, not tab)
 - `stores/tree-store.ts` Zustand store for user's trees (local state, will migrate to Supabase)
+- `stores/settings-store.ts` notification and app settings
+- `stores/profile-store.ts` user profile state
 - `docs/` planning docs — `all-phases.md` (roadmap), `phase-*.md` (per-phase plans)
+- `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
 - `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
 - `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
+- `lib/supabase.ts` Supabase client init
+- `lib/auth.ts` auth helpers
+- `lib/query-client.ts` TanStack Query client config
+- `lib/notifications.ts` push notification setup
+- `lib/fruit-icons.ts` fruit icon mapping
 - `lib/mocks/` hardcoded mock data for UI development
-- `lib/care/` fruit tree care logic and recommendation generation
+- `lib/care/` care logic — `watering.ts`, `season-order.ts`, `research-sources.ts`
 - `hooks/` custom React hooks
 - `stores/` local app state
+
+## Key files
+- `app/_layout.tsx` root layout (global nav options, stack screen registration)
+- `app/(tabs)/_layout.tsx` tab bar config (visible/hidden tabs)
+- `global.css` Tailwind/NativeWind base styles
+- `tailwind.config.js` custom colors (`brand-*`, `cream-*`), font config
+- `metro.config.js` Metro bundler config with NativeWind plugin
+- `app.json` Expo app config
 
 ## Domain concepts
 - **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
