@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
 import { View, Text, SectionList } from "react-native";
 
+import { FruitIcon } from "@/components/FruitIcon";
 import { Screen } from "@/components/Screen";
 import { TREE_CATEGORY_MAP } from "@/lib/fruit-tree-data";
 import { getWateringGuide, type WateringGuide } from "@/lib/care/watering";
@@ -23,7 +24,7 @@ function SignList({
   items: string[];
   color: "red" | "amber";
 }) {
-  const iconColor = color === "red" ? "#ef4444" : "#f59e0b";
+  const iconColor = color === "red" ? "#ef4444" : "#eab308";
   return (
     <View className="mt-3">
       <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
@@ -32,7 +33,7 @@ function SignList({
       {items.map((item) => (
         <View key={item} className="mt-1.5 flex-row items-start gap-2">
           <Ionicons
-            name={color === "red" ? "water" : "sunny-outline"}
+            name={color === "red" ? "water" : "water-outline"}
             size={14}
             color={iconColor}
             style={{ marginTop: 2 }}
@@ -71,7 +72,7 @@ function WateringCard({ guide }: { guide: WateringGuide }) {
       </View>
 
       <View className="mt-3 flex-row items-start gap-3">
-        <Ionicons name="sunny-outline" size={18} color="#15803d" />
+        <Ionicons name="time-outline" size={18} color="#15803d" />
         <View className="flex-1">
           <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
             Best Time to Water
@@ -144,7 +145,8 @@ export default function WateringScreen() {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => <WateringCard guide={item} />}
         renderSectionHeader={({ section }) => (
-          <View className="mb-2 mt-4">
+          <View className="mb-2 mt-4 flex-row items-center gap-2">
+            <FruitIcon type={section.treeType} size={24} />
             <Text className="text-sm font-bold text-gray-700">
               {section.title}
             </Text>
