@@ -15,7 +15,7 @@ export function GardenerInsight({
   return (
     <View className="rounded-3xl bg-cream-100 p-5">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="leaf" size={14} color="#15803d" />
+        <Ionicons name="star" size={14} color="#15803d" />
         <Text className="text-xs font-semibold uppercase tracking-wider text-brand-700">
           Gardener&apos;s Insight
         </Text>

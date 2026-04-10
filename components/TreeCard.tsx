@@ -1,8 +1,9 @@
 import { View, Text, Pressable } from "react-native";
 
+import { FruitIcon } from "@/components/FruitIcon";
 import type { Tree } from "@/lib/types";
 import type { TreeCategory } from "@/lib/fruit-tree-data";
-import { TREE_CATEGORY_MAP, TREE_EMOJI } from "@/lib/fruit-tree-data";
+import { TREE_CATEGORY_MAP } from "@/lib/fruit-tree-data";
 
 const CATEGORY_COLOR: Record<TreeCategory, string> = {
   "Pome Fruit": "bg-red-50 text-red-700",
@@ -22,14 +23,13 @@ interface TreeCardProps {
 
 export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
   const category = TREE_CATEGORY_MAP[tree.type];
-  const emoji = TREE_EMOJI[tree.type] ?? "\uD83C\uDF33";
   const categoryColors = CATEGORY_COLOR[category];
   const [badgeBg, badgeText] = categoryColors.split(" ");
 
   return (
     <View className="mb-4 rounded-3xl bg-white p-5">
       <View className="flex-row items-start justify-between">
-        <Text className="text-3xl">{emoji}</Text>
+        <FruitIcon type={tree.type} size={36} />
         <View className={`rounded-full px-3 py-1 ${badgeBg}`}>
           <Text className={`text-xs font-semibold uppercase ${badgeText}`}>
             {category}

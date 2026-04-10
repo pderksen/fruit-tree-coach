@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { GardenerInsight } from "@/components/GardenerInsight";
@@ -26,7 +26,11 @@ export default function HomeScreen() {
         {/* Header */}
         <View className="flex-row items-center justify-between px-5 pb-2 pt-3">
           <View className="flex-row items-center gap-2">
-            <Ionicons name="leaf" size={22} color="#15803d" />
+            <Image
+              source={require("@/assets/images/fruit-tree-coach-logo.png")}
+              style={{ width: 22, height: 22 }}
+              resizeMode="contain"
+            />
             <Text className="text-lg font-bold text-gray-900">
               Fruit Tree Coach
             </Text>
@@ -80,7 +84,7 @@ export default function HomeScreen() {
         <View className="px-5 pt-6">
           <View className="flex-row items-center justify-between">
             <Text className="text-xl font-bold text-gray-900">
-              Your Fruit Trees
+              My Backyard Orchard
             </Text>
             <Pressable
               onPress={() => router.push("/(tabs)/orchard")}
@@ -109,6 +113,18 @@ export default function HomeScreen() {
         {/* Seasonal Forecast */}
         <View className="px-5 pt-2">
           <SeasonalForecast />
+        </View>
+
+        {/* TEST: Launch trial screen */}
+        <View className="px-5 pt-6">
+          <Pressable
+            className="items-center rounded-xl border border-dashed border-gray-300 py-3"
+            onPress={() => router.push("/trial")}
+          >
+            <Text className="text-sm font-medium text-gray-400">
+              Test: Open Trial Screen
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>

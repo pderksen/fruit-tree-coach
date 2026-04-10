@@ -119,13 +119,7 @@ function StepCard({ step }: { step: Guide["steps"][number] }) {
 
 function CategoryIcon({ category }: { category: string }) {
   const icon =
-    category === "fertilizer"
-      ? "leaf-outline"
-      : category === "pruning-tool"
-        ? "cut-outline"
-        : category === "pest-control"
-          ? "shield-outline"
-          : "cube-outline";
+    category === "pruning-tool" ? "cut-outline" : "leaf-outline";
 
   return <Ionicons name={icon} size={16} color="#15803d" />;
 }

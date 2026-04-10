@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-import { TREE_EMOJI } from "@/lib/fruit-tree-data";
+import { FruitIcon } from "@/components/FruitIcon";
 import type { CalendarTask } from "@/lib/mocks/calendar-tasks";
 
 const CATEGORY_ICON: Record<CalendarTask["category"], string> = {
@@ -16,7 +16,6 @@ interface CalendarTaskRowProps {
 }
 
 export function CalendarTaskRow({ task }: CalendarTaskRowProps) {
-  const emoji = TREE_EMOJI[task.treeType] ?? "\uD83C\uDF33";
   const categoryIcon = CATEGORY_ICON[task.category];
   const day = new Date(task.dueDate).toLocaleDateString("en-US", {
     weekday: "short",
@@ -26,7 +25,9 @@ export function CalendarTaskRow({ task }: CalendarTaskRowProps) {
 
   return (
     <View className="mb-3 flex-row rounded-2xl bg-white p-4">
-      <Text className="mr-3 text-2xl">{emoji}</Text>
+      <View className="mr-3">
+        <FruitIcon type={task.treeType} size={32} />
+      </View>
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
           <Text className="text-sm font-bold text-gray-900">{task.title}</Text>

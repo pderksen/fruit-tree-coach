@@ -24,8 +24,20 @@ export default function RootLayout() {
         screenOptions={{ headerBackTitle: "" }}
       >
         <Stack.Screen name="splash" options={{ headerShown: false }} />
-        <Stack.Screen name="trial" options={{ headerShown: false }} />
-        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="trial"
+          options={{
+            presentation: "modal",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="sign-in"
+          options={{
+            presentation: "modal",
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
         <Stack.Screen
           name="tree/[id]"

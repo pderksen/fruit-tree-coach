@@ -137,7 +137,7 @@ export const TREE_EMOJI: Record<FruitTreeType, string> = {
   Peach: "\uD83C\uDF51", // 🍑
   Cherry: "\uD83C\uDF52", // 🍒
   Plum: "\uD83C\uDF51", // 🍑 (closest match)
-  Fig: "\uD83E\uDED2", // 🫒 — fig emoji U+1FAD2 (Unicode 14.0, iOS 15.4+, Android 12+). Image replacement planned.
+  Fig: "\uD83C\uDF33", // 🌳 — no dedicated fig emoji; placeholder until icon image is added
   Lemon: "\uD83C\uDF4B", // 🍋
   Orange: "\uD83C\uDF4A", // 🍊
   Lime: "\uD83C\uDF4B", // 🍋 (closest match)

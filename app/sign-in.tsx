@@ -46,6 +46,14 @@ export default function SignInPage() {
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        {/* Close button */}
+        <Pressable
+          className="absolute right-4 top-3 z-10 p-2"
+          onPress={() => router.dismiss()}
+        >
+          <Ionicons name="close" size={28} color="#6b7280" />
+        </Pressable>
+
         <ScrollView
           contentContainerClassName="items-center px-6 pb-8 pt-8"
           showsVerticalScrollIndicator={false}
@@ -93,7 +101,7 @@ export default function SignInPage() {
           {/* Toggle mode */}
           <Pressable className="mt-6" onPress={() => setIsSignUp(!isSignUp)}>
             <Text className="text-sm text-gray-500">
-              {isSignUp ? "Already have an account? " : "Don&apos;t have an account? "}
+              {isSignUp ? "Already have an account? " : "Don\u2019t have an account? "}
               <Text className="font-semibold text-brand-700">
                 {isSignUp ? "Sign in" : "Sign up"}
               </Text>

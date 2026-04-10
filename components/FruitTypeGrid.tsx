@@ -2,11 +2,11 @@ import { useState, useMemo } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import { FruitIcon } from "@/components/FruitIcon";
 import {
   FRUIT_TREE_TYPES,
   POPULAR_TYPE_COUNT,
   TREE_CATEGORY_MAP,
-  TREE_EMOJI,
 } from "@/lib/fruit-tree-data";
 import type { FruitTreeType } from "@/lib/types";
 
@@ -107,7 +107,6 @@ function TypeRow({
     <View className="flex-row flex-wrap gap-2">
       {types.map((type) => {
         const isSelected = selected === type;
-        const emoji = TREE_EMOJI[type] ?? "\uD83C\uDF33";
         return (
           <Pressable
             key={type}
@@ -118,7 +117,7 @@ function TypeRow({
             }`}
             onPress={() => onSelect(type)}
           >
-            <Text className="text-2xl">{emoji}</Text>
+            <FruitIcon type={type} size={32} />
             <Text className="mt-1 text-xs font-semibold text-gray-800">
               {type}
             </Text>

@@ -1,15 +1,15 @@
 import { View, Text } from "react-native";
 
 import { Badge } from "@/components/Badge";
+import { FruitIcon } from "@/components/FruitIcon";
 import type { Tree } from "@/lib/types";
-import { SCIENTIFIC_NAME_MAP, TREE_EMOJI } from "@/lib/fruit-tree-data";
+import { SCIENTIFIC_NAME_MAP } from "@/lib/fruit-tree-data";
 
 interface TreeDetailHeaderProps {
   tree: Tree;
 }
 
 export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
-  const emoji = TREE_EMOJI[tree.type] ?? "\uD83C\uDF33";
   const scientificName = SCIENTIFIC_NAME_MAP[tree.type];
   const currentYear = new Date().getFullYear();
   const age = tree.plantedYear ? currentYear - tree.plantedYear : null;
@@ -17,7 +17,7 @@ export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
 
   return (
     <View className="items-center pb-4">
-      <Text className="text-6xl">{emoji}</Text>
+      <FruitIcon type={tree.type} size={72} />
       <Text className="mt-3 text-2xl font-bold text-gray-900">
         {tree.name}
       </Text>

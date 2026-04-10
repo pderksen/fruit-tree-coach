@@ -14,6 +14,9 @@ export default function OrchardScreen() {
     <Screen>
       <View className="mb-4 mt-2">
         <Text className="text-2xl font-bold text-gray-900">My Orchard</Text>
+        <Text className="mt-1 text-sm text-gray-500">
+          Zone 8b · Clovis, CA
+        </Text>
       </View>
 
       <FlatList

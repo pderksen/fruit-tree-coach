@@ -10,7 +10,7 @@ export default function SplashPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/trial");
+      router.replace("/(tabs)");
     }, 2000);
     return () => clearTimeout(timer);
   }, [router]);
