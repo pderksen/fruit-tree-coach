@@ -9,6 +9,8 @@ export interface CalendarTask {
   description: string;
   dueDate: string;
   category: "pruning" | "feeding" | "monitoring" | "harvesting" | "protection";
+  /** Maps to a guide's taskId in MOCK_GUIDES. Undefined if no guide exists. */
+  guideTaskId?: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Remove crossing and dead branches before buds swell. Late pruning risks disease entry.",
     dueDate: "2026-04-10",
     category: "pruning",
+    guideTaskId: "dt1",
   },
   // Source: Clemson Cooperative Extension — Peach Care Calendar
   {
@@ -39,6 +42,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Spray before bud break to smother overwintering scale and mite eggs.",
     dueDate: "2026-04-11",
     category: "protection",
+    guideTaskId: "dt4",
   },
   // Source: UC Davis — Citrus for the Home Garden
   {
@@ -51,6 +55,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Apply balanced citrus fertilizer (e.g. 6-4-6) with micronutrients. Water thoroughly after application.",
     dueDate: "2026-04-14",
     category: "feeding",
+    guideTaskId: "dt5",
   },
   // Source: Texas A&M AgriLife Extension — Figs
   {
@@ -63,6 +68,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Ensure no standing water around the root zone. Amend heavy clay with compost if needed.",
     dueDate: "2026-04-15",
     category: "monitoring",
+    guideTaskId: "dt6",
   },
   // Source: University of Minnesota Extension — Apple Thinning
   {
@@ -87,6 +93,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Pink bud tips signal dormancy break. Time any remaining sprays before petals open.",
     dueDate: "2026-04-22",
     category: "monitoring",
+    guideTaskId: "dt4",
   },
   // Source: WSU Extension — Home Orchard Fertility
   {
@@ -111,6 +118,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "Inspect new growth for silvery trails. Treat early infestations with neem oil.",
     dueDate: "2026-05-03",
     category: "monitoring",
+    guideTaskId: "dt12",
   },
   // Source: University of Minnesota Extension — Apple Thinning
   {
@@ -123,6 +131,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
       "After petal fall, remove excess fruitlets to one per cluster. Aim for 6–8\" between fruits.",
     dueDate: "2026-05-10",
     category: "pruning",
+    guideTaskId: "dt2",
   },
   // Source: Texas A&M AgriLife Extension — Figs
   {

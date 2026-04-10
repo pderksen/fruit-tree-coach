@@ -1,72 +1,134 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useMemo } from "react";
-import { View, Text, SectionList } from "react-native";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { View, Text, ScrollView } from "react-native";
 
-import { CalendarTaskRow } from "@/components/CalendarTaskRow";
+import { CalendarHeader } from "@/components/CalendarHeader";
+import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
+import { TimelineTask } from "@/components/TimelineTask";
 import {
   MOCK_CALENDAR_TASKS,
   type CalendarTask,
 } from "@/lib/mocks/calendar-tasks";
+import { useSettingsStore } from "@/stores/settings-store";
 
-/** Group tasks by ISO week label (e.g. "Apr 7 – 13"). */
-function groupByWeek(tasks: CalendarTask[]) {
+function isSameDay(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+/** Group tasks by date label and sort chronologically. */
+function groupByDate(tasks: CalendarTask[]) {
   const sorted = [...tasks].sort(
     (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
   );
 
-  const sections = new Map<string, CalendarTask[]>();
-
+  const groups = new Map<string, CalendarTask[]>();
   for (const task of sorted) {
-    const d = new Date(task.dueDate);
-    const day = d.getDay();
-    const monday = new Date(d);
-    monday.setDate(d.getDate() - ((day + 6) % 7));
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-
-    const fmt = (dt: Date) =>
-      dt.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const key = `${fmt(monday)} – ${fmt(sunday)}`;
-
-    if (!sections.has(key)) sections.set(key, []);
-    sections.get(key)!.push(task);
+    const key = task.dueDate;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(task);
   }
 
-  return Array.from(sections.entries()).map(([title, data]) => ({
-    title,
-    data,
+  return Array.from(groups.entries()).map(([dateStr, items]) => ({
+    dateStr,
+    date: new Date(dateStr),
+    items,
   }));
 }
 
 export default function CalendarScreen() {
-  const sections = useMemo(() => groupByWeek(MOCK_CALENDAR_TASKS), []);
+  const today = useMemo(() => new Date(), []);
+  const [selectedDate, setSelectedDate] = useState(today);
+  const scrollRef = useRef<ScrollView>(null);
+  const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
+  const [showNotifModal, setShowNotifModal] = useState(!hasSeenPrompt);
+
+  const filteredTasks = useMemo(() => {
+    const selectedMonth = selectedDate.getMonth();
+    const selectedYear = selectedDate.getFullYear();
+    return MOCK_CALENDAR_TASKS.filter((t) => {
+      const d = new Date(t.dueDate);
+      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+    });
+  }, [selectedDate]);
+
+  const groups = useMemo(() => groupByDate(filteredTasks), [filteredTasks]);
+
+  const isOverdue = useCallback(
+    (task: CalendarTask) => {
+      const due = new Date(task.dueDate);
+      due.setHours(23, 59, 59, 999);
+      return due < today;
+    },
+    [today],
+  );
+
+  const handleDismissNotif = useCallback(() => {
+    setShowNotifModal(false);
+  }, []);
+
+  const totalTasks = filteredTasks.length;
 
   return (
     <Screen>
-      <View className="mb-2 mt-2">
-        <Text className="text-2xl font-bold text-gray-900">Care Calendar</Text>
-        <Text className="mt-1 text-sm text-gray-500">
-          Upcoming tasks for your orchard
+      <View className="mb-1 mt-2 flex-row items-center justify-between">
+        <Text className="text-sm text-gray-500">
+          {totalTasks} {totalTasks === 1 ? "task" : "tasks"} this month
         </Text>
       </View>
 
-      {sections.length > 0 ? (
-        <SectionList
-          sections={sections}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <CalendarTaskRow task={item} />}
-          renderSectionHeader={({ section }) => (
-            <View className="mb-2 mt-4">
-              <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                {section.title}
-              </Text>
-            </View>
-          )}
-          contentContainerStyle={{ paddingBottom: 100 }}
+      <CalendarHeader
+        selectedDate={selectedDate}
+        onSelectDate={setSelectedDate}
+      />
+
+      {groups.length > 0 ? (
+        <ScrollView
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
-          stickySectionHeadersEnabled={false}
-        />
+          contentContainerStyle={{ paddingBottom: 120 }}
+        >
+          {groups.map((group, gi) => {
+            const dateLabel = group.date.toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "short",
+              day: "numeric",
+            });
+            const isToday = isSameDay(group.date, today);
+
+            return (
+              <View key={group.dateStr} className="mb-2">
+                <View className="mb-2 ml-8 flex-row items-center gap-2">
+                  <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                    {dateLabel}
+                  </Text>
+                  {isToday && (
+                    <View className="rounded-full bg-brand-700 px-2 py-0.5">
+                      <Text className="text-xs font-semibold text-white">
+                        Today
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                {group.items.map((task, ti) => (
+                  <TimelineTask
+                    key={task.id}
+                    task={task}
+                    isOverdue={isOverdue(task)}
+                    isLast={
+                      gi === groups.length - 1 && ti === group.items.length - 1
+                    }
+                  />
+                ))}
+              </View>
+            );
+          })}
+        </ScrollView>
       ) : (
         <View className="flex-1 items-center justify-center">
           <Ionicons name="checkmark-circle" size={48} color="#16a34a" />
@@ -74,10 +136,15 @@ export default function CalendarScreen() {
             All caught up!
           </Text>
           <Text className="mt-1 text-sm text-gray-500">
-            No upcoming tasks on the calendar. Check back next week.
+            No tasks scheduled for this month.
           </Text>
         </View>
       )}
+
+      <NotificationOptInModal
+        visible={showNotifModal}
+        onDismiss={handleDismissNotif}
+      />
     </Screen>
   );
 }
