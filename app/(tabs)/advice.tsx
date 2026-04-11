@@ -7,7 +7,7 @@ export default function AdviceScreen() {
   return (
     <Screen>
       <View className="flex-1 items-center justify-center">
-        <Ionicons name="bulb-outline" size={48} color="#9ca3af" />
+        <Ionicons name="star" size={48} color="#9ca3af" />
         <Text className="mt-3 text-lg font-semibold text-gray-900">
           Expert Advice
         </Text>

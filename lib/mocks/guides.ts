@@ -65,9 +65,9 @@ export const MOCK_GUIDES: Record<string, Guide> = {
       },
       {
         stepNumber: 4,
-        title: "Open the centre",
+        title: "Open the center",
         description:
-          "For an open-vase shape, remove vigorous upright shoots (water sprouts) growing into the centre of the canopy.",
+          "For an open-vase shape, remove vigorous upright shoots (water sprouts) growing into the center of the canopy.",
         tip: "A good rule: if a bird can fly through the canopy, airflow is sufficient.",
         diagramImage: true, // TODO: replace with require("@/assets/images/guides/pruning-diagram-apple.png")
       },
@@ -150,7 +150,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         stepNumber: 3,
         title: "Thin to one per cluster",
         description:
-          "Gently twist off the smaller fruitlets, leaving the \"king\" fruit (usually the largest, centre fruit). Aim for 6–8\" spacing between remaining fruits.",
+          "Gently twist off the smaller fruitlets, leaving the \"king\" fruit (usually the largest, center fruit). Aim for 6–8\" spacing between remaining fruits.",
         tip: "Thinning early produces larger fruit. Every week you delay reduces the size benefit.",
       },
       {
@@ -447,7 +447,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         stepNumber: 3,
         title: "Thin interior shoots",
         description:
-          "Remove inward-growing branches and water sprouts to open the centre. Sunlight should reach all parts of the canopy.",
+          "Remove inward-growing branches and water sprouts to open the center. Sunlight should reach all parts of the canopy.",
         tip: "Peaches need aggressive thinning — don't be shy. The tree will replace removed wood quickly.",
       },
       {
@@ -724,7 +724,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     treeType: "Apple",
     title: "Harvest Readiness Guide",
     introduction:
-      "Picking apples at the right stage ensures the best flavour, texture, and storage life. Honeycrisp in particular benefits from precise harvest timing.",
+      "Picking apples at the right stage ensures the best flavor, texture, and storage life. Honeycrisp in particular benefits from precise harvest timing.",
     steps: [
       {
         stepNumber: 1,
@@ -741,7 +741,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
       },
       {
         stepNumber: 3,
-        title: "Check seed colour",
+        title: "Check seed color",
         description:
           "Cut an apple open. Seeds should be dark brown, not white or light tan. Dark seeds indicate maturity.",
       },
@@ -773,13 +773,13 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     treeType: "Peach",
     title: "Peach Harvest Guide",
     introduction:
-      "Peaches must ripen on the tree for best flavour. Unlike apples, they don't improve in storage — timing your pick is critical.",
+      "Peaches must ripen on the tree for best flavor. Unlike apples, they don't improve in storage — timing your pick is critical.",
     steps: [
       {
         stepNumber: 1,
-        title: "Watch the ground colour",
+        title: "Watch the ground color",
         description:
-          "Ignore the red blush — look at the background colour. It should change from green to creamy yellow. No green = ready.",
+          "Ignore the red blush — look at the background color. It should change from green to creamy yellow. No green = ready.",
       },
       {
         stepNumber: 2,
@@ -826,7 +826,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     steps: [
       {
         stepNumber: 1,
-        title: "Check colour",
+        title: "Check color",
         description:
           "Meyer lemons are ready when they turn deep egg-yolk yellow to light orange. A few green patches are fine near the stem.",
       },
@@ -865,7 +865,7 @@ export const MOCK_GUIDES: Record<string, Guide> = {
     treeType: "Fig",
     title: "Fig Ripeness Guide",
     introduction:
-      "Figs must fully ripen on the tree — they will not continue ripening after picking. Knowing the signs of ripeness ensures the best flavour.",
+      "Figs must fully ripen on the tree — they will not continue ripening after picking. Knowing the signs of ripeness ensures the best flavor.",
     steps: [
       {
         stepNumber: 1,

@@ -65,13 +65,13 @@ export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
       treeId: "1",
       treeName: "Honeycrisp Apple",
       title: "Harvest readiness check",
-      why: "Picking at the right time ensures best flavour and storage life.",
+      why: "Picking at the right time ensures best flavor and storage life.",
       done: false,
       priority: false,
       season: "Fall",
       // Source: University of Minnesota Extension — Harvesting Apples
       description:
-        "Use the stem-twist test: cradle the apple and twist gently. If it separates easily, it's ready. Check seed colour (dark brown = ripe) and flesh firmness.",
+        "Use the stem-twist test: cradle the apple and twist gently. If it separates easily, it's ready. Check seed color (dark brown = ripe) and flesh firmness.",
     },
   ],
   // Elberta Peach
@@ -127,7 +127,7 @@ export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
       season: "Summer",
       // Source: Clemson Extension — Peach Harvest
       description:
-        "Check for full colour change (no green on the ground colour), slight softness when pressed near the stem, and a sweet fragrance. Twist gently to pick.",
+        "Check for full color change (no green on the ground color), slight softness when pressed near the stem, and a sweet fragrance. Twist gently to pick.",
     },
   ],
   // Meyer Lemon
@@ -164,7 +164,7 @@ export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
       treeId: "3",
       treeName: "Meyer Lemon",
       title: "Citrus harvest",
-      why: "Meyer lemons can be picked year-round once they reach full colour.",
+      why: "Meyer lemons can be picked year-round once they reach full color.",
       done: false,
       priority: false,
       season: "Fall",
@@ -213,7 +213,7 @@ export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
       season: "Summer",
       // Source: Texas A&M Extension — Figs
       description:
-        "Ripe figs droop on the stem, feel soft, and may show slight skin cracks. Colour deepens to brown-purple for Brown Turkey. Pick gently to avoid bruising.",
+        "Ripe figs droop on the stem, feel soft, and may show slight skin cracks. Color deepens to brown-purple for Brown Turkey. Pick gently to avoid bruising.",
     },
   ],
 };
