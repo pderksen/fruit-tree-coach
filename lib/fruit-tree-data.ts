@@ -170,37 +170,37 @@ export const TREE_EMOJI: Record<FruitTreeType, string> = {
   Peach: "\uD83C\uDF51", // 🍑
   Cherry: "\uD83C\uDF52", // 🍒
   Plum: "\uD83C\uDF51", // 🍑 (closest match)
-  Fig: "\uD83C\uDF33", // 🌳 — no dedicated fig emoji; placeholder until icon image is added
+  Fig: "\uD83C\uDF4E", // 🍎 (closest round fruit; PNG icon preferred)
   Lemon: "\uD83C\uDF4B", // 🍋
   Orange: "\uD83C\uDF4A", // 🍊
   Lime: "\uD83C\uDF4B", // 🍋 (closest match)
   Crabapple: "\uD83C\uDF4E", // 🍎
   Quince: "\uD83C\uDF50", // 🍐 (closest match)
-  Medlar: "\uD83C\uDF33", // 🌳
+  Medlar: "\uD83C\uDF50", // 🍐 (closest pome fruit)
   Apricot: "\uD83C\uDF51", // 🍑 (closest match)
   Nectarine: "\uD83C\uDF51", // 🍑 (closest match)
   Grapefruit: "\uD83C\uDF4A", // 🍊 (closest match)
   Tangerine: "\uD83C\uDF4A", // 🍊
   Kumquat: "\uD83C\uDF4A", // 🍊 (closest match)
   Avocado: "\uD83E\uDD51", // 🥑
-  Pomegranate: "\uD83C\uDF33", // 🌳
-  Persimmon: "\uD83C\uDF33", // 🌳
+  Pomegranate: "\uD83C\uDF4E", // 🍎 (closest round fruit; PNG icon preferred)
+  Persimmon: "\uD83C\uDF4A", // 🍊 (closest orange-colored fruit)
   Olive: "\uD83E\uDED2", // 🫒
-  Jujube: "\uD83C\uDF33", // 🌳
+  Jujube: "\uD83C\uDF4E", // 🍎 (closest small round fruit)
   Loquat: "\uD83C\uDF4A", // 🍊 (closest match)
   Mango: "\uD83E\uDD6D", // 🥭
   Guava: "\uD83C\uDF53", // 🍓 (closest match)
-  Papaya: "\uD83C\uDF33", // 🌳
+  Papaya: "\uD83E\uDD6D", // 🥭 (closest tropical fruit)
   Banana: "\uD83C\uDF4C", // 🍌
-  "Passion Fruit": "\uD83C\uDF33", // 🌳
-  "Dragon Fruit": "\uD83C\uDF33", // 🌳
+  "Passion Fruit": "\uD83E\uDD5D", // 🥝 (closest round tropical; PNG icon preferred)
+  "Dragon Fruit": "\uD83C\uDF53", // 🍓 (closest pink fruit)
   Kiwi: "\uD83E\uDD5D", // 🥝
-  Jackfruit: "\uD83C\uDF33", // 🌳
+  Jackfruit: "\uD83E\uDD6D", // 🥭 (closest large tropical fruit)
   Starfruit: "\u2B50", // ⭐ (playful match)
   Coconut: "\uD83E\uDD65", // 🥥
   "Date Palm": "\uD83C\uDF34", // 🌴
-  Mulberry: "\uD83C\uDFF4", // 🫐 fallback to 🌳
-  Pawpaw: "\uD83C\uDF33", // 🌳
+  Mulberry: "\uD83C\uDF47", // 🍇 (closest berry cluster)
+  Pawpaw: "\uD83C\uDF4C", // 🍌 (closest tropical fruit)
   Gooseberry: "\uD83C\uDF53", // 🍓 (closest match)
   Elderberry: "\uD83C\uDF47", // 🍇 (closest match)
 };
