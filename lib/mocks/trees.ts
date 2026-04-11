@@ -7,7 +7,7 @@ export const MOCK_TREES: Tree[] = [
     type: "Apple",
     variety: "Honeycrisp",
     plantedYear: 2019,
-    zipCode: "97201",
+    orchardId: "default",
     statusLabel: "Pruning time",
     statusDescription:
       "Now is a good time to prune your apple tree. It helps with light penetration and air flow for the upcoming buds.",
@@ -20,7 +20,7 @@ export const MOCK_TREES: Tree[] = [
     type: "Peach",
     variety: "Elberta",
     plantedYear: 2021,
-    zipCode: "97201",
+    orchardId: "default",
     statusLabel: "Budding soon",
     statusDescription:
       "Your peach tree is showing early signs of waking up. Keep an eye on those delicate buds as the nights stay cool.",
@@ -33,7 +33,7 @@ export const MOCK_TREES: Tree[] = [
     type: "Lemon",
     variety: "Meyer",
     plantedYear: 2022,
-    zipCode: "97201",
+    orchardId: "default",
     statusLabel: "Feed me",
     statusDescription:
       "Spring is the time for a light feeding. A high-nitrogen organic fertilizer will help these glossy leaves stay deep green.",
@@ -46,7 +46,7 @@ export const MOCK_TREES: Tree[] = [
     type: "Fig",
     variety: "Brown Turkey",
     plantedYear: 2020,
-    zipCode: "97201",
+    orchardId: "default",
     statusLabel: "Stable growth",
     statusDescription:
       "Figs are hardy and require minimal care right now. Ensure the soil remains well-drained as we enter the rainy season.",

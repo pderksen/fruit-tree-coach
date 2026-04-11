@@ -43,6 +43,14 @@ export type FruitTreeType =
   | "Gooseberry"
   | "Elderberry";
 
+export interface Orchard {
+  id: string;
+  name: string;
+  zipCode: string;
+  zone: string;
+  createdAt: string;
+}
+
 export interface Tree {
   id: string;
   name: string;
@@ -50,7 +58,7 @@ export interface Tree {
   variety?: string;
   plantedYear?: number;
   plantedDate?: string;
-  zipCode: string;
+  orchardId: string;
   ageBracket?: AgeBracket;
   description?: string;
   /** Short status label shown on collection cards */

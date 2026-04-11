@@ -9,13 +9,13 @@ import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
-import { useProfileStore } from "@/stores/profile-store";
+import { useOrchardStore } from "@/stores/orchard-store";
 import { useTreeStore } from "@/stores/tree-store";
 
 export default function HomeScreen() {
   const router = useRouter();
   const trees = useTreeStore((s) => s.trees);
-  const gardeningZone = useProfileStore((s) => s.gardeningZone);
+  const gardeningZone = useOrchardStore((s) => s.getDefaultOrchard().zone);
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 

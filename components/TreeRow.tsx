@@ -22,7 +22,7 @@ export function TreeRow({ tree, onPress }: TreeRowProps) {
             {tree.name}
           </Text>
           <Text className="mt-0.5 text-sm text-gray-500">
-            {tree.type} · {tree.zipCode}
+            {tree.type}
           </Text>
         </View>
       </View>

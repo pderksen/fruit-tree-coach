@@ -18,7 +18,7 @@ import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
-import { useProfileStore } from "@/stores/profile-store";
+import { useOrchardStore } from "@/stores/orchard-store";
 import { useTreeStore } from "@/stores/tree-store";
 import type { AgeBracket, FruitTreeType, Tree } from "@/lib/types";
 
@@ -33,8 +33,8 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 export default function AddTreeScreen() {
   const router = useRouter();
   const addTree = useTreeStore((s) => s.addTree);
-  const zone = useProfileStore((s) => s.gardeningZone);
-  const zipCode = useProfileStore((s) => s.zipCode);
+  const defaultOrchard = useOrchardStore((s) => s.getDefaultOrchard());
+  const zone = defaultOrchard.zone;
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -52,7 +52,7 @@ export default function AddTreeScreen() {
       name: variety ? `${variety} ${treeType}` : treeType,
       type: treeType,
       variety,
-      zipCode,
+      orchardId: defaultOrchard.id,
       ageBracket: (data.ageBracket as AgeBracket) || undefined,
       statusLabel: "Just planted",
       statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
