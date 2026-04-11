@@ -1,9 +1,10 @@
 import "../global.css";
+import { Ionicons } from "@expo/vector-icons";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import { queryClient } from "@/lib/query-client";
 
 const logo = require("@/assets/images/fruit-tree-coach-logo.png") as number;
@@ -18,6 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     SplashScreen.hideAsync();
@@ -48,7 +50,14 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <Stack
-        screenOptions={{ headerBackTitle: "" }}
+        screenOptions={{
+          headerLeft: ({ canGoBack }) =>
+            canGoBack ? (
+              <Pressable onPress={() => router.back()} hitSlop={8}>
+                <Ionicons name="chevron-back" size={28} color="#000" />
+              </Pressable>
+            ) : null,
+        }}
       >
         <Stack.Screen
           name="trial"
