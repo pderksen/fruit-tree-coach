@@ -57,7 +57,7 @@ export default function AddTreeScreen() {
       statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
     };
     addTree(newTree);
-    router.back();
+    router.replace("/(tabs)");
   }
 
   const coachTip = selectedType
@@ -129,7 +129,7 @@ export default function AddTreeScreen() {
               onPress={handleSubmit(onSubmit)}
             />
           </View>
-          <Pressable className="mt-3 items-center py-2" onPress={() => router.back()}>
+          <Pressable className="mt-3 items-center py-2" onPress={() => router.replace("/(tabs)")}>
             <Text className="text-base font-medium text-gray-500">
               Save as Draft
             </Text>
