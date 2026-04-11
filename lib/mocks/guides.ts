@@ -94,32 +94,18 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
       },
       {
-        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
-      },
-      {
-        name: "Felco F-2 Bypass Pruners",
+        name: "Fiskars Bypass Pruning Shears",
         category: "pruning-tool",
         description:
-          "Industry-standard hand pruners with replaceable blades. Comfortable for extended use.",
-        affiliateUrl: "https://www.amazon.com/dp/B00004R9JB?tag=fruittreecoach-20",
+          "Sharp bypass blades with ergonomic grip. Cuts branches up to 3/4\" diameter cleanly.",
+        affiliateUrl: "https://www.amazon.com/dp/B00B1MST64?tag=fruittreecoach-20",
       },
       {
-        name: "Corona SL 4364 Bypass Loppers",
+        name: "Fiskars PowerGear2 Bypass Lopper",
         category: "pruning-tool",
         description:
-          "Lightweight aluminium handles with non-stick blade coating. Good reach for interior branches.",
-        affiliateUrl: "https://www.amazon.com/dp/B00004R9LB?tag=fruittreecoach-20",
-      },
-      {
-        name: "Silky Zubat Curved Pruning Saw",
-        category: "pruning-tool",
-        description:
-          "Razor-sharp curved blade cuts on the pull stroke. Ideal for limbs over 1.5\" diameter.",
-        affiliateUrl: "https://www.amazon.com/dp/B0000AX1LC?tag=fruittreecoach-20",
+          "Geared for 2x more cutting power. Handles branches up to 1.5\" diameter with less effort.",
+        affiliateUrl: "https://www.amazon.com/dp/B002BRKBC8?tag=fruittreecoach-20",
       },
     ],
     source: "Oregon State University Extension — PNW 400",
@@ -173,18 +159,11 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
       },
       {
-        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
-      },
-      {
-        name: "ARS Fruit Thinning Scissors",
+        name: "Fiskars Bypass Pruning Shears",
         category: "pruning-tool",
         description:
-          "Narrow-bladed scissors designed for precise fruitlet removal without damaging nearby fruit.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX2JPC?tag=fruittreecoach-20",
+          "Sharp bypass blades with ergonomic grip. Useful for snipping tight fruit clusters.",
+        affiliateUrl: "https://www.amazon.com/dp/B00B1MST64?tag=fruittreecoach-20",
       },
     ],
     source: "University of Minnesota Extension — Apple Thinning Guide",
@@ -244,20 +223,6 @@ export const MOCK_GUIDES: Record<string, Guide> = {
           "Organic granular citrus fertilizer with Bio-tone microbes. Gentle, slow-release formula safe for containers.",
         affiliateUrl: "https://www.amazon.com/dp/B000AX3JMA?tag=fruittreecoach-20",
       },
-      {
-        name: "Dr. Earth Exotic Blend Citrus Fertilizer",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic option with mycorrhizae. Good micronutrient profile for alkaline soils.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX4KNB?tag=fruittreecoach-20",
-      },
-      {
-        name: "Jobe's Citrus Fertilizer Spikes",
-        category: "fertilizer",
-        description:
-          "Pre-measured spikes for easy container feeding. Convenient if you prefer less mess.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX5LOC?tag=fruittreecoach-20",
-      },
     ],
     source: "UC Davis — Citrus for the Home Garden",
   },
@@ -312,13 +277,6 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         description:
           "Slow-release granular fertilizer ideal for figs. Bio-tone microbes support root health.",
         affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
-      },
-      {
-        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic fertilizer with mycorrhizae. Works well for all fruit trees including figs.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
       },
       {
         name: "Kellogg Garden Organics Raised Bed Mix",
@@ -396,13 +354,6 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
       },
       {
-        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic fertilizer with mycorrhizae. Works well for peach trees.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
-      },
-      {
         name: "Bonide All Seasons Horticultural Oil",
         category: "pest-control",
         description:
@@ -478,25 +429,18 @@ export const MOCK_GUIDES: Record<string, Guide> = {
         affiliateUrl: "https://www.amazon.com/dp/B0000AXE1E?tag=fruittreecoach-20",
       },
       {
-        name: "Dr. Earth Home Grown Organic Fertilizer (4-6-3)",
-        category: "fertilizer",
-        description:
-          "OMRI-listed organic fertilizer with mycorrhizae. Works well for peach trees.",
-        affiliateUrl: "https://www.amazon.com/dp/B000AX1AAW?tag=fruittreecoach-20",
-      },
-      {
-        name: "Felco F-2 Bypass Pruners",
+        name: "Fiskars Bypass Pruning Shears",
         category: "pruning-tool",
         description:
-          "Industry-standard hand pruners with replaceable blades. Comfortable for extended use.",
-        affiliateUrl: "https://www.amazon.com/dp/B00004R9JB?tag=fruittreecoach-20",
+          "Sharp bypass blades with ergonomic grip. Cuts branches up to 3/4\" diameter cleanly.",
+        affiliateUrl: "https://www.amazon.com/dp/B00B1MST64?tag=fruittreecoach-20",
       },
       {
-        name: "Silky Zubat Curved Pruning Saw",
+        name: "Fiskars PowerGear2 Bypass Lopper",
         category: "pruning-tool",
         description:
-          "Razor-sharp curved blade cuts on the pull stroke. Ideal for limbs over 1.5\" diameter.",
-        affiliateUrl: "https://www.amazon.com/dp/B0000AX1LC?tag=fruittreecoach-20",
+          "Geared for 2x more cutting power. Handles branches up to 1.5\" diameter with less effort.",
+        affiliateUrl: "https://www.amazon.com/dp/B002BRKBC8?tag=fruittreecoach-20",
       },
     ],
     source: "University of Georgia Extension — Peach Pruning",

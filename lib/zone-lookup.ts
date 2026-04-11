@@ -221,9 +221,50 @@ const ZIP_PREFIX_TO_ZONE: Record<string, string> = {
 
 /**
  * Look up an approximate USDA hardiness zone from a 5-digit US zip code.
+ * Uses a static 3-digit prefix table — fast but imprecise.
  * Returns null if the zip prefix is not in the lookup table.
  */
 export function zipToZone(zip: string): string | null {
   const prefix = zip.slice(0, 3);
   return ZIP_PREFIX_TO_ZONE[prefix] ?? null;
+}
+
+const ZONE_PATTERN = /^\d{1,2}[ab]$/;
+
+/**
+ * Fetch the exact USDA hardiness zone for a 5-digit zip code from the
+ * USDA Plant Hardiness Zone Map API (https://phzmapi.org).
+ *
+ * Returns the zone string (e.g. "8b") on success, or null on any failure
+ * (network error, timeout, invalid response). Callers should fall back to
+ * the static `zipToZone()` when this returns null.
+ *
+ * Source: USDA Agricultural Research Service — Plant Hardiness Zone Map
+ */
+export async function fetchZoneForZip(zip: string): Promise<string | null> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5_000);
+
+    const response = await fetch(`https://phzmapi.org/${zip}.json`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) return null;
+
+    const data: unknown = await response.json();
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "zone" in data &&
+      typeof (data as { zone: unknown }).zone === "string" &&
+      ZONE_PATTERN.test((data as { zone: string }).zone)
+    ) {
+      return (data as { zone: string }).zone;
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }

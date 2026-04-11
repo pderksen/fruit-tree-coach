@@ -23,6 +23,7 @@ import { useTreeStore } from "@/stores/tree-store";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required").max(50, "50 characters max"),
   zipCode: z.string().regex(/^\d{5}$/, "Must be a 5-digit zip code"),
+  zone: z.string().regex(/^\d{1,2}[abAB]$/, "Enter a zone like 8b or 7a"),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -35,23 +36,26 @@ export default function ProfileScreen() {
   const treeCount = useTreeStore((s) => s.trees.length);
   const appVersion = Constants.expoConfig?.version ?? "1.0.0";
 
+  const refreshZoneFromApi = useOrchardStore((s) => s.refreshZoneFromApi);
   const zipCode = defaultOrchard.zipCode;
   const gardeningZone = defaultOrchard.zone;
 
   const [editingField, setEditingField] = useState<keyof ProfileFormValues | null>(null);
+  const [isLookingUpZone, setIsLookingUpZone] = useState(false);
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { name, zipCode },
+    defaultValues: { name, zipCode, zone: gardeningZone },
   });
 
   const startEditing = (field: keyof ProfileFormValues) => {
-    reset({ name, zipCode });
+    reset({ name, zipCode, zone: gardeningZone });
     setEditingField(field);
   };
 
@@ -61,8 +65,21 @@ export default function ProfileScreen() {
     if (data.name) {
       updateProfile({ name: data.name });
     }
+    if (data.zone && data.zone.toLowerCase() !== gardeningZone.toLowerCase()) {
+      updateOrchard(defaultOrchard.id, { zone: data.zone.toLowerCase() });
+    }
     if (data.zipCode && data.zipCode !== zipCode) {
       updateOrchard(defaultOrchard.id, { zipCode: data.zipCode });
+      // Fetch accurate zone from USDA API after saving zip
+      setIsLookingUpZone(true);
+      refreshZoneFromApi(defaultOrchard.id).finally(() => {
+        setIsLookingUpZone(false);
+        // Sync the form's zone value with the store's updated zone
+        const updatedZone = useOrchardStore.getState().orchards.find(
+          (o) => o.id === defaultOrchard.id,
+        )?.zone;
+        if (updatedZone) setValue("zone", updatedZone);
+      });
     }
     setEditingField(null);
   });
@@ -110,7 +127,7 @@ export default function ProfileScreen() {
           </View>
           <Text className="mt-3 text-xl font-bold text-gray-900">{name}</Text>
           <Text className="mt-1 text-sm text-gray-500">
-            Zone {gardeningZone} · {zipCode}
+            Zone {gardeningZone}{isLookingUpZone ? " (updating…)" : ""} · {zipCode}
           </Text>
         </View>
 
@@ -144,10 +161,17 @@ export default function ProfileScreen() {
             onCancel={cancelEditing}
             keyboardType="number-pad"
           />
-          <InfoRow
-            icon="leaf-outline"
+          <EditableRow
             label="Gardening Zone"
-            value={gardeningZone}
+            icon="leaf-outline"
+            value={isLookingUpZone ? `${gardeningZone} (updating…)` : gardeningZone}
+            field="zone"
+            editingField={editingField}
+            control={control}
+            error={errors.zone?.message}
+            onEdit={startEditing}
+            onSave={saveField}
+            onCancel={cancelEditing}
             isLast
           />
         </View>

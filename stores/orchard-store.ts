@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { Orchard } from "@/lib/types";
-import { zipToZone } from "@/lib/zone-lookup";
+import { fetchZoneForZip, zipToZone } from "@/lib/zone-lookup";
 
 const DEFAULT_ORCHARD_ID = "default";
 
@@ -22,7 +22,9 @@ interface OrchardStore {
   defaultOrchardId: string;
   getDefaultOrchard: () => Orchard;
   addOrchard: (orchard: Orchard) => void;
-  updateOrchard: (id: string, fields: Partial<Pick<Orchard, "name" | "zipCode">>) => void;
+  updateOrchard: (id: string, fields: Partial<Pick<Orchard, "name" | "zipCode" | "zone">>) => void;
+  /** Fetch the accurate zone from the USDA API and update the orchard. */
+  refreshZoneFromApi: (id: string) => Promise<void>;
 }
 
 export const useOrchardStore = create<OrchardStore>()(
@@ -44,12 +46,26 @@ export const useOrchardStore = create<OrchardStore>()(
           orchards: state.orchards.map((o) => {
             if (o.id !== id) return o;
             const updated = { ...o, ...fields };
-            if (fields.zipCode) {
+            // When zip changes and zone wasn't explicitly set, use static fallback
+            if (fields.zipCode && !fields.zone) {
               updated.zone = zipToZone(fields.zipCode) ?? o.zone;
             }
             return updated;
           }),
         })),
+
+      refreshZoneFromApi: async (id) => {
+        const orchard = get().orchards.find((o) => o.id === id);
+        if (!orchard) return;
+        const zone = await fetchZoneForZip(orchard.zipCode);
+        if (zone) {
+          set((state) => ({
+            orchards: state.orchards.map((o) =>
+              o.id === id ? { ...o, zone } : o,
+            ),
+          }));
+        }
+      },
     }),
     {
       name: "fruit-tree-coach-orchards",
