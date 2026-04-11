@@ -17,7 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
 
 import { FormField } from "@/components/FormField";
-import { signIn, signUp } from "@/lib/auth";
+import { signIn, signUp, resetPassword } from "@/lib/auth";
 
 const logo = require("@/assets/images/fruit-tree-coach-logo.png") as number;
 
@@ -107,21 +107,6 @@ export default function SignInPage() {
               </Text>
             </Text>
           </Pressable>
-
-          {/* Forgot password */}
-          {!isSignUp && (
-            <Pressable
-              className="mt-3"
-              onPress={() =>
-                Alert.alert(
-                  "Forgot Password",
-                  "Password reset will be available soon.",
-                )
-              }
-            >
-              <Text className="text-sm text-gray-400">Forgot password?</Text>
-            </Pressable>
-          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -196,6 +181,7 @@ function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
 function SignInForm({ onSuccess }: { onSuccess: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   const methods = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -211,6 +197,23 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
       onSuccess();
     } else {
       setError(result.error ?? "Invalid email or password");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const email = methods.getValues("email").trim();
+    if (!email) {
+      setError("Enter your email above, then tap Forgot password");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    const result = await resetPassword(email);
+    setLoading(false);
+    if (result.success) {
+      setResetSent(true);
+    } else {
+      setError(result.error ?? "Something went wrong");
     }
   };
 
@@ -237,6 +240,12 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
           <Text className="mb-3 text-sm text-red-500">{error}</Text>
         )}
 
+        {resetSent && (
+          <Text className="mb-3 text-sm text-brand-700">
+            Check your email for a password reset link.
+          </Text>
+        )}
+
         <Pressable
           className={`items-center rounded-xl bg-brand-700 px-6 py-3.5 ${loading ? "opacity-50" : ""}`}
           onPress={methods.handleSubmit(onSubmit)}
@@ -245,6 +254,14 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
           <Text className="text-base font-semibold text-white">
             {loading ? "Signing in..." : "Sign In"}
           </Text>
+        </Pressable>
+
+        <Pressable
+          className="mt-3 self-center"
+          onPress={handleForgotPassword}
+          disabled={loading}
+        >
+          <Text className="text-sm text-gray-400">Forgot password?</Text>
         </Pressable>
       </View>
     </FormProvider>

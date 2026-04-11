@@ -10,7 +10,7 @@ interface ProfileStore {
 export const useProfileStore = create<ProfileStore>()(
   persist(
     (set) => ({
-      name: "Phil",
+      name: "",
       updateProfile: (fields) => set(fields),
     }),
     {
