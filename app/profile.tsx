@@ -56,6 +56,9 @@ export default function ProfileScreen() {
 
   const saveField = handleSubmit((data) => {
     updateProfile(data);
+    if (data.zipCode && data.zipCode !== zipCode) {
+      useTreeStore.getState().updateAllZipCodes(data.zipCode);
+    }
     setEditingField(null);
   });
 

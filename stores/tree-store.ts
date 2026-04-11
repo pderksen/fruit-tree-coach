@@ -6,9 +6,14 @@ import type { Tree } from "@/lib/types";
 interface TreeStore {
   trees: Tree[];
   addTree: (tree: Tree) => void;
+  updateAllZipCodes: (zipCode: string) => void;
 }
 
 export const useTreeStore = create<TreeStore>((set) => ({
   trees: MOCK_TREES,
   addTree: (tree) => set((state) => ({ trees: [...state.trees, tree] })),
+  updateAllZipCodes: (zipCode) =>
+    set((state) => ({
+      trees: state.trees.map((tree) => ({ ...tree, zipCode })),
+    })),
 }));

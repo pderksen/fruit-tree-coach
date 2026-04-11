@@ -34,6 +34,7 @@ export default function AddTreeScreen() {
   const router = useRouter();
   const addTree = useTreeStore((s) => s.addTree);
   const zone = useProfileStore((s) => s.gardeningZone);
+  const zipCode = useProfileStore((s) => s.zipCode);
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -51,7 +52,7 @@ export default function AddTreeScreen() {
       name: variety ? `${variety} ${treeType}` : treeType,
       type: treeType,
       variety,
-      zipCode: "97201", // TODO: use user's actual zip code
+      zipCode,
       ageBracket: (data.ageBracket as AgeBracket) || undefined,
       statusLabel: "Just planted",
       statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
