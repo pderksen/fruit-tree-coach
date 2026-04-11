@@ -4,7 +4,6 @@ import { View, Text, SectionList } from "react-native";
 
 import { FruitIcon } from "@/components/FruitIcon";
 import { Screen } from "@/components/Screen";
-import { TREE_CATEGORY_MAP } from "@/lib/fruit-tree-data";
 import { getWateringGuide, type WateringGuide } from "@/lib/care/watering";
 import { useTreeStore } from "@/stores/tree-store";
 import type { FruitTreeType } from "@/lib/types";
@@ -33,7 +32,7 @@ function SignList({
       {items.map((item) => (
         <View key={item} className="mt-1.5 flex-row items-start gap-2">
           <Ionicons
-            name={color === "red" ? "water" : "water-outline"}
+            name="water-outline"
             size={14}
             color={iconColor}
             style={{ marginTop: 2 }}
@@ -98,7 +97,7 @@ function WateringCard({ guide }: { guide: WateringGuide }) {
       {/* Tip */}
       <View className="mt-4 rounded-xl bg-brand-50 p-3">
         <View className="flex-row items-start gap-2">
-          <Ionicons name="bulb-outline" size={16} color="#15803d" />
+          <Ionicons name="star" size={16} color="#15803d" />
           <Text className="flex-1 text-sm leading-5 text-brand-800">
             {guide.tip}
           </Text>
@@ -120,9 +119,8 @@ export default function WateringScreen() {
       seen.add(tree.type);
 
       const guide = getWateringGuide(tree.type);
-      const category = TREE_CATEGORY_MAP[tree.type];
       result.push({
-        title: `${tree.type} (${category})`,
+        title: tree.type,
         treeType: tree.type,
         data: [guide],
       });
