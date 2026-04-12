@@ -51,6 +51,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `stores/tree-store.ts`, `stores/orchard-store.ts`, `stores/profile-store.ts` — legacy, being replaced by TanStack Query hooks in `hooks/use-*.ts`; scheduled for removal in Phase 9
 - `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts` TanStack Query hooks backed by `lib/services/`
 - `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-10/`) with per-phase plans
+- `docs/testing.md` test scope (Vitest) + manual smoke checklist + per-phase QA history
 - `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
 - `components/` reusable UI components
@@ -117,7 +118,10 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 1. `npm run typecheck` passes
 2. `npm test` passes for touched files
 3. `npm run lint` passes
-4. If UI changed, describe how to manually verify on Android and iOS
+4. If UI changed, cite the relevant sections of `docs/testing.md` and state which steps you ran, which you skipped, and on which platforms (iOS/Android). If a platform couldn't be tested, say so explicitly rather than claiming success.
+5. If you suggest any manual QA steps that aren't already in `docs/testing.md`, append them to the "Feature-specific QA checklists" section of that doc as part of the same change — don't just drop them in the chat. The doc is the durable record; chat is not. If the steps are narrow to one change, add a dated subsection; if they're a general smoke-path gap, add them to the main checklist. Do this before declaring the task done.
+
+See `docs/testing.md` for the full automated-test scope and manual smoke checklist.
 
 ## What NOT to do
 - Don't add dependencies without asking first
@@ -129,6 +133,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - Don't use Context for server state, that's TanStack Query's job
 - Don't invent horticultural advice, if a recommendation isn't backed
   by a known source, flag it and ask
+- Don't leave suggested manual QA steps in chat only — append them to `docs/testing.md` so they survive the conversation
 
 ## Working style
 - For any non-trivial task, write a plan first and wait for approval
