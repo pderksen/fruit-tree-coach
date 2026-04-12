@@ -29,11 +29,11 @@ export default function RootLayout() {
     SplashScreen.hideAsync();
   }, []);
 
-  // Minimum 3-second splash
+  // Minimum 2-second splash
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinSplashDone(true);
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
