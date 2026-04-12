@@ -59,7 +59,7 @@ export default function RootLayout() {
     if (isAuthenticated) {
       router.replace("/(tabs)");
     } else {
-      router.replace("/splash");
+      router.replace(__DEV__ ? "/dev-login" : "/splash");
     }
   }, [ready, isAuthenticated, router]);
 
@@ -101,6 +101,10 @@ export default function RootLayout() {
       >
         <Stack.Screen
           name="splash"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="dev-login"
           options={{ headerShown: false }}
         />
         <Stack.Screen
