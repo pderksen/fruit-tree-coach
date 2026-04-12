@@ -25,6 +25,19 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `@react-native-community/datetimepicker` for native date pickers
 - ESLint (latest stable) + Prettier for linting and formatting
 
+## Supabase schema changes (migrations)
+All schema changes must land as committed SQL files in `supabase/migrations/`
+— this is our free-tier substitute for PITR. Git history is the schema history.
+- New change: `npx supabase migration new <name>` → write forward SQL → `npx supabase db push` → commit the `.sql` file
+- Never make schema changes via the Supabase dashboard SQL editor or MCP `apply_migration` — they bypass local files. Always go through `migration new` + `db push` so the SQL is captured in git
+- Forward-only: to undo, write a new migration that reverses it — never edit or delete an already-applied file
+- The four pre-2026-04-12 migration files are placeholder shims; real SQL was applied before tracking started, so the schema before then is not reproducible from git
+- Linked remote project ref: `wrbrgzkbqcyhhjqepqiv` (Fruit Tree Coach Dev). The older `uybliviykcbdrjdauilj` (Lovable 1) is inactive — do not link to it
+- CLI auth is two credentials: personal access token via `npx supabase login` (OS keychain) + DB password prompted on `supabase link`. Neither is the anon key
+- `npx supabase migration repair --status reverted|applied <version...>` only edits the `schema_migrations` tracking table — runs no SQL, never changes schema. Safe for reconciling history
+- If local/remote history diverges, `supabase migration list` shows both columns side-by-side — start debugging there
+- Never commit the DB password or `supabase login` token; `supabase/.temp/` is already gitignored
+
 ## Project structure
 - `app/` screens and navigation
 - `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
@@ -127,6 +140,9 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `npm run test:watch` run Vitest in watch mode
 - `npm run lint` ESLint
 - `npm run format` Prettier format all files
+- `npx supabase migration new <name>` create a new migration file
+- `npx supabase db push` apply pending local migrations to the linked remote DB
+- `npx supabase migration list` show local vs remote migration history
 - `eas build --profile preview` cloud build for testing
 - `eas build --profile production` production build
 

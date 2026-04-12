@@ -1,0 +1,3 @@
+-- Baseline placeholder. Applied directly to remote on 2026-04-12 before
+-- local migration tracking existed. Actual SQL is not captured locally;
+-- this file exists only to keep CLI history consistent.

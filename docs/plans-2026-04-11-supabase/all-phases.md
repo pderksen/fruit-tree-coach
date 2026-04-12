@@ -136,3 +136,36 @@ All phases for migrating from local mock data to a live Supabase backend.
 - **Every Supabase response** goes through a Zod schema (CLAUDE.md rule)
 - **No Supabase imports in components** — all queries go through `lib/services/`
 - **Server state uses TanStack Query**, local UI state stays in Zustand
+
+---
+
+## Schema changes: migration workflow
+
+All schema changes from 2026-04-12 onward must land as committed migration
+files in `supabase/migrations/`. This is our free-tier substitute for
+point-in-time recovery — git history *is* the schema history.
+
+**To make a schema change:**
+
+1. `npx supabase migration new <descriptive_name>` — creates a timestamped
+   `.sql` file in `supabase/migrations/`
+2. Write the forward SQL in that file (tables, columns, policies, triggers)
+3. `npx supabase db push` — applies it to the linked remote dev DB
+4. Commit the new `.sql` file to git
+
+**To undo a change:** write a new migration that reverses it (forward-only —
+no `supabase db rollback`). Git `log`/`diff`/`blame` on `supabase/migrations/`
+is the audit trail.
+
+**Never make schema changes via the dashboard SQL editor or MCP
+`apply_migration`** — they bypass the local files. Always go through
+`migration new` + `db push` so the SQL lands in git.
+
+**Baseline:** the four `20260411*` / `20260412183823_*` files are placeholder
+shims — the real SQL for those was applied directly to the remote before
+tracking started, and is not captured locally. `supabase db reset` will
+therefore not reproduce pre-2026-04-12 schema state. All *future* migrations
+will be replayable from git.
+
+**Never commit:** the database password, the personal access token from
+`supabase login`, or anything in `supabase/.temp/` (already gitignored).
