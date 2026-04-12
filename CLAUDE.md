@@ -48,9 +48,8 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
 - `app/profile.tsx` user profile/account screen (stack, not tab)
 - `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
-- `stores/tree-store.ts`, `stores/orchard-store.ts`, `stores/profile-store.ts` — legacy, being replaced by TanStack Query hooks in `hooks/use-*.ts`; scheduled for removal in Phase 9
-- `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts` TanStack Query hooks backed by `lib/services/`
-- `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-10/`) with per-phase plans
+- `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts`, `hooks/use-session.ts`, `hooks/use-guide.ts` TanStack Query hooks backed by `lib/services/`
+- `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-12/`) with per-phase plans
 - `docs/testing.md` test scope (Vitest) + manual smoke checklist + per-phase QA history
 - `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
@@ -67,8 +66,8 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `lib/zone-lookup.ts` USDA zone / climate lookup
 - `lib/mocks/` hardcoded mock data for UI development
 - `lib/care/` care logic — `watering.ts`, `season-order.ts`, `research-sources.ts`
-- `hooks/` custom React hooks (currently empty placeholder)
-- `stores/` local app state
+- `hooks/` custom React hooks (TanStack Query wrappers for server state)
+- `stores/` local app state (device-only, e.g. notification settings)
 
 ## Key files
 - `app/_layout.tsx` root layout (global nav options, stack screen registration)
