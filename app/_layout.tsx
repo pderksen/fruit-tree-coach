@@ -136,6 +136,10 @@ export default function RootLayout() {
           name="profile"
           options={{ title: "Profile" }}
         />
+        <Stack.Screen
+          name="onboarding-zip"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
       </Stack>
     </PersistQueryClientProvider>
   );

@@ -193,6 +193,39 @@ toggling airplane mode on a real device or simulator.
 - [ ] Banner does NOT flash on cold start before NetInfo resolves
       (i.e. no render when `isConnected === null`)
 
+### Onboarding ZIP screen (shipped 2026-04-12)
+
+New post-signup screen that collects ZIP via device location or manual
+entry, then populates orchard zip+zone via `useUpdateOrchard`. Requires
+real device or simulator with location services configurable.
+
+**Note (2026-04-12):** the "Use my current location" button is hidden in
+Expo Go because the native permission string only lands in a custom dev
+client. In Expo Go, only manual entry is testable. The location items
+below are parked until the dev client ships (see
+`docs/plans-2026-04-12/`).
+
+- [ ] Sign up as a new user → lands on Onboarding ZIP screen (not
+      directly on the tabs)
+- [ ] Tap "Use my current location" → native permission dialog appears
+      on first run → grant → ZIP populates in the input within a few
+      seconds → success message reads "Detected your ZIP. Change it
+      if it's wrong."
+- [ ] Deny location permission → inline error shows, ZIP input is
+      empty, can still enter manually
+- [ ] Simulator with location set to a non-US region (e.g. London) →
+      error: "Couldn't detect a US ZIP code."
+- [ ] Manually enter a 5-digit ZIP → Continue enables → tap → lands
+      on Home → open Profile → ZIP and Gardening Zone are both set
+      (zone was auto-looked up)
+- [ ] Enter fewer than 5 digits → Continue stays disabled
+- [ ] Tap "Skip for now" → lands on Home → Profile shows blank ZIP
+      and zone (expected — no banner yet, tracked as follow-up)
+- [ ] iOS: no back-swipe gesture dismisses the onboarding screen
+      (`gestureEnabled: false`)
+- [ ] Android: hardware/gesture back does not leave the onboarding
+      screen back into sign-in
+
 ## When Vitest and the smoke path aren't enough
 
 - **Schema/RLS changes**: in addition to the smoke path, run the

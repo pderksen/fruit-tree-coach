@@ -169,9 +169,6 @@ export default function ProfileScreen() {
             <Ionicons name="person" size={36} color="#15803d" />
           </View>
           <Text className="mt-3 text-xl font-bold text-gray-900">{name}</Text>
-          <Text className="mt-1 text-sm text-gray-500">
-            Zone {gardeningZone}{isLookingUpZone ? " (updating…)" : ""} · {zipCode}
-          </Text>
         </View>
 
         {/* Editable account info */}

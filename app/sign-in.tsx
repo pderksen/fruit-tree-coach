@@ -73,7 +73,7 @@ export default function SignInPage() {
           {/* Form */}
           {isSignUp ? (
             <SignUpForm
-              onSuccess={() => router.replace("/(tabs)")}
+              onSuccess={() => router.replace("/onboarding-zip")}
             />
           ) : (
             <SignInForm
