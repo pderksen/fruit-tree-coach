@@ -1,10 +1,10 @@
-import type { DetailedTask, ExpertTip, FruitTreeType, SeasonStage } from "@/lib/types";
+import type { Task, ExpertTip, FruitTreeType, SeasonStage } from "@/lib/types";
 
 /**
  * Mock detailed tasks keyed by tree ID.
  * Sources cited per CLAUDE.md — all horticultural advice is defensible.
  */
-export const MOCK_DETAILED_TASKS: Record<string, DetailedTask[]> = {
+export const MOCK_DETAILED_TASKS: Record<string, Task[]> = {
   // Honeycrisp Apple
   "1": [
     {

@@ -35,6 +35,7 @@ export function useCreateTree() {
     mutationFn: (tree: NewTree) => createTree(tree),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["trees"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 }

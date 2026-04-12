@@ -4,11 +4,11 @@ import { View, Text, Pressable } from "react-native";
 
 import { FruitIcon } from "@/components/FruitIcon";
 import { TimelineDot } from "@/components/TimelineLine";
-import type { CalendarTask } from "@/lib/mocks/calendar-tasks";
 import { formatWeekRange } from "@/lib/date-utils";
+import type { Task } from "@/lib/types";
 
 interface TimelineTaskProps {
-  task: CalendarTask;
+  task: Task & { dueDate: string };
   isOverdue: boolean;
   isLast: boolean;
 }
@@ -19,17 +19,10 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
   const weekLabel = formatWeekRange(new Date(task.dueDate));
 
   const handlePress = () => {
-    if (task.guideTaskId) {
-      router.push({
-        pathname: "/tree/guide/[taskId]",
-        params: { taskId: task.guideTaskId },
-      });
-    } else {
-      router.push({
-        pathname: "/tree/[id]",
-        params: { id: task.treeId },
-      });
-    }
+    router.push({
+      pathname: "/tree/guide/[taskId]",
+      params: { taskId: task.id },
+    });
   };
 
   return (
@@ -51,9 +44,11 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
           elevation: 1,
         }}
       >
-        <View className="mr-3">
-          <FruitIcon type={task.treeType} size={32} />
-        </View>
+        {task.treeType ? (
+          <View className="mr-3">
+            <FruitIcon type={task.treeType} size={32} />
+          </View>
+        ) : null}
 
         <View className="flex-1">
           <Text className="text-sm font-bold text-gray-900">{task.title}</Text>

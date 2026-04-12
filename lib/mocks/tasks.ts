@@ -8,6 +8,7 @@ export const MOCK_TASKS: Task[] = [
     title: "Prune crossing branches",
     why: "Removing crossing branches improves air circulation and reduces disease risk.",
     done: false,
+    priority: false,
   },
   {
     id: "t2",
@@ -16,6 +17,7 @@ export const MOCK_TASKS: Task[] = [
     title: "Check for pests",
     why: "A quick look now can catch problems before they spread to new growth.",
     done: false,
+    priority: false,
   },
   {
     id: "t3",
@@ -24,5 +26,6 @@ export const MOCK_TASKS: Task[] = [
     title: "Apply fertilizer",
     why: "A spring feeding supports healthy leaf growth and future fruit production.",
     done: false,
+    priority: false,
   },
 ];

@@ -1,25 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { ActivityIndicator, View, Text, ScrollView } from "react-native";
 
 import { CalendarHeader } from "@/components/CalendarHeader";
 import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
 import { TimelineTask } from "@/components/TimelineTask";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useAllTasks } from "@/hooks/use-tasks";
 import { formatWeekRange, getWeekKey, getWeekStart } from "@/lib/date-utils";
-import {
-  MOCK_CALENDAR_TASKS,
-  type CalendarTask,
-} from "@/lib/mocks/calendar-tasks";
+import type { Task } from "@/lib/types";
 import { useSettingsStore } from "@/stores/settings-store";
 
+type DatedTask = Task & { dueDate: string };
+
 /** Group tasks by week (Monday–Sunday) and sort chronologically. */
-function groupByWeek(tasks: CalendarTask[]) {
+function groupByWeek(tasks: DatedTask[]) {
   const sorted = [...tasks].sort(
     (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
   );
 
-  const groups = new Map<string, CalendarTask[]>();
+  const groups = new Map<string, DatedTask[]>();
   for (const task of sorted) {
     const key = getWeekKey(new Date(task.dueDate));
     if (!groups.has(key)) groups.set(key, []);
@@ -40,20 +41,24 @@ export default function CalendarScreen() {
   const scrollRef = useRef<ScrollView>(null);
   const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
   const [showNotifModal, setShowNotifModal] = useState(!hasSeenPrompt);
+  const orchard = useDefaultOrchard();
+  const tasksQuery = useAllTasks(orchard?.id);
 
   const filteredTasks = useMemo(() => {
     const selectedMonth = selectedDate.getMonth();
     const selectedYear = selectedDate.getFullYear();
-    return MOCK_CALENDAR_TASKS.filter((t) => {
+    const source = tasksQuery.data ?? [];
+    return source.filter((t): t is DatedTask => {
+      if (!t.dueDate) return false;
       const d = new Date(t.dueDate);
       return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
     });
-  }, [selectedDate]);
+  }, [selectedDate, tasksQuery.data]);
 
   const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);
 
   const isOverdue = useCallback(
-    (task: CalendarTask) => {
+    (task: DatedTask) => {
       const due = new Date(task.dueDate);
       due.setHours(23, 59, 59, 999);
       return due < today;
@@ -82,7 +87,11 @@ export default function CalendarScreen() {
         onSelectDate={setSelectedDate}
       />
 
-      {groups.length > 0 ? (
+      {tasksQuery.isLoading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator color="#15803d" />
+        </View>
+      ) : groups.length > 0 ? (
         <ScrollView
           ref={scrollRef}
           showsVerticalScrollIndicator={false}

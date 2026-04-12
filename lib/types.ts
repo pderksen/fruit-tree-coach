@@ -67,20 +67,28 @@ export interface Tree {
   statusDescription?: string;
 }
 
+export type TaskCategory =
+  | "pruning"
+  | "feeding"
+  | "monitoring"
+  | "harvesting"
+  | "protection";
+
 export interface Task {
   id: string;
   treeId: string;
   treeName: string;
+  treeType?: FruitTreeType;
   title: string;
   why: string;
   done: boolean;
-}
-
-export interface DetailedTask extends Task {
+  dueDate?: string;
+  category?: TaskCategory;
+  priority: boolean;
+  season?: string;
   timeWindow?: string;
   description?: string;
-  priority?: boolean;
-  season?: string;
+  guideTaskId?: string;
 }
 
 export interface ExpertTip {

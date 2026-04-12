@@ -116,6 +116,19 @@ All phases for migrating from local mock data to a live Supabase backend.
 
 ---
 
+## Phase 10: Guides in Supabase
+
+- Move `MOCK_GUIDES` content into a `guides` table (or JSON column on tasks)
+- Design schema for steps, tools, product recommendations, research notes
+- Create `lib/services/guide-service.ts` + `hooks/use-guide.ts`
+- Replace `MOCK_GUIDES` lookup in `app/tree/guide/[taskId].tsx` with a real query
+- Decide on authoring workflow (seed SQL, admin UI, or direct table edits)
+- Keep `guide_task_id` linkage on tasks working against the new source
+
+**Files:** Supabase migration, `lib/services/guide-service.ts`, `hooks/use-guide.ts`, `lib/schemas.ts`, `app/tree/guide/[taskId].tsx`, `lib/mocks/guides.ts` (remove usage)
+
+---
+
 ## Notes
 
 - **Settings store** stays local unless cross-device sync is needed later

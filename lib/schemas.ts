@@ -106,6 +106,14 @@ export const newTreeSchema = z.object({
 
 export type NewTree = z.infer<typeof newTreeSchema>;
 
+const taskCategorySchema = z.enum([
+  "pruning",
+  "feeding",
+  "monitoring",
+  "harvesting",
+  "protection",
+]);
+
 export const taskRowSchema = z.object({
   id: z.string().uuid(),
   tree_id: z.string().uuid(),
@@ -113,16 +121,34 @@ export const taskRowSchema = z.object({
   why: z.string().nullable(),
   done: z.boolean(),
   created_at: z.string(),
-  trees: z.object({ name: z.string() }).nullable().optional(),
+  due_date: z.string().nullable(),
+  category: taskCategorySchema.nullable(),
+  priority: z.boolean(),
+  season: z.string().nullable(),
+  time_window: z.string().nullable(),
+  description: z.string().nullable(),
+  guide_task_id: z.string().nullable(),
+  trees: z
+    .object({ name: z.string(), type: fruitTreeTypeSchema })
+    .nullable()
+    .optional(),
 });
 
 export const taskSchema = taskRowSchema.transform((row) => ({
   id: row.id,
   treeId: row.tree_id,
   treeName: row.trees?.name ?? "",
+  treeType: row.trees?.type,
   title: row.title,
   why: row.why ?? "",
   done: row.done,
+  dueDate: optional(row.due_date),
+  category: optional(row.category),
+  priority: row.priority,
+  season: optional(row.season),
+  timeWindow: optional(row.time_window),
+  description: optional(row.description),
+  guideTaskId: optional(row.guide_task_id),
 }));
 
 export type TaskRow = z.infer<typeof taskRowSchema>;
@@ -132,6 +158,13 @@ export const newTaskSchema = z.object({
   title: z.string().min(1),
   why: z.string().optional(),
   done: z.boolean().default(false),
+  dueDate: z.string().optional(),
+  category: taskCategorySchema.optional(),
+  priority: z.boolean().default(false),
+  season: z.string().optional(),
+  timeWindow: z.string().optional(),
+  description: z.string().optional(),
+  guideTaskId: z.string().optional(),
 });
 
 export type NewTask = z.infer<typeof newTaskSchema>;

@@ -1,8 +1,8 @@
 import { View } from "react-native";
 
-import type { CalendarTask } from "@/lib/mocks/calendar-tasks";
+import type { TaskCategory } from "@/lib/types";
 
-const CATEGORY_DOT_COLOR: Record<CalendarTask["category"], string> = {
+const CATEGORY_DOT_COLOR: Record<TaskCategory, string> = {
   pruning: "bg-brand-500",
   feeding: "bg-amber-500",
   monitoring: "bg-blue-500",
@@ -11,12 +11,14 @@ const CATEGORY_DOT_COLOR: Record<CalendarTask["category"], string> = {
 };
 
 interface TimelineDotProps {
-  category: CalendarTask["category"];
+  category: TaskCategory | undefined;
   isOverdue: boolean;
 }
 
 export function TimelineDot({ category, isOverdue }: TimelineDotProps) {
-  const dotColor = isOverdue ? "bg-red-500" : CATEGORY_DOT_COLOR[category];
+  const dotColor = isOverdue
+    ? "bg-red-500"
+    : (category && CATEGORY_DOT_COLOR[category]) ?? "bg-gray-400";
 
   return (
     <View className="items-center" style={{ width: 24 }}>

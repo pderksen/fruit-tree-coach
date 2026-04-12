@@ -16,6 +16,7 @@ import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
 import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
 import { TreeDetailHeader } from "@/components/TreeDetailHeader";
+import { useTasks, useToggleTask } from "@/hooks/use-tasks";
 import { useDeleteTree, useTree } from "@/hooks/use-trees";
 import {
   compareByUpcomingSeason,
@@ -23,9 +24,9 @@ import {
 } from "@/lib/care/season-order";
 import {
   CURRENT_SEASON_STAGE,
-  MOCK_DETAILED_TASKS,
   MOCK_EXPERT_TIPS,
 } from "@/lib/mocks/care-details";
+import type { Task } from "@/lib/types";
 
 export default function TreeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -33,6 +34,12 @@ export default function TreeDetailScreen() {
   const treeQuery = useTree(id);
   const tree = treeQuery.data;
   const deleteTreeMutation = useDeleteTree();
+  const tasksQuery = useTasks(id);
+  const toggleTaskMutation = useToggleTask();
+
+  const handleToggleTask = (task: Task) => {
+    toggleTaskMutation.mutate({ id: task.id, done: !task.done });
+  };
 
   const handleDelete = () => {
     if (!tree) return;
@@ -59,10 +66,7 @@ export default function TreeDetailScreen() {
     );
   };
 
-  const allTasks = useMemo(
-    () => MOCK_DETAILED_TASKS[id ?? ""] ?? [],
-    [id],
-  );
+  const allTasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
   const priorityTask = allTasks.find((t) => t.priority);
   const laterTasks = useMemo(() => {
     const raw = allTasks.filter((t) => !t.priority);
@@ -115,6 +119,7 @@ export default function TreeDetailScreen() {
           {priorityTask ? (
             <PriorityTaskCard
               task={priorityTask}
+              onToggleDone={() => handleToggleTask(priorityTask)}
               onViewGuide={() => {
                 router.push({
                   pathname: "/tree/guide/[taskId]",
@@ -141,7 +146,7 @@ export default function TreeDetailScreen() {
             What to do later
           </Text>
           {laterTasks.length > 0 ? (
-            <LaterTaskList tasks={laterTasks} />
+            <LaterTaskList tasks={laterTasks} onToggleDone={handleToggleTask} />
           ) : (
             <View className="items-center rounded-2xl bg-white p-6">
               <Text className="text-sm text-gray-500">

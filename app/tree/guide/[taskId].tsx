@@ -1,15 +1,39 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { LayoutAnimation, Linking, Pressable, View, Text, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  LayoutAnimation,
+  Linking,
+  Pressable,
+  View,
+  Text,
+  ScrollView,
+} from "react-native";
 
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Screen } from "@/components/Screen";
+import { useTask, useToggleTask } from "@/hooks/use-tasks";
 import { MOCK_GUIDES, type Guide, type ProductRecommendation } from "@/lib/mocks/guides";
 
 export default function GuideScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
-  const guide = taskId ? MOCK_GUIDES[taskId] : undefined;
+  const router = useRouter();
+  const taskQuery = useTask(taskId);
+  const toggleTask = useToggleTask();
+  const task = taskQuery.data;
+  const guideKey = task?.guideTaskId ?? taskId;
+  const guide = guideKey ? MOCK_GUIDES[guideKey] : undefined;
+
+  if (taskQuery.isLoading) {
+    return (
+      <Screen>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator color="#15803d" />
+        </View>
+      </Screen>
+    );
+  }
 
   if (!guide) {
     return (
@@ -23,6 +47,14 @@ export default function GuideScreen() {
       </Screen>
     );
   }
+
+  const handleMarkDone = () => {
+    if (!task) return;
+    toggleTask.mutate(
+      { id: task.id, done: !task.done },
+      { onSuccess: () => router.back() },
+    );
+  };
 
   return (
     <Screen bg="bg-cream-50">
@@ -82,6 +114,29 @@ export default function GuideScreen() {
         {/* Research Notes (collapsible) */}
         {guide.researchNotes ? (
           <ResearchNotes notes={guide.researchNotes} />
+        ) : null}
+
+        {task ? (
+          <Pressable
+            onPress={handleMarkDone}
+            disabled={toggleTask.isPending}
+            className="mt-6 flex-row items-center justify-center gap-2 rounded-2xl bg-brand-700 py-4 active:opacity-80"
+          >
+            {toggleTask.isPending ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <>
+                <Ionicons
+                  name={task.done ? "refresh" : "checkmark-circle"}
+                  size={18}
+                  color="white"
+                />
+                <Text className="text-base font-semibold text-white">
+                  {task.done ? "Mark as not done" : "Mark as done"}
+                </Text>
+              </>
+            )}
+          </Pressable>
         ) : null}
       </ScrollView>
     </Screen>

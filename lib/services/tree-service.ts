@@ -2,6 +2,45 @@ import { supabase } from "@/lib/supabase";
 import { treeSchema, type NewTree } from "@/lib/schemas";
 import type { Tree } from "@/lib/types";
 
+// Generic starter tasks inserted when a new tree is created.
+// These are placeholders until a real care-plan generator lands.
+const STARTER_TASKS: {
+  title: string;
+  why: string;
+  description: string;
+  category: "pruning" | "feeding" | "monitoring";
+  season: string;
+  priority: boolean;
+}[] = [
+  {
+    title: "Check tree health",
+    why: "Regular inspection catches pests and disease early.",
+    description:
+      "Walk around your tree. Look at leaves, bark, and branch tips for anything unusual.",
+    category: "monitoring",
+    season: "Spring",
+    priority: true,
+  },
+  {
+    title: "Apply spring compost",
+    why: "A compost ring feeds the roots as the tree breaks dormancy.",
+    description:
+      "Spread 2–3 inches of compost around the drip line, keeping it clear of the trunk.",
+    category: "feeding",
+    season: "Spring",
+    priority: false,
+  },
+  {
+    title: "Light shape pruning",
+    why: "Removing dead and crossing branches improves airflow and reduces disease risk.",
+    category: "pruning",
+    description:
+      "Snip out dead, damaged, or crossing branches with clean, sharp secateurs.",
+    season: "Late Winter",
+    priority: false,
+  },
+];
+
 const TREE_COLUMNS =
   "id, orchard_id, name, type, variety, planted_year, planted_date, age_bracket, description, status_label, status_description, created_at";
 
@@ -43,7 +82,24 @@ export async function createTree(tree: NewTree): Promise<Tree> {
     .select(TREE_COLUMNS)
     .single();
   if (error) throw error;
-  return treeSchema.parse(data);
+  const created = treeSchema.parse(data);
+  await seedStarterTasks(created.id);
+  return created;
+}
+
+async function seedStarterTasks(treeId: string): Promise<void> {
+  const rows = STARTER_TASKS.map((t) => ({
+    tree_id: treeId,
+    title: t.title,
+    why: t.why,
+    description: t.description,
+    category: t.category,
+    season: t.season,
+    priority: t.priority,
+    done: false,
+  }));
+  const { error } = await supabase.from("tasks").insert(rows);
+  if (error) throw error;
 }
 
 export async function updateTree(

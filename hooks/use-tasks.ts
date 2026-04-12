@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createTask,
   deleteTask,
+  fetchTask,
   fetchTasks,
   fetchTasksByOrchard,
   updateTask,
@@ -22,6 +23,14 @@ export function useTasks(treeId: string | undefined) {
     queryKey: tasksByTreeKey(treeId),
     queryFn: () => fetchTasks(treeId!),
     enabled: !!treeId,
+  });
+}
+
+export function useTask(id: string | undefined) {
+  return useQuery({
+    queryKey: ["tasks", "detail", id],
+    queryFn: () => fetchTask(id!),
+    enabled: !!id,
   });
 }
 
