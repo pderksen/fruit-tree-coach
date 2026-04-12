@@ -45,10 +45,12 @@ export default function RootLayout() {
     if (hasNavigated.current) return;
     hasNavigated.current = true;
 
-    if (isAuthenticated) {
+    if (__DEV__) {
+      router.replace("/dev-login");
+    } else if (isAuthenticated) {
       router.replace("/(tabs)");
     } else {
-      router.replace(__DEV__ ? "/dev-login" : "/splash");
+      router.replace("/splash");
     }
   }, [ready, isAuthenticated, router]);
 
