@@ -9,8 +9,8 @@ import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useAllTasks } from "@/hooks/use-tasks";
 import { useTrees } from "@/hooks/use-trees";
-import { MOCK_TASKS } from "@/lib/mocks/tasks";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -18,7 +18,8 @@ export default function HomeScreen() {
   const gardeningZone = orchard?.zone ?? "—";
   const treesQuery = useTrees(orchard?.id);
   const trees = treesQuery.data ?? [];
-  const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
+  const tasksQuery = useAllTasks(orchard?.id);
+  const pendingTasks = (tasksQuery.data ?? []).filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
   return (
