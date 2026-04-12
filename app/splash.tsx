@@ -24,7 +24,7 @@ export default function SplashPage() {
 
         <Pressable
           className="mb-4 w-full items-center rounded-xl bg-brand-700 px-6 py-4"
-          onPress={() => router.push("/trial")}
+          onPress={() => router.push("/sign-in?mode=signup")}
         >
           <Text className="text-base font-semibold text-white">
             Start Free Trial

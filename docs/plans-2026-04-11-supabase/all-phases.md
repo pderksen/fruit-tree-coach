@@ -101,18 +101,28 @@ All phases for migrating from local mock data to a live Supabase backend.
 
 ---
 
-## Phase 9: Post-Migration Cleanup & Offline Foundation
+## Phase 9a: Post-Migration Cleanup
 
-- Delete obsolete Zustand stores (`tree-store`, `profile-store`, `orchard-store`)
-- Delete obsolete screens (`app/trial.tsx`) and dead hidden-tab files
-- Move `refreshZoneFromApi` out of `orchard-store` into `lib/zone-lookup.ts`
-- Document settings split: device-local (notifications) vs future synced (units, flags)
+- Delete dead hidden-tab files (`trees`, `advice`, `settings`) + registrations
+- Keep `app/trial.tsx` as a dev-only test screen (launched from `dev-login`);
+  remove the production trial-launcher button from `app/(tabs)/index.tsx`
+- Rewire splash CTA from `/trial` → `/sign-in?mode=signup` (paywall not shipping yet)
+- Fix missing `zipToZone` offline fallback in `useUpdateOrchard`
+- Document the settings local-vs-sync split as a header comment in `settings-store.ts`
+- Zustand store cleanup already done in prior phases — nothing to delete here
+
+**Files:** `app/(tabs)/trees.tsx`, `app/(tabs)/advice.tsx`, `app/(tabs)/settings.tsx` (delete), `app/(tabs)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/splash.tsx`, `hooks/use-orchards.ts`, `stores/settings-store.ts`
+
+---
+
+## Phase 9b: Offline-First Foundation
+
 - Add TanStack Query persistence + `networkMode: "offlineFirst"` for offline-first UX
-- Optimistic + queued mutations for critical offline actions (mark task done)
+- Optimistic + queued mutations for critical offline actions (mark task done, add tree, update notes)
 - Offline banner via `@react-native-community/netinfo`
 - Write `docs/offline-strategy.md` to lock in the approach
 
-**Files:** `stores/*` (delete), `app/trial.tsx` (delete), `app/_layout.tsx`, `lib/query-client.ts`, `hooks/use-tasks.ts`, `components/OfflineBanner.tsx`, `docs/offline-strategy.md`
+**Files:** `app/_layout.tsx`, `lib/query-client.ts`, `hooks/use-tasks.ts`, `hooks/use-trees.ts`, `components/OfflineBanner.tsx`, `docs/offline-strategy.md`
 
 ---
 

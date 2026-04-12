@@ -1,3 +1,24 @@
+/**
+ * Device-local app settings. Persisted to AsyncStorage on this device only —
+ * NOT synced across the user's devices. This is deliberate.
+ *
+ * Belongs here (device-local):
+ *   - Notification toggle, notification time, per-category notification prefs
+ *   - Haptics / sound toggles
+ *   Rationale: these are tied to the physical device. The user's iPad
+ *   shouldn't buzz because they enabled notifications on their phone. Apple
+ *   Health, Strava, and Todoist all work this way.
+ *
+ * Does NOT belong here (future `user_preferences` Supabase table):
+ *   - Measurement units (imperial vs metric)
+ *   - Language / region overrides
+ *   - "Advanced mode" or onboarding-completed flags
+ *   Rationale: these are about the user, not the device, and feel broken
+ *   if they reset when switching devices.
+ *
+ * Do not create the sync table until a real sync-worthy preference exists.
+ * An empty table locks in the wrong shape — YAGNI.
+ */
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";

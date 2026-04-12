@@ -180,17 +180,6 @@ export default function HomeScreen() {
           <SeasonalForecast />
         </View>
 
-        {/* TEST: Launch trial screen */}
-        <View className="px-5 pt-6">
-          <Pressable
-            className="items-center rounded-xl border border-dashed border-gray-300 py-3"
-            onPress={() => router.push("/trial")}
-          >
-            <Text className="text-sm font-medium text-gray-400">
-              Test: Open Trial Screen
-            </Text>
-          </Pressable>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

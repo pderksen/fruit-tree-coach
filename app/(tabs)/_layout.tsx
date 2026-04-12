@@ -70,24 +70,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="trees"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
-        name="advice"
-        options={{
-          href: null,
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          href: null,
-        }}
-      />
     </Tabs>
   );
 }

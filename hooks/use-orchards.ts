@@ -7,7 +7,7 @@ import {
   fetchOrchards,
   updateOrchard,
 } from "@/lib/services/orchard-service";
-import { fetchZoneForZip } from "@/lib/zone-lookup";
+import { fetchZoneForZip, zipToZone } from "@/lib/zone-lookup";
 import type { OrchardWithUser } from "@/lib/schemas";
 
 const orchardsKey = (userId: string | undefined) => ["orchards", userId];
@@ -78,10 +78,13 @@ export function useUpdateOrchard() {
     }) => {
       const { id, fields } = args;
       const patch = { ...fields };
-      // When the zip changes, look up an accurate zone from the USDA API
-      // and persist both zip and zone together.
+      // When the zip changes, look up the zone via the USDA API, falling
+      // back to the static zip-prefix table if the API is unreachable
+      // (offline, timeout, rate-limited). Keeps zip and zone in sync.
       if (fields.zipCode && fields.zone === undefined) {
-        const zone = await fetchZoneForZip(fields.zipCode);
+        const zone =
+          (await fetchZoneForZip(fields.zipCode)) ??
+          zipToZone(fields.zipCode);
         if (zone) patch.zone = zone;
       }
       return updateOrchard(id, patch);
