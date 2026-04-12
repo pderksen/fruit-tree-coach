@@ -49,7 +49,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `app/profile.tsx` user profile/account screen (stack, not tab)
 - `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
 - `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts`, `hooks/use-session.ts`, `hooks/use-guide.ts` TanStack Query hooks backed by `lib/services/`
-- `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-12/`) with per-phase plans
+- `docs/` planning docs — dated subfolders (e.g. `plans-2026-04-12/`) each containing an `all-phases.md` roadmap + per-phase files; no top-level `all-phases.md`
 - `docs/testing.md` test scope (Vitest) + manual smoke checklist + per-phase QA history
 - `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
