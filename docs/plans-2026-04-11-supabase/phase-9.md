@@ -14,24 +14,27 @@ sync, and locks in the long-term shape of the app.
 
 ## 1. Delete obsolete Zustand stores
 
-Phase 8 already flags these; Phase 9 finishes the job.
+**Status: already done in earlier phases + Phase 8a.**
 
-- `stores/tree-store.ts` — delete. Replaced by `hooks/use-trees.ts`.
-- `stores/profile-store.ts` — delete. Replaced by `hooks/use-profile.ts`.
-- `stores/orchard-store.ts` — delete the orchard array/CRUD. Move the
-  `refreshZoneFromApi` helper into `lib/zone-lookup.ts` (or a new
-  `lib/services/zone-service.ts`) so the logic survives.
+- `stores/tree-store.ts` — deleted (pre-Phase 8).
+- `stores/orchard-store.ts` — deleted (pre-Phase 8). `refreshZoneFromApi`
+  logic is already in the orchard-service / zone-lookup path.
+- `stores/profile-store.ts` — **deleted in Phase 8a** (2026-04-12).
+  Replaced by `hooks/use-profile.ts`.
 - `stores/settings-store.ts` — keep. See Section 3.
 
-Also clean up any AsyncStorage keys left behind by the deleted stores
-(grep for `zustand/persist` configs and the key names).
+Orphaned AsyncStorage keys (`fruit-tree-coach-profile`, etc.) will
+clear on reinstall — no programmatic purge needed.
 
 ---
 
 ## 2. Delete obsolete screens & routes
 
 - `app/trial.tsx` — delete. The sign-in gate replaces it. Remove its
-  `Stack.Screen` registration in `app/_layout.tsx` too.
+  `Stack.Screen` registration in `app/_layout.tsx` too. Also remove the
+  "Test: Open Trial Screen" dev button at the bottom of
+  `app/(tabs)/index.tsx` (kept in Phase 8a because `trial.tsx` still
+  exists).
 - Hidden tab files (`app/(tabs)/trees.tsx`, `app/(tabs)/advice.tsx`,
   `app/(tabs)/settings.tsx`) — currently hidden via `href: null` but
   Expo Router still auto-registers them. If they're truly dead,

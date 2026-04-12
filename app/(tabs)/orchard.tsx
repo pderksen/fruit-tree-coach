@@ -1,6 +1,8 @@
 import { useRouter } from "expo-router";
-import { ActivityIndicator, View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, RefreshControl } from "react-native";
 
+import { ErrorState } from "@/components/ErrorState";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { TreeRow } from "@/components/TreeRow";
@@ -27,13 +29,12 @@ export default function OrchardScreen() {
       </View>
 
       {treesQuery.isLoading ? (
-        <View className="items-center py-8">
-          <ActivityIndicator color="#15803d" />
-        </View>
+        <LoadingSpinner />
       ) : treesQuery.isError ? (
-        <Text className="py-8 text-center text-sm text-red-500">
-          Could not load your trees.
-        </Text>
+        <ErrorState
+          message="Could not load your trees."
+          onRetry={() => treesQuery.refetch()}
+        />
       ) : (
         <FlatList
           data={trees}
@@ -58,6 +59,13 @@ export default function OrchardScreen() {
           }
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={treesQuery.isRefetching}
+              onRefresh={() => treesQuery.refetch()}
+              tintColor="#15803d"
+            />
+          }
         />
       )}
 

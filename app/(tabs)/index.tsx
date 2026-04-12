@@ -1,9 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { ActivityIndicator, View, Text, ScrollView, Pressable, Image } from "react-native";
+import { useCallback } from "react";
+import { RefreshControl, View, Text, ScrollView, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ErrorState } from "@/components/ErrorState";
 import { GardenerInsight } from "@/components/GardenerInsight";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { OrchardHealthCard } from "@/components/OrchardHealthCard";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
@@ -22,12 +25,25 @@ export default function HomeScreen() {
   const pendingTasks = (tasksQuery.data ?? []).filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
+  const isRefreshing = treesQuery.isRefetching || tasksQuery.isRefetching;
+  const onRefresh = useCallback(() => {
+    treesQuery.refetch();
+    tasksQuery.refetch();
+  }, [treesQuery, tasksQuery]);
+
   return (
     <SafeAreaView className="flex-1 bg-cream-50" edges={["top"]}>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor="#15803d"
+          />
+        }
       >
         {/* Header */}
         <View className="flex-row items-center justify-between px-5 pb-2 pt-3">
@@ -118,15 +134,12 @@ export default function HomeScreen() {
 
         <View className="px-5 pt-3">
           {treesQuery.isLoading ? (
-            <View className="items-center py-8">
-              <ActivityIndicator color="#15803d" />
-            </View>
+            <LoadingSpinner />
           ) : treesQuery.isError ? (
-            <View className="items-center rounded-2xl bg-white p-6">
-              <Text className="text-sm text-red-500">
-                Could not load your trees. Pull down to try again.
-              </Text>
-            </View>
+            <ErrorState
+              message="Could not load your trees. Pull down to try again."
+              onRetry={() => treesQuery.refetch()}
+            />
           ) : trees.length === 0 ? (
             <View className="items-center rounded-2xl bg-white p-6">
               <Text className="text-base font-semibold text-gray-900">

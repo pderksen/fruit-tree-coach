@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 import { CalendarHeader } from "@/components/CalendarHeader";
+import { ErrorState } from "@/components/ErrorState";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
 import { TimelineTask } from "@/components/TimelineTask";
@@ -88,9 +90,13 @@ export default function CalendarScreen() {
       />
 
       {tasksQuery.isLoading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator color="#15803d" />
-        </View>
+        <LoadingSpinner fullScreen />
+      ) : tasksQuery.isError ? (
+        <ErrorState
+          fullScreen
+          message="Could not load tasks."
+          onRetry={() => tasksQuery.refetch()}
+        />
       ) : groups.length > 0 ? (
         <ScrollView
           ref={scrollRef}

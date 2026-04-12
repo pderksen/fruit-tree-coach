@@ -20,7 +20,7 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { useCreateTree } from "@/hooks/use-trees";
-import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
+import { COACH_TIPS } from "@/lib/care/coach-tips";
 import type { AgeBracket, FruitTreeType } from "@/lib/types";
 
 const addTreeSchema = z.object({
@@ -67,7 +67,7 @@ export default function AddTreeScreen() {
   }
 
   const coachTip = selectedType
-    ? MOCK_COACH_TIPS[selectedType as FruitTreeType]
+    ? COACH_TIPS[selectedType as FruitTreeType]
     : null;
 
   return (

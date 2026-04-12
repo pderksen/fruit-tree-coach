@@ -1,31 +1,32 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   ActivityIndicator,
   Alert,
   Pressable,
+  RefreshControl,
   ScrollView,
   Text,
   View,
 } from "react-native";
 
+import { ErrorState } from "@/components/ErrorState";
 import { ExpertTipsCard } from "@/components/ExpertTipsCard";
 import { LaterTaskList } from "@/components/LaterTaskList";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
 import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
 import { TreeDetailHeader } from "@/components/TreeDetailHeader";
 import { useTasks, useToggleTask } from "@/hooks/use-tasks";
 import { useDeleteTree, useTree } from "@/hooks/use-trees";
+import { EXPERT_TIPS } from "@/lib/care/expert-tips";
 import {
   compareByUpcomingSeason,
   getRotatedSeasonOrder,
 } from "@/lib/care/season-order";
-import {
-  CURRENT_SEASON_STAGE,
-  MOCK_EXPERT_TIPS,
-} from "@/lib/mocks/care-details";
+import { CURRENT_SEASON_STAGE } from "@/lib/care/season-stage";
 import type { Task } from "@/lib/types";
 
 export default function TreeDetailScreen() {
@@ -76,12 +77,16 @@ export default function TreeDetailScreen() {
     );
   }, [allTasks]);
 
+  const isRefreshing = treeQuery.isRefetching || tasksQuery.isRefetching;
+  const onRefresh = useCallback(() => {
+    treeQuery.refetch();
+    tasksQuery.refetch();
+  }, [treeQuery, tasksQuery]);
+
   if (treeQuery.isLoading) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator color="#15803d" />
-        </View>
+        <LoadingSpinner fullScreen />
       </Screen>
     );
   }
@@ -89,16 +94,22 @@ export default function TreeDetailScreen() {
   if (!tree) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-base text-gray-500">
-            {treeQuery.isError ? "Could not load tree" : "Tree not found"}
-          </Text>
-        </View>
+        {treeQuery.isError ? (
+          <ErrorState
+            fullScreen
+            message="Could not load tree."
+            onRetry={() => treeQuery.refetch()}
+          />
+        ) : (
+          <View className="flex-1 items-center justify-center">
+            <Text className="text-base text-gray-500">Tree not found</Text>
+          </View>
+        )}
       </Screen>
     );
   }
 
-  const tips = MOCK_EXPERT_TIPS[tree.type] ?? [];
+  const tips = EXPERT_TIPS[tree.type] ?? [];
   const currentStage = CURRENT_SEASON_STAGE[tree.type] ?? "dormant";
 
   return (
@@ -106,6 +117,13 @@ export default function TreeDetailScreen() {
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor="#15803d"
+          />
+        }
       >
         <TreeDetailHeader tree={tree} />
 

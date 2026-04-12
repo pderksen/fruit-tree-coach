@@ -8,7 +8,6 @@ import { Image, Pressable, Text, View } from "react-native";
 import { queryClient } from "@/lib/query-client";
 import { useEnsureDefaultOrchard } from "@/hooks/use-orchards";
 import { useSession } from "@/hooks/use-session";
-import { useProfileStore } from "@/stores/profile-store";
 
 const logo = require("@/assets/images/fruit-tree-coach-logo.png") as number;
 
@@ -22,7 +21,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [minSplashDone, setMinSplashDone] = useState(false);
-  const { isLoading, isAuthenticated, user } = useSession();
+  const { isLoading, isAuthenticated } = useSession();
   const router = useRouter();
   const hasNavigated = useRef(false);
 
@@ -37,16 +36,6 @@ export default function RootLayout() {
     }, 3000);
     return () => clearTimeout(timer);
   }, []);
-
-  // Seed profile store from auth metadata on sign-in
-  useEffect(() => {
-    if (user) {
-      const name = (user.user_metadata?.name as string) ?? "";
-      if (name) {
-        useProfileStore.getState().updateProfile({ name });
-      }
-    }
-  }, [user]);
 
   // Navigate once splash + auth check are both done
   const ready = minSplashDone && !isLoading;

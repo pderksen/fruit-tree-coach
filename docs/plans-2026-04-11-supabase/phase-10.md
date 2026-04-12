@@ -21,6 +21,18 @@ authoring workflow.
 - `lib/mocks/guides.ts` holds `MOCK_GUIDES`, `Guide`, `GuideStep`,
   `ProductRecommendation` types and all content
 
+## Not in scope (static reference data that stays local)
+Phase 8a moved three per-fruit-type lookups out of `lib/mocks/` into
+`lib/care/` because they're static reference content, not user data:
+- `lib/care/expert-tips.ts` (`EXPERT_TIPS`)
+- `lib/care/coach-tips.ts` (`COACH_TIPS`)
+- `lib/care/season-stage.ts` (`CURRENT_SEASON_STAGE`)
+
+These are intentionally *not* moving to Supabase — they change with
+app releases, not per-user, and shipping them in-bundle keeps the UI
+instant-on. Only `MOCK_GUIDES` (actual authored guide content) is in
+scope for this phase.
+
 ## Tasks
 
 ### 1. Decide storage shape

@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import { z } from "zod";
 
+import { ErrorState } from "@/components/ErrorState";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard, useUpdateOrchard } from "@/hooks/use-orchards";
 import { useProfile, useUpdateProfile } from "@/hooks/use-profile";
@@ -134,6 +136,26 @@ export default function ProfileScreen() {
   const handleRestorePurchases = () => {
     Alert.alert("Coming Soon", "Purchase restoration will be available in a future update.");
   };
+
+  if (profileQuery.isLoading) {
+    return (
+      <Screen bg="bg-cream-50">
+        <LoadingSpinner fullScreen />
+      </Screen>
+    );
+  }
+
+  if (profileQuery.isError) {
+    return (
+      <Screen bg="bg-cream-50">
+        <ErrorState
+          fullScreen
+          message="Could not load your profile."
+          onRetry={() => profileQuery.refetch()}
+        />
+      </Screen>
+    );
+  }
 
   return (
     <Screen bg="bg-cream-50">

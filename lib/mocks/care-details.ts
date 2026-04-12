@@ -1,4 +1,4 @@
-import type { Task, ExpertTip, FruitTreeType, SeasonStage } from "@/lib/types";
+import type { Task } from "@/lib/types";
 
 /**
  * Mock detailed tasks keyed by tree ID.
@@ -218,76 +218,6 @@ export const MOCK_DETAILED_TASKS: Record<string, Task[]> = {
   ],
 };
 
-/**
- * Expert tips keyed by fruit tree type.
- * Sources cited inline.
- */
-export const MOCK_EXPERT_TIPS: Partial<Record<FruitTreeType, ExpertTip[]>> = {
-  // Source: General horticultural wisdom, widely cited in extension literature
-  Apple: [
-    { quote: "Pruning helps air circulation. If a bird can't fly through your tree, it's too dense.", attribution: "Master Gardener Pete" },
-    { quote: "Mulch like a donut, not a volcano. Keep it away from the trunk.", attribution: "Master Gardener Pete" },
-  ],
-  Peach: [
-    { quote: "Peaches fruit on last year's wood — prune boldly to encourage fresh growth.", attribution: "Extension Horticulturist" },
-    { quote: "A well-thinned peach tree gives you fewer but far superior fruits.", attribution: "Extension Horticulturist" },
-  ],
-  Lemon: [
-    { quote: "Lemon trees love at least 6–8 hours of direct sunlight. Ensure your chosen spot is the sunniest patch in your orchard.", attribution: "Citrus Specialist" },
-    { quote: "Yellow leaves on citrus often mean iron deficiency, not overwatering.", attribution: "Citrus Specialist" },
-  ],
-  Fig: [
-    { quote: "Figs are forgiving — they thrive on neglect better than most fruit trees.", attribution: "Southern Garden Expert" },
-    { quote: "Protect young figs from frost with burlap wrapping in their first few winters.", attribution: "Southern Garden Expert" },
-  ],
-  Pear: [
-    { quote: "Pears ripen from the inside out — pick them firm and let them finish on the counter.", attribution: "Extension Horticulturist" },
-    { quote: "Fire blight spreads in wet weather — prune only when it's dry.", attribution: "Extension Horticulturist" },
-  ],
-  Cherry: [
-    { quote: "Cherries need cold winters to set fruit — 700+ chill hours for most varieties.", attribution: "Orchard Consultant" },
-    { quote: "Bird netting is the cherry grower's best friend.", attribution: "Orchard Consultant" },
-  ],
-  Plum: [
-    { quote: "Japanese plums bloom early — site them where late frost won't catch the blossoms.", attribution: "Extension Horticulturist" },
-    { quote: "Thin plums to 4–6 inches apart for the best fruit size.", attribution: "Extension Horticulturist" },
-  ],
-  Orange: [
-    { quote: "Don't prune orange trees heavily — they fruit on old and new wood alike.", attribution: "Citrus Specialist" },
-    { quote: "A deep soak once a week beats daily sprinkles for citrus roots.", attribution: "Citrus Specialist" },
-  ],
-  Lime: [
-    { quote: "Limes are the most cold-sensitive citrus — bring potted trees indoors below 50°F.", attribution: "Citrus Specialist" },
-    { quote: "Pick limes when they give slightly to pressure, not when they turn yellow.", attribution: "Citrus Specialist" },
-  ],
-};
-
-/**
- * Coach tips for the new tree form, keyed by fruit type.
- */
-export const MOCK_COACH_TIPS: Partial<Record<FruitTreeType, string>> = {
-  Apple: "Apple trees need a pollination partner nearby. Consider planting a second variety within 50 feet for the best fruit set.",
-  Peach: "Peach trees are self-fertile — one tree is enough! Plant in a sunny, sheltered spot with good air drainage to prevent frost damage.",
-  Lemon: "Lemon trees love at least 6–8 hours of direct sunlight. Ensure your chosen spot is the sunniest patch in your orchard.",
-  Fig: "Figs thrive in warm, sheltered spots. Plant near a south-facing wall to maximize heat retention and protect from winter winds.",
-  Pear: "Most pears need a cross-pollinator. Bartlett and Anjou make a great pairing for reliable fruit set.",
-  Cherry: "Sweet cherries need another variety for cross-pollination, but sour cherries are self-fertile. Choose based on your space.",
-  Plum: "European plums are mostly self-fertile, while Japanese plums need a pollinator. Check your variety before planting solo.",
-  Orange: "Orange trees are evergreen and need consistent watering year-round. A thick mulch ring helps retain soil moisture.",
-  Lime: "Lime trees are very frost-sensitive. In cooler climates, keep them in containers so you can bring them indoors for winter.",
-};
-
-/**
- * Current season stage per fruit type (mocked for early spring, April 2026).
- */
-export const CURRENT_SEASON_STAGE: Partial<Record<FruitTreeType, SeasonStage>> = {
-  Apple: "bloom",
-  Pear: "bloom",
-  Peach: "bloom",
-  Cherry: "bloom",
-  Plum: "bloom",
-  Fig: "growth",
-  Lemon: "growth",
-  Orange: "growth",
-  Lime: "growth",
-};
+// EXPERT_TIPS → lib/care/expert-tips.ts
+// COACH_TIPS → lib/care/coach-tips.ts
+// CURRENT_SEASON_STAGE → lib/care/season-stage.ts
