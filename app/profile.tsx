@@ -27,7 +27,6 @@ import { signOut } from "@/lib/auth";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required").max(50, "50 characters max"),
   zipCode: z.string().regex(/^\d{5}$/, "Must be a 5-digit zip code"),
-  zone: z.string().regex(/^\d{1,2}[abAB]$/, "Enter a zone like 8b or 7a"),
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -48,56 +47,47 @@ export default function ProfileScreen() {
   const zipCode = defaultOrchard?.zipCode ?? "";
   const gardeningZone = defaultOrchard?.zone ?? "";
 
-  const [editingField, setEditingField] = useState<keyof ProfileFormValues | null>(null);
-  const [isLookingUpZone, setIsLookingUpZone] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { name, zipCode, zone: gardeningZone },
+    defaultValues: { name, zipCode },
   });
 
-  const startEditing = (field: keyof ProfileFormValues) => {
-    reset({ name, zipCode, zone: gardeningZone });
-    setEditingField(field);
+  const startEditing = () => {
+    reset({ name, zipCode });
+    setIsEditing(true);
   };
 
-  const cancelEditing = () => setEditingField(null);
+  const cancelEditing = () => {
+    reset({ name, zipCode });
+    setIsEditing(false);
+  };
 
-  const saveField = handleSubmit(async (data) => {
-    if (data.name && data.name !== name) {
-      await updateProfileMutation.mutateAsync({ name: data.name });
-    }
-    if (!defaultOrchard) {
-      setEditingField(null);
-      return;
-    }
-    if (data.zone && data.zone.toLowerCase() !== gardeningZone.toLowerCase()) {
-      updateOrchardMutation.mutate({
-        id: defaultOrchard.id,
-        fields: { zone: data.zone.toLowerCase() },
-      });
-    }
-    if (data.zipCode && data.zipCode !== zipCode) {
-      // The mutation itself looks up the zone from the USDA API
-      // when a zip is provided without an explicit zone.
-      setIsLookingUpZone(true);
-      try {
-        const updated = await updateOrchardMutation.mutateAsync({
+  const saveAll = handleSubmit(async (data) => {
+    setIsSaving(true);
+    try {
+      if (data.name !== name) {
+        await updateProfileMutation.mutateAsync({ name: data.name });
+      }
+      if (defaultOrchard && data.zipCode !== zipCode) {
+        // The mutation looks up the USDA zone from the zip code,
+        // so updating the zip also refreshes the gardening zone.
+        await updateOrchardMutation.mutateAsync({
           id: defaultOrchard.id,
           fields: { zipCode: data.zipCode },
         });
-        if (updated.zone) setValue("zone", updated.zone);
-      } finally {
-        setIsLookingUpZone(false);
       }
+      setIsEditing(false);
+    } finally {
+      setIsSaving(false);
     }
-    setEditingField(null);
   });
 
   const handleSignOut = () => {
@@ -173,47 +163,80 @@ export default function ProfileScreen() {
 
         {/* Editable account info */}
         <View className="rounded-2xl bg-white p-4">
-          <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
-            Account Info
-          </Text>
-          <EditableRow
-            label="Name"
-            icon="person-outline"
-            value={name}
-            field="name"
-            editingField={editingField}
-            control={control}
-            error={errors.name?.message}
-            onEdit={startEditing}
-            onSave={saveField}
-            onCancel={cancelEditing}
-          />
-          <EditableRow
-            label="Zip Code"
-            icon="location-outline"
-            value={zipCode}
-            field="zipCode"
-            editingField={editingField}
-            control={control}
-            error={errors.zipCode?.message}
-            onEdit={startEditing}
-            onSave={saveField}
-            onCancel={cancelEditing}
-            keyboardType="number-pad"
-          />
-          <EditableRow
-            label="Gardening Zone"
-            icon="leaf-outline"
-            value={isLookingUpZone ? `${gardeningZone} (updating…)` : gardeningZone}
-            field="zone"
-            editingField={editingField}
-            control={control}
-            error={errors.zone?.message}
-            onEdit={startEditing}
-            onSave={saveField}
-            onCancel={cancelEditing}
-            isLast
-          />
+          <View className="mb-3 flex-row items-center justify-between">
+            <Text className="text-xs font-bold uppercase tracking-wider text-gray-400">
+              Account Info
+            </Text>
+            {!isEditing && (
+              <Pressable onPress={startEditing} hitSlop={8}>
+                <Text className="text-sm font-semibold text-brand-700">Edit</Text>
+              </Pressable>
+            )}
+          </View>
+
+          {isEditing ? (
+            <>
+              <EditField
+                label="Name"
+                icon="person-outline"
+                field="name"
+                control={control}
+                error={errors.name?.message}
+                autoCapitalize="words"
+              />
+              <EditField
+                label="Zip Code"
+                icon="location-outline"
+                field="zipCode"
+                control={control}
+                error={errors.zipCode?.message}
+                keyboardType="number-pad"
+              />
+              <View className="py-3">
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center gap-3">
+                    <Ionicons name="leaf-outline" size={18} color="#6b7280" />
+                    <Text className="text-sm text-gray-600">Gardening Zone</Text>
+                  </View>
+                  <Text className="text-sm font-medium text-gray-900">
+                    {gardeningZone || "—"}
+                  </Text>
+                </View>
+                <Text className="mt-1 pl-8 text-xs text-gray-400">
+                  Auto-detected from your zip code
+                </Text>
+              </View>
+              <View className="mt-4 flex-row gap-2">
+                <Pressable
+                  onPress={cancelEditing}
+                  disabled={isSaving}
+                  className="flex-1 items-center rounded-xl border border-gray-200 py-3"
+                >
+                  <Text className="text-sm font-semibold text-gray-700">Cancel</Text>
+                </Pressable>
+                <Pressable
+                  onPress={saveAll}
+                  disabled={isSaving}
+                  className="flex-1 items-center rounded-xl bg-brand-700 py-3"
+                >
+                  <Text className="text-sm font-semibold text-white">
+                    {isSaving ? "Saving…" : "Save"}
+                  </Text>
+                </Pressable>
+              </View>
+            </>
+          ) : (
+            <>
+              <ReadRow icon="person-outline" label="Name" value={name} />
+              <ReadRow icon="location-outline" label="Zip Code" value={zipCode} />
+              <ReadRow
+                icon="leaf-outline"
+                label="Gardening Zone"
+                value={gardeningZone}
+                isLast
+              />
+            </>
+          )}
         </View>
 
         {/* Additional info rows */}
@@ -221,13 +244,13 @@ export default function ProfileScreen() {
           <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
             Details
           </Text>
-          <InfoRow icon="mail-outline" label="Email" value={email || "—"} />
-          <InfoRow
+          <ReadRow icon="mail-outline" label="Email" value={email || "—"} />
+          <ReadRow
             icon="leaf-outline"
             label="Trees in orchard"
             value={String(treeCount)}
           />
-          <InfoRow
+          <ReadRow
             icon="information-circle-outline"
             label="App version"
             value={appVersion}
@@ -307,95 +330,58 @@ export default function ProfileScreen() {
   );
 }
 
-// ── Editable row ────────────────────────────────────────────────────────
-interface EditableRowProps {
+// ── Edit field ──────────────────────────────────────────────────────────
+interface EditFieldProps {
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
-  value: string;
   field: keyof ProfileFormValues;
-  editingField: keyof ProfileFormValues | null;
   control: ReturnType<typeof useForm<ProfileFormValues>>["control"];
   error?: string;
-  onEdit: (field: keyof ProfileFormValues) => void;
-  onSave: () => void;
-  onCancel: () => void;
   keyboardType?: "default" | "number-pad";
+  autoCapitalize?: "none" | "words";
   isLast?: boolean;
 }
 
-function EditableRow({
+function EditField({
   label,
   icon,
-  value,
   field,
-  editingField,
   control,
   error,
-  onEdit,
-  onSave,
-  onCancel,
   keyboardType = "default",
+  autoCapitalize = "none",
   isLast = false,
-}: EditableRowProps) {
-  const isEditing = editingField === field;
+}: EditFieldProps) {
   const borderClass = isLast ? "" : "border-b border-gray-100";
-
-  if (isEditing) {
-    return (
-      <View className={`py-3 ${borderClass}`}>
-        <View className="flex-row items-center gap-3">
-          <Ionicons name={icon} size={18} color="#6b7280" />
-          <Text className="text-sm text-gray-600">{label}</Text>
-        </View>
-        <View className="mt-2 flex-row items-center gap-2 pl-8">
-          <Controller
-            control={control}
-            name={field}
-            render={({ field: f }) => (
-              <TextInput
-                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900"
-                value={f.value}
-                onChangeText={f.onChange}
-                onBlur={f.onBlur}
-                autoFocus
-                keyboardType={keyboardType}
-                autoCapitalize={field === "name" ? "words" : "none"}
-              />
-            )}
-          />
-          <Pressable onPress={onSave} className="rounded-lg bg-brand-700 px-3 py-2">
-            <Text className="text-xs font-semibold text-white">Save</Text>
-          </Pressable>
-          <Pressable onPress={onCancel} className="px-2 py-2">
-            <Ionicons name="close" size={18} color="#6b7280" />
-          </Pressable>
-        </View>
-        {error && (
-          <Text className="mt-1 pl-8 text-xs text-red-500">{error}</Text>
-        )}
-      </View>
-    );
-  }
-
   return (
-    <Pressable
-      onPress={() => onEdit(field)}
-      className={`flex-row items-center justify-between py-3 ${borderClass}`}
-    >
+    <View className={`py-3 ${borderClass}`}>
       <View className="flex-row items-center gap-3">
         <Ionicons name={icon} size={18} color="#6b7280" />
         <Text className="text-sm text-gray-600">{label}</Text>
       </View>
-      <View className="flex-row items-center gap-2">
-        <Text className="text-sm font-medium text-gray-900">{value}</Text>
-        <Ionicons name="create-outline" size={14} color="#9ca3af" />
-      </View>
-    </Pressable>
+      <Controller
+        control={control}
+        name={field}
+        render={({ field: f }) => (
+          <TextInput
+            className="mt-2 ml-8 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900"
+            value={f.value}
+            onChangeText={f.onChange}
+            onBlur={f.onBlur}
+            keyboardType={keyboardType}
+            autoCapitalize={autoCapitalize}
+          />
+        )}
+      />
+      {error && (
+        <Text className="mt-1 pl-8 text-xs text-red-500">{error}</Text>
+      )}
+    </View>
   );
 }
 
-// ── Read-only info row ──────────────────────────────────────────────────
-function InfoRow({
+// ── Read-only row ───────────────────────────────────────────────────────
+function ReadRow({
   icon,
   label,
   value,
@@ -413,7 +399,7 @@ function InfoRow({
         <Ionicons name={icon} size={18} color="#6b7280" />
         <Text className="text-sm text-gray-600">{label}</Text>
       </View>
-      <Text className="text-sm font-medium text-gray-900">{value}</Text>
+      <Text className="text-sm font-medium text-gray-900">{value || "—"}</Text>
     </View>
   );
 }

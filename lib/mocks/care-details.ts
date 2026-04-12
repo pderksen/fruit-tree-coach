@@ -157,7 +157,7 @@ export const MOCK_DETAILED_TASKS: Record<string, Task[]> = {
       season: "Spring",
       // Source: UC Davis — Citrus Pest Management
       description:
-        "Check undersides of leaves and stems for sticky honeydew, sooty mould, or small bumps (scale). Treat with neem oil or insecticidal soap if found.",
+        "Check undersides of leaves and stems for sticky honeydew, sooty mold, or small bumps (scale). Treat with neem oil or insecticidal soap if found.",
     },
     {
       id: "dt13",

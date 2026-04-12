@@ -72,7 +72,7 @@ export const FRUIT_TREE_TYPES: FruitTreeType[] = [
   "Elderberry",
 ];
 
-/** Number of "popular" types shown before the categorised groups. */
+/** Number of "popular" types shown before the categorized groups. */
 export const POPULAR_TYPE_COUNT = 8;
 
 // ---------------------------------------------------------------------------

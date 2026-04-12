@@ -78,7 +78,7 @@ export const MOCK_CALENDAR_TASKS: CalendarTask[] = [
     treeType: "Apple",
     title: "Inspect for fire blight",
     description:
-      "Look for blackened, shepherd-crook branch tips. Prune 12\" below infected tissue with sterilised tools.",
+      "Look for blackened, shepherd-crook branch tips. Prune 12\" below infected tissue with sterilized tools.",
     dueDate: "2026-04-20",
     category: "monitoring",
   },
