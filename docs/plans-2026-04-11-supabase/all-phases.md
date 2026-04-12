@@ -117,12 +117,15 @@ All phases for migrating from local mock data to a live Supabase backend.
 
 ## Phase 9b: Offline-First Foundation
 
-- Add TanStack Query persistence + `networkMode: "offlineFirst"` for offline-first UX
-- Optimistic + queued mutations for critical offline actions (mark task done, add tree, update notes)
-- Offline banner via `@react-native-community/netinfo`
-- Write `docs/offline-strategy.md` to lock in the approach
+- Install `@tanstack/react-query-persist-client`, `@tanstack/query-async-storage-persister`, `@react-native-community/netinfo`
+- Update `lib/query-client.ts`: `networkMode: "offlineFirst"`, `gcTime` ≥ 24h, export an AsyncStorage-backed `persister`
+- Swap `QueryClientProvider` → `PersistQueryClientProvider` in `app/_layout.tsx` (7-day `maxAge`, bumpable `buster`)
+- Add optimistic `onMutate` + rollback for `useCreateTree` and `useUpdateTree` (`useToggleTask` is already optimistic)
+- Build `components/OfflineBanner.tsx` (NetInfo-driven) and render it above the tab bar in `app/(tabs)/_layout.tsx`
+- Write `docs/offline-strategy.md` capturing what works offline, what doesn't, and cache-invalidation levers
+- Manual offline QA: airplane-mode cold start, queued mark-done, queued add-tree, sign-in still fails cleanly
 
-**Files:** `app/_layout.tsx`, `lib/query-client.ts`, `hooks/use-tasks.ts`, `hooks/use-trees.ts`, `components/OfflineBanner.tsx`, `docs/offline-strategy.md`
+**Files:** `app/_layout.tsx`, `app/(tabs)/_layout.tsx`, `lib/query-client.ts`, `hooks/use-trees.ts`, `components/OfflineBanner.tsx`, `docs/offline-strategy.md`, `package.json`
 
 ---
 

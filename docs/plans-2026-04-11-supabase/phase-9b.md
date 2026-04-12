@@ -1,93 +1,156 @@
 # Phase 9b: Offline-First Foundation
 
 ## Goal
-Set up the app for real offline use (yard work, spotty connections,
-travel). Offline is a first-class use case for this app, not an edge
-case — this phase is where it becomes real.
-
-Phase 9a handled the cleanup prerequisites. This phase is purely
-architectural: new dependencies, persisted query cache, optimistic
-mutations, connectivity UI.
+Make offline a first-class experience: cached data renders on cold
+start with no network, critical writes queue and replay when the
+connection returns, and the user sees a non-blocking indicator of
+connectivity state. Phase 9a handled cleanup prerequisites; this phase
+is purely architectural (client-side only — no schema changes).
 
 ---
 
-## 1. TanStack Query persistence
+## 1. Dependencies to install
 
-- Install:
-  - `@tanstack/react-query-persist-client`
-  - `@tanstack/query-async-storage-persister`
-- Wrap the query client with `PersistQueryClientProvider` in
-  `app/_layout.tsx`, backed by AsyncStorage (swap to MMKV later if
-  perf demands it).
-- Set `networkMode: "offlineFirst"` on the query client.
-- Result: trees, orchards, tasks, and profile all render cached data
-  instantly on cold start, even with no network.
+```
+npx expo install @react-native-community/netinfo
+npm install @tanstack/react-query-persist-client @tanstack/query-async-storage-persister
+```
 
-## 2. Optimistic mutations for critical paths
+- `@react-native-async-storage/async-storage` is already installed (2.2.0).
+- `@react-native-community/netinfo` is a native module — use
+  `expo install` so Expo pins the SDK 54-compatible version.
+- The two persister packages are JS-only and peer on `@tanstack/react-query`
+  which is already installed (`^5.96.2`).
 
-Identify actions users most need offline and make them optimistic +
-queued with `onMutate` / `onError` rollback:
+---
 
-- **Mark task done** — highest priority. User is outside, marks
-  pruning done, expects it to stick.
-- **Add a tree** — medium priority.
-- **Update tree notes** — medium priority.
+## 2. Query client — persistence + `offlineFirst`
 
-Queued offline writes ride on the persisted mutation cache from
-`persistQueryClient`; add a lightweight mutation queue only if that
-proves insufficient.
+**File:** `lib/query-client.ts`
 
-## 3. Connectivity UI
+Current state: plain `QueryClient` with `staleTime: 5min`, `retry: 2`.
 
-- Install `@react-native-community/netinfo`.
-- Add `components/OfflineBanner.tsx` — thin banner at top of screen
-  when `NetInfo.useNetInfo().isConnected === false`.
-- Don't block the UI — just indicate state. Users keep working.
-- Show a subtle indicator when mutations are queued and pending sync.
+Changes:
+- Add `networkMode: "offlineFirst"` to `defaultOptions.queries` and
+  `defaultOptions.mutations`. Queries will serve cache first instead of
+  pausing when offline; mutations will be attempted and queued by the
+  persister when they fail due to lack of connectivity.
+- Bump `gcTime` (formerly `cacheTime`) to at least 24h so the persister
+  has something to rehydrate. Default 5min will be garbage-collected
+  before the user opens the app again.
+- Export a `persister` built from
+  `createAsyncStoragePersister({ storage: AsyncStorage, key: "ftc-rq-cache" })`.
+- Keep the export shape compatible with the existing `QueryClientProvider`
+  usage in `app/_layout.tsx` — we'll swap providers, not rebuild the
+  client.
 
-## 4. What should NOT work offline (set expectations)
+## 3. Wrap the app in `PersistQueryClientProvider`
 
-- Sign-in / sign-up — requires network. Cache the session so returning
-  users don't re-auth.
-- Password reset — requires network.
-- USDA zone lookup — `fetchZoneForZip` already degrades gracefully to
-  the static `zipToZone` table (wired up in Phase 9a). No additional
-  work here, but verify the path still works under airplane mode.
+**File:** `app/_layout.tsx`
 
-## 5. Deliverable
+- Replace `QueryClientProvider` import + usage with
+  `PersistQueryClientProvider` from
+  `@tanstack/react-query-persist-client`.
+- Pass `persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 * 7 }}`
+  (7-day cache window — longer than a typical trip away from the app).
+- Add a `buster` key tied to a bumpable constant (e.g. `"v1"`) so we
+  can invalidate all persisted caches if we change the shape of cached
+  data. Start at `"v1"`.
+- Everything inside the provider stays the same (`DefaultOrchardBootstrap`,
+  `Stack`, screens).
 
-- `docs/offline-strategy.md` — one-page doc capturing these decisions
-  so they don't get lost.
-- Query client setup in `lib/query-client.ts` updated.
-- Wrapped provider in `app/_layout.tsx`.
-- At least "mark task done" working offline end-to-end as the proof.
+## 4. Optimistic mutations — audit and fill gaps
 
-## 6. Dependencies to add (ask first, per CLAUDE.md)
+`useToggleTask` in `hooks/use-tasks.ts` is already optimistic with
+snapshot-based rollback (good — nothing to change there). Audit the
+other hooks and upgrade the three Phase 9b priority paths:
 
-- `@tanstack/react-query-persist-client`
-- `@tanstack/query-async-storage-persister`
-- `@react-native-community/netinfo`
+- **Mark task done** — `useToggleTask` already optimistic. ✅ leave.
+- **Add a tree** — `useCreateTree` currently only invalidates on
+  success. Add `onMutate` that inserts a temporary row with a
+  client-generated `crypto.randomUUID()` into the `["trees", orchardId]`
+  cache and rolls back on error. The optimistic row is replaced when
+  the real row lands via `onSettled` invalidation.
+- **Update tree notes** — `useUpdateTree` currently only invalidates.
+  Add `onMutate` that patches the cache entry for the affected tree
+  (both `["trees", orchardId]` list and `["trees", "detail", id]`
+  detail), snapshot for rollback, invalidate on settle.
 
-## 7. Offline QA pass
+Scope limit: don't touch `useCreateTask`, `useDeleteTask`,
+`useDeleteTree` — not in the Phase 9b priority list, and adding
+optimism everywhere is a YAGNI trap.
 
-- Airplane mode → open app cold → cached trees/tasks render.
-- Mark a task done offline → toggle network on → confirm sync.
-- Kill app offline → reopen → data still there.
-- Change zip with network off → confirm `zipToZone` fallback populates
-  the zone (sanity check for Phase 9a fix).
+## 5. Offline banner
+
+**File:** `components/OfflineBanner.tsx` (new)
+
+- Thin banner (≤32px tall) rendered at the top of `app/(tabs)/_layout.tsx`
+  and any non-tab screen that should show it (keep it to the tab layout
+  for now; sign-in/splash don't need it).
+- Use `useNetInfo()` from `@react-native-community/netinfo`. Render
+  only when `isConnected === false` (explicitly `false`, not `null` —
+  null means "unknown yet" and flashing the banner on cold start is
+  ugly).
+- Copy: "You're offline. Changes will sync when you reconnect."
+- Styling: `bg-amber-100 border-b border-amber-300 text-amber-900`
+  small caps label. No interaction, no dismiss — purely informational.
+- No queued-mutation counter in v1. If users ask for one, add later
+  using `queryClient.getMutationCache().getAll()` filtered to pending.
+
+## 6. Documentation
+
+**File:** `docs/offline-strategy.md` (new, ~1 page)
+
+Capture:
+- Why offline is first-class for this app (yard work, spotty yards).
+- What works offline: browsing cached trees/tasks, marking tasks done,
+  adding trees, editing notes.
+- What doesn't: sign-in, password reset, fresh USDA zone lookup
+  (falls back to static table — wired in Phase 9a).
+- How the cache is invalidated: 7-day `maxAge` + manual `buster` bump.
+- Where to look when offline behavior breaks: query keys, persister
+  key, NetInfo state.
+
+Keep it a reference doc, not a tutorial — future-me reading this
+needs to recover context fast.
+
+---
+
+## 7. Verification
+
+- `npm run typecheck` passes.
+- `npm test` passes (no test changes expected — persister is wrapping
+  the same client).
+- `npm run lint` passes.
+- **Manual QA (Phase 9b-specific):**
+  1. Airplane mode → cold-launch app → cached trees/tasks render.
+  2. Airplane mode → mark a task done → banner shows → disable airplane
+     mode → confirm task stays done (sync completed).
+  3. Airplane mode → add a tree → optimistic row appears → enable
+     network → confirm the temp-UUID row is replaced by the real row.
+  4. Kill + reopen the app offline → data still there.
+  5. Sign-in flow still fails cleanly offline (does NOT pretend to
+     work).
+
+---
 
 ## Files touched (expected)
-- `lib/query-client.ts` — add persistence + `offlineFirst`
-- `app/_layout.tsx` — wrap with `PersistQueryClientProvider`
-- `hooks/use-tasks.ts` — optimistic mark-done
-- `hooks/use-trees.ts` — optimistic add-tree, update-notes
-- `components/OfflineBanner.tsx` — new
-- `docs/offline-strategy.md` — new
+
+- `lib/query-client.ts` — add persister, `offlineFirst`, `gcTime`.
+- `app/_layout.tsx` — swap to `PersistQueryClientProvider`.
+- `hooks/use-trees.ts` — optimistic `useCreateTree`, `useUpdateTree`.
+- `components/OfflineBanner.tsx` — new.
+- `app/(tabs)/_layout.tsx` — render `<OfflineBanner />` above tabs.
+- `docs/offline-strategy.md` — new.
+- `package.json` + lockfile — three new deps.
 
 ## Out of scope (future phases)
-- Full conflict resolution for concurrent multi-device edits — defer
-  until there's a web app or shared-orchard feature.
-- CRDT / local-first sync engine (PowerSync, Replicache, etc.) —
-  only if TanStack Query persistence proves insufficient.
+
+- Conflict resolution for concurrent multi-device edits (no web app
+  or shared orchards yet).
+- CRDT / local-first sync engines (PowerSync, Replicache, etc.) —
+  only if TanStack Query persistence proves insufficient at scale.
 - `user_preferences` table — only when a real sync-worthy preference
-  exists.
+  exists (YAGNI, per CLAUDE.md).
+- Switching persister storage from AsyncStorage to MMKV — revisit if
+  cold-start rehydrate time becomes noticeable.

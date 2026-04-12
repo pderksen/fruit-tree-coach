@@ -2,74 +2,79 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
 
+import { OfflineBanner } from "@/components/OfflineBanner";
+
 export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: "#15803d",
-        tabBarInactiveTintColor: "#9ca3af",
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "#ffffff",
-          borderTopWidth: 1,
-          borderTopColor: "#f3f4f6",
-          paddingTop: 6,
-          height: 88,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "600",
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
+    <View className="flex-1">
+      <OfflineBanner />
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: "#15803d",
+          tabBarInactiveTintColor: "#9ca3af",
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: "#ffffff",
+            borderTopWidth: 1,
+            borderTopColor: "#f3f4f6",
+            paddingTop: 6,
+            height: 88,
+          },
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: "600",
+          },
         }}
-      />
-      <Tabs.Screen
-        name="calendar"
-        options={{
-          title: "Calendar",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="new-tree"
-        options={{
-          title: "New Tree",
-          tabBarIcon: ({ focused }) => (
-            <View className="h-10 w-10 items-center justify-center rounded-full bg-brand-700">
-              <Ionicons name="add" size={24} color="#ffffff" />
-            </View>
-          ),
-          tabBarLabel: () => null,
-        }}
-      />
-      <Tabs.Screen
-        name="orchard"
-        options={{
-          title: "Orchard",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="leaf-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="watering"
-        options={{
-          title: "Watering",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="water-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="calendar"
+          options={{
+            title: "Calendar",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="calendar-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="new-tree"
+          options={{
+            title: "New Tree",
+            tabBarIcon: () => (
+              <View className="h-10 w-10 items-center justify-center rounded-full bg-brand-700">
+                <Ionicons name="add" size={24} color="#ffffff" />
+              </View>
+            ),
+            tabBarLabel: () => null,
+          }}
+        />
+        <Tabs.Screen
+          name="orchard"
+          options={{
+            title: "Orchard",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="leaf-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="watering"
+          options={{
+            title: "Watering",
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="water-outline" size={size} color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </View>
   );
 }

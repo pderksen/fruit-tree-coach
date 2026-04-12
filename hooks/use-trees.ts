@@ -33,7 +33,32 @@ export function useCreateTree() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (tree: NewTree) => createTree(tree),
-    onSuccess: () => {
+    onMutate: async (tree) => {
+      const listKey = treesKey(tree.orchardId);
+      await queryClient.cancelQueries({ queryKey: listKey });
+      const previous = queryClient.getQueryData<Tree[]>(listKey);
+      const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const optimistic: Tree = {
+        id: tempId,
+        orchardId: tree.orchardId,
+        name: tree.name,
+        type: tree.type,
+        variety: tree.variety,
+        plantedYear: tree.plantedYear,
+        plantedDate: tree.plantedDate,
+        ageBracket: tree.ageBracket,
+        description: tree.description,
+        statusLabel: tree.statusLabel,
+        statusDescription: tree.statusDescription,
+      };
+      queryClient.setQueryData<Tree[]>(listKey, [...(previous ?? []), optimistic]);
+      return { listKey, previous };
+    },
+    onError: (_err, _tree, context) => {
+      if (!context) return;
+      queryClient.setQueryData(context.listKey, context.previous);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["trees"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
@@ -47,7 +72,35 @@ export function useUpdateTree() {
       id: string;
       fields: Partial<Omit<Tree, "id" | "orchardId">>;
     }) => updateTree(args.id, args.fields),
-    onSuccess: () => {
+    onMutate: async (args) => {
+      await queryClient.cancelQueries({ queryKey: ["trees"] });
+      const listSnapshots = queryClient.getQueriesData<Tree[]>({
+        queryKey: ["trees"],
+      });
+      for (const [key, data] of listSnapshots) {
+        if (!Array.isArray(data)) continue;
+        queryClient.setQueryData<Tree[]>(
+          key,
+          data.map((t) => (t.id === args.id ? { ...t, ...args.fields } : t)),
+        );
+      }
+      const detailKey = treeDetailKey(args.id);
+      const detailPrev = queryClient.getQueryData<Tree>(detailKey);
+      if (detailPrev) {
+        queryClient.setQueryData<Tree>(detailKey, { ...detailPrev, ...args.fields });
+      }
+      return { listSnapshots, detailKey, detailPrev };
+    },
+    onError: (_err, _args, context) => {
+      if (!context) return;
+      for (const [key, data] of context.listSnapshots) {
+        queryClient.setQueryData(key, data);
+      }
+      if (context.detailPrev !== undefined) {
+        queryClient.setQueryData(context.detailKey, context.detailPrev);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["trees"] });
     },
   });
