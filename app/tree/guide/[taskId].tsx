@@ -164,7 +164,7 @@ function StepCard({ step }: { step: Guide["steps"][number] }) {
       {step.tip && (
         <View className="ml-10 mt-2 rounded-xl bg-amber-50 px-3 py-2">
           <Text className="text-xs leading-4 text-amber-800">
-            {"\uD83D\uDCA1"} {step.tip}
+            {"\u2B50"} {step.tip}
           </Text>
         </View>
       )}
