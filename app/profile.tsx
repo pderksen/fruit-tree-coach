@@ -16,8 +16,10 @@ import { z } from "zod";
 
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard, useUpdateOrchard } from "@/hooks/use-orchards";
+import { useProfile, useUpdateProfile } from "@/hooks/use-profile";
+import { useSession } from "@/hooks/use-session";
 import { useTrees } from "@/hooks/use-trees";
-import { useProfileStore } from "@/stores/profile-store";
+import { signOut } from "@/lib/auth";
 
 // ── Validation ──────────────────────────────────────────────────────────
 const profileSchema = z.object({
@@ -30,7 +32,11 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 // ── Screen ──────────────────────────────────────────────────────────────
 export default function ProfileScreen() {
   const router = useRouter();
-  const { name, updateProfile } = useProfileStore();
+  const { user } = useSession();
+  const profileQuery = useProfile();
+  const updateProfileMutation = useUpdateProfile();
+  const name = profileQuery.data?.name ?? "";
+  const email = user?.email ?? "";
   const defaultOrchard = useDefaultOrchard();
   const updateOrchardMutation = useUpdateOrchard();
   const treesQuery = useTrees(defaultOrchard?.id);
@@ -62,8 +68,8 @@ export default function ProfileScreen() {
   const cancelEditing = () => setEditingField(null);
 
   const saveField = handleSubmit(async (data) => {
-    if (data.name) {
-      updateProfile({ name: data.name });
+    if (data.name && data.name !== name) {
+      await updateProfileMutation.mutateAsync({ name: data.name });
     }
     if (!defaultOrchard) {
       setEditingField(null);
@@ -95,7 +101,14 @@ export default function ProfileScreen() {
   const handleSignOut = () => {
     Alert.alert("Sign Out", "Are you sure you want to sign out?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Sign Out", style: "destructive", onPress: () => router.replace("/splash") },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: async () => {
+          await signOut();
+          router.replace("/splash");
+        },
+      },
     ]);
   };
 
@@ -189,8 +202,7 @@ export default function ProfileScreen() {
           <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
             Details
           </Text>
-          <InfoRow icon="mail-outline" label="Email" value="—" />
-          <InfoRow icon="calendar-outline" label="Member since" value="—" />
+          <InfoRow icon="mail-outline" label="Email" value={email || "—"} />
           <InfoRow
             icon="leaf-outline"
             label="Trees in orchard"

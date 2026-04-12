@@ -1,3 +1,4 @@
+import { queryClient } from "@/lib/query-client";
 import { supabase } from "@/lib/supabase";
 
 interface AuthResult {
@@ -58,6 +59,7 @@ export async function signUp(
 
 export async function signOut(): Promise<void> {
   await supabase.auth.signOut();
+  queryClient.clear();
 }
 
 export async function resetPassword(email: string): Promise<AuthResult> {
