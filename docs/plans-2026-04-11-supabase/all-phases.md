@@ -101,6 +101,21 @@ All phases for migrating from local mock data to a live Supabase backend.
 
 ---
 
+## Phase 9: Post-Migration Cleanup & Offline Foundation
+
+- Delete obsolete Zustand stores (`tree-store`, `profile-store`, `orchard-store`)
+- Delete obsolete screens (`app/trial.tsx`) and dead hidden-tab files
+- Move `refreshZoneFromApi` out of `orchard-store` into `lib/zone-lookup.ts`
+- Document settings split: device-local (notifications) vs future synced (units, flags)
+- Add TanStack Query persistence + `networkMode: "offlineFirst"` for offline-first UX
+- Optimistic + queued mutations for critical offline actions (mark task done)
+- Offline banner via `@react-native-community/netinfo`
+- Write `docs/offline-strategy.md` to lock in the approach
+
+**Files:** `stores/*` (delete), `app/trial.tsx` (delete), `app/_layout.tsx`, `lib/query-client.ts`, `hooks/use-tasks.ts`, `components/OfflineBanner.tsx`, `docs/offline-strategy.md`
+
+---
+
 ## Notes
 
 - **Settings store** stays local unless cross-device sync is needed later

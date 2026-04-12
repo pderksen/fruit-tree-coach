@@ -29,9 +29,9 @@ do this week, what to wait on, and how to avoid common mistakes.
 - `app/` screens and navigation
 - `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
 - `app/profile.tsx` user profile/account screen (stack, not tab)
-- `stores/tree-store.ts` Zustand store for user's trees (local state, will migrate to Supabase)
-- `stores/settings-store.ts` notification and app settings
-- `stores/profile-store.ts` user profile state
+- `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
+- `stores/tree-store.ts`, `stores/orchard-store.ts`, `stores/profile-store.ts` — legacy, being replaced by TanStack Query hooks in `hooks/use-*.ts`; scheduled for removal in Phase 9
+- `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts` TanStack Query hooks backed by `lib/services/`
 - `docs/` planning docs — `all-phases.md` (roadmap), dated subfolders (e.g. `plans-2026-04-10/`) with per-phase plans
 - `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
 - `app/tree/` tree detail, creation, and step-by-step guide routes
@@ -65,6 +65,19 @@ do this week, what to wait on, and how to avoid common mistakes.
 - **Care plan**: the set of recommended tasks and timing for a tree
 - **Location**: the user’s area, used to adjust timing and recommendations
 - Tasks should clearly answer: what to do, when to do it, and why it matters
+
+## Offline strategy (target state — lands in Phase 9)
+- Offline is a first-class use case (yard work, spotty connections), not an edge case
+- Target: TanStack Query configured with AsyncStorage persistence and `networkMode: "offlineFirst"` so cached data renders immediately on cold start
+- Target: critical mutations (marking a task done, adding a tree) are optimistic with rollback on error
+- Target: UI never blocks when offline; an offline banner (via `@react-native-community/netinfo`) indicates state but lets the user keep working
+- Target: sign-in, password reset, and USDA zone API calls are the only flows allowed to hard-fail offline; cache last-known zone as fallback
+- Until Phase 9 ships, don't design new features assuming persistence is in place — but also don't add patterns that will make persistence harder to turn on
+
+## Settings: local-device vs user-synced
+- **Device-local** (stays in `stores/settings-store.ts` + AsyncStorage): notification on/off, notification time, haptics, sound. These are tied to the physical device — an iPad shouldn't buzz because the phone enabled notifications.
+- **User-synced** (future `user_preferences` Supabase table): units (imperial/metric), language/region, onboarding-completed flags. These are about the user and feel broken if they reset across devices.
+- Don't create the `user_preferences` table until a real synced preference exists — YAGNI, and an empty table locks in the wrong shape.
 
 ## Conventions
 - Functional components only
