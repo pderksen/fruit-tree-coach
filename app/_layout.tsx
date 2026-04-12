@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useRef, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { queryClient } from "@/lib/query-client";
+import { useEnsureDefaultOrchard } from "@/hooks/use-orchards";
 import { useSession } from "@/hooks/use-session";
 import { useProfileStore } from "@/stores/profile-store";
 
@@ -87,6 +88,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <DefaultOrchardBootstrap />
       <Stack
         screenOptions={{
           headerLeft: ({ canGoBack }) =>
@@ -135,4 +137,9 @@ export default function RootLayout() {
       </Stack>
     </QueryClientProvider>
   );
+}
+
+function DefaultOrchardBootstrap() {
+  useEnsureDefaultOrchard();
+  return null;
 }

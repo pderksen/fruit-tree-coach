@@ -17,8 +17,8 @@ import { FormField } from "@/components/FormField";
 import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
-import { useOrchardStore } from "@/stores/orchard-store";
 import { useTreeStore } from "@/stores/tree-store";
 import type { AgeBracket, FruitTreeType, Tree } from "@/lib/types";
 
@@ -33,8 +33,8 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 export default function AddTreeScreen() {
   const router = useRouter();
   const addTree = useTreeStore((s) => s.addTree);
-  const defaultOrchard = useOrchardStore((s) => s.getDefaultOrchard());
-  const zone = defaultOrchard.zone;
+  const defaultOrchard = useDefaultOrchard();
+  const zone = defaultOrchard?.zone ?? "";
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -45,6 +45,7 @@ export default function AddTreeScreen() {
   const selectedType = typeField.field.value as FruitTreeType | "";
 
   function onSubmit(data: AddTreeForm) {
+    if (!defaultOrchard) return;
     const treeType = data.type as FruitTreeType;
     const variety = data.name || undefined;
     const newTree: Tree = {

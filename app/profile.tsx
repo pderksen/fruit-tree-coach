@@ -15,7 +15,7 @@ import {
 import { z } from "zod";
 
 import { Screen } from "@/components/Screen";
-import { useOrchardStore } from "@/stores/orchard-store";
+import { useDefaultOrchard, useUpdateOrchard } from "@/hooks/use-orchards";
 import { useProfileStore } from "@/stores/profile-store";
 import { useTreeStore } from "@/stores/tree-store";
 
@@ -31,14 +31,13 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 export default function ProfileScreen() {
   const router = useRouter();
   const { name, updateProfile } = useProfileStore();
-  const defaultOrchard = useOrchardStore((s) => s.getDefaultOrchard());
-  const updateOrchard = useOrchardStore((s) => s.updateOrchard);
+  const defaultOrchard = useDefaultOrchard();
+  const updateOrchardMutation = useUpdateOrchard();
   const treeCount = useTreeStore((s) => s.trees.length);
   const appVersion = Constants.expoConfig?.version ?? "1.0.0";
 
-  const refreshZoneFromApi = useOrchardStore((s) => s.refreshZoneFromApi);
-  const zipCode = defaultOrchard.zipCode;
-  const gardeningZone = defaultOrchard.zone;
+  const zipCode = defaultOrchard?.zipCode ?? "";
+  const gardeningZone = defaultOrchard?.zone ?? "";
 
   const [editingField, setEditingField] = useState<keyof ProfileFormValues | null>(null);
   const [isLookingUpZone, setIsLookingUpZone] = useState(false);
@@ -61,25 +60,33 @@ export default function ProfileScreen() {
 
   const cancelEditing = () => setEditingField(null);
 
-  const saveField = handleSubmit((data) => {
+  const saveField = handleSubmit(async (data) => {
     if (data.name) {
       updateProfile({ name: data.name });
     }
+    if (!defaultOrchard) {
+      setEditingField(null);
+      return;
+    }
     if (data.zone && data.zone.toLowerCase() !== gardeningZone.toLowerCase()) {
-      updateOrchard(defaultOrchard.id, { zone: data.zone.toLowerCase() });
+      updateOrchardMutation.mutate({
+        id: defaultOrchard.id,
+        fields: { zone: data.zone.toLowerCase() },
+      });
     }
     if (data.zipCode && data.zipCode !== zipCode) {
-      updateOrchard(defaultOrchard.id, { zipCode: data.zipCode });
-      // Fetch accurate zone from USDA API after saving zip
+      // The mutation itself looks up the zone from the USDA API
+      // when a zip is provided without an explicit zone.
       setIsLookingUpZone(true);
-      refreshZoneFromApi(defaultOrchard.id).finally(() => {
+      try {
+        const updated = await updateOrchardMutation.mutateAsync({
+          id: defaultOrchard.id,
+          fields: { zipCode: data.zipCode },
+        });
+        if (updated.zone) setValue("zone", updated.zone);
+      } finally {
         setIsLookingUpZone(false);
-        // Sync the form's zone value with the store's updated zone
-        const updatedZone = useOrchardStore.getState().orchards.find(
-          (o) => o.id === defaultOrchard.id,
-        )?.zone;
-        if (updatedZone) setValue("zone", updatedZone);
-      });
+      }
     }
     setEditingField(null);
   });

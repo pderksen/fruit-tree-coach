@@ -4,20 +4,24 @@ import { View, Text, FlatList } from "react-native";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { TreeRow } from "@/components/TreeRow";
-import { useOrchardStore } from "@/stores/orchard-store";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { useTreeStore } from "@/stores/tree-store";
 
 export default function OrchardScreen() {
   const router = useRouter();
   const trees = useTreeStore((s) => s.trees);
-  const defaultOrchard = useOrchardStore((s) => s.getDefaultOrchard());
+  const defaultOrchard = useDefaultOrchard();
 
   return (
     <Screen>
       <View className="mb-4 mt-2">
-        <Text className="text-2xl font-bold text-gray-900">{defaultOrchard.name}</Text>
+        <Text className="text-2xl font-bold text-gray-900">
+          {defaultOrchard?.name ?? "My Orchard"}
+        </Text>
         <Text className="mt-1 text-sm text-gray-500">
-          Zone {defaultOrchard.zone} · {defaultOrchard.zipCode}
+          {defaultOrchard?.zone
+            ? `Zone ${defaultOrchard.zone}${defaultOrchard.zipCode ? ` · ${defaultOrchard.zipCode}` : ""}`
+            : "Set your zip code in Profile"}
         </Text>
       </View>
 

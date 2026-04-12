@@ -8,14 +8,15 @@ import { OrchardHealthCard } from "@/components/OrchardHealthCard";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
-import { useOrchardStore } from "@/stores/orchard-store";
 import { useTreeStore } from "@/stores/tree-store";
 
 export default function HomeScreen() {
   const router = useRouter();
   const trees = useTreeStore((s) => s.trees);
-  const gardeningZone = useOrchardStore((s) => s.getDefaultOrchard().zone);
+  const orchard = useDefaultOrchard();
+  const gardeningZone = orchard?.zone ?? "—";
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
