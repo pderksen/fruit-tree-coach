@@ -1,7 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo } from "react";
-import { ActivityIndicator, View, Text, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 import { ExpertTipsCard } from "@/components/ExpertTipsCard";
 import { LaterTaskList } from "@/components/LaterTaskList";
@@ -9,7 +16,7 @@ import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
 import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
 import { TreeDetailHeader } from "@/components/TreeDetailHeader";
-import { useTree } from "@/hooks/use-trees";
+import { useDeleteTree, useTree } from "@/hooks/use-trees";
 import {
   compareByUpcomingSeason,
   getRotatedSeasonOrder,
@@ -25,6 +32,32 @@ export default function TreeDetailScreen() {
   const router = useRouter();
   const treeQuery = useTree(id);
   const tree = treeQuery.data;
+  const deleteTreeMutation = useDeleteTree();
+
+  const handleDelete = () => {
+    if (!tree) return;
+    Alert.alert(
+      "Delete tree?",
+      `This will permanently remove ${tree.name} and its care history.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            deleteTreeMutation.mutate(tree.id, {
+              onSuccess: () => router.back(),
+              onError: () =>
+                Alert.alert(
+                  "Couldn't delete tree",
+                  "Please check your connection and try again.",
+                ),
+            });
+          },
+        },
+      ],
+    );
+  };
 
   const allTasks = useMemo(
     () => MOCK_DETAILED_TASKS[id ?? ""] ?? [],
@@ -130,6 +163,25 @@ export default function TreeDetailScreen() {
           <SeasonalLifeCycle currentStage={currentStage} />
         </View>
 
+        {/* Delete tree */}
+        <View className="mt-8">
+          <Pressable
+            onPress={handleDelete}
+            disabled={deleteTreeMutation.isPending}
+            className="flex-row items-center justify-center gap-2 rounded-2xl border border-red-200 bg-white p-4 active:bg-red-50"
+          >
+            {deleteTreeMutation.isPending ? (
+              <ActivityIndicator color="#dc2626" />
+            ) : (
+              <>
+                <Ionicons name="trash-outline" size={18} color="#dc2626" />
+                <Text className="text-base font-semibold text-red-600">
+                  Delete tree
+                </Text>
+              </>
+            )}
+          </Pressable>
+        </View>
       </ScrollView>
     </Screen>
   );
