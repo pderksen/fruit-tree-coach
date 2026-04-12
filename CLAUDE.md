@@ -38,6 +38,11 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - If local/remote history diverges, `supabase migration list` shows both columns side-by-side — start debugging there
 - Never commit the DB password or `supabase login` token; `supabase/.temp/` is already gitignored
 
+## Database backups (phased plan)
+- **Now (pre-launch):** no backup beyond Supabase's free-tier daily snapshot (~7-day retention, restore via support ticket). Schema is in git; test data is disposable
+- **At first beta users:** add a nightly GitHub Actions workflow that runs `pg_dump` against the remote DB and uploads the `.sql` to a private repo or S3/R2. Runs free, no servers
+- **At public launch:** upgrade to Supabase Pro ($25/mo) for self-serve daily backups + PITR with 7-day retention
+
 ## Project structure
 - `app/` screens and navigation
 - `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
