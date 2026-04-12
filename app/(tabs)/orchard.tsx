@@ -1,16 +1,17 @@
 import { useRouter } from "expo-router";
-import { View, Text, FlatList } from "react-native";
+import { ActivityIndicator, View, Text, FlatList } from "react-native";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { TreeRow } from "@/components/TreeRow";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
-import { useTreeStore } from "@/stores/tree-store";
+import { useTrees } from "@/hooks/use-trees";
 
 export default function OrchardScreen() {
   const router = useRouter();
-  const trees = useTreeStore((s) => s.trees);
   const defaultOrchard = useDefaultOrchard();
+  const treesQuery = useTrees(defaultOrchard?.id);
+  const trees = treesQuery.data ?? [];
 
   return (
     <Screen>
@@ -25,20 +26,40 @@ export default function OrchardScreen() {
         </Text>
       </View>
 
-      <FlatList
-        data={trees}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TreeRow
-            tree={item}
-            onPress={() =>
-              router.push({ pathname: "/tree/[id]", params: { id: item.id } })
-            }
-          />
-        )}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
-      />
+      {treesQuery.isLoading ? (
+        <View className="items-center py-8">
+          <ActivityIndicator color="#15803d" />
+        </View>
+      ) : treesQuery.isError ? (
+        <Text className="py-8 text-center text-sm text-red-500">
+          Could not load your trees.
+        </Text>
+      ) : (
+        <FlatList
+          data={trees}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TreeRow
+              tree={item}
+              onPress={() =>
+                router.push({ pathname: "/tree/[id]", params: { id: item.id } })
+              }
+            />
+          )}
+          ListEmptyComponent={
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Text className="text-base font-semibold text-gray-900">
+                No trees yet
+              </Text>
+              <Text className="mt-1 text-center text-sm text-gray-500">
+                Tap &quot;Add tree&quot; below to plant your first one.
+              </Text>
+            </View>
+          }
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <View className="absolute bottom-6 left-5 right-5">
         <PrimaryButton

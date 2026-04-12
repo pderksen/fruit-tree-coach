@@ -4,10 +4,13 @@ import { View, Text, FlatList } from "react-native";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { TreeRow } from "@/components/TreeRow";
-import { MOCK_TREES } from "@/lib/mocks/trees";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useTrees } from "@/hooks/use-trees";
 
 export default function TreesScreen() {
   const router = useRouter();
+  const orchard = useDefaultOrchard();
+  const trees = useTrees(orchard?.id).data ?? [];
 
   return (
     <Screen>
@@ -16,7 +19,7 @@ export default function TreesScreen() {
       </View>
 
       <FlatList
-        data={MOCK_TREES}
+        data={trees}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TreeRow

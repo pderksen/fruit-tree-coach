@@ -16,8 +16,8 @@ import { z } from "zod";
 
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard, useUpdateOrchard } from "@/hooks/use-orchards";
+import { useTrees } from "@/hooks/use-trees";
 import { useProfileStore } from "@/stores/profile-store";
-import { useTreeStore } from "@/stores/tree-store";
 
 // ── Validation ──────────────────────────────────────────────────────────
 const profileSchema = z.object({
@@ -33,7 +33,8 @@ export default function ProfileScreen() {
   const { name, updateProfile } = useProfileStore();
   const defaultOrchard = useDefaultOrchard();
   const updateOrchardMutation = useUpdateOrchard();
-  const treeCount = useTreeStore((s) => s.trees.length);
+  const treesQuery = useTrees(defaultOrchard?.id);
+  const treeCount = treesQuery.data?.length ?? 0;
   const appVersion = Constants.expoConfig?.version ?? "1.0.0";
 
   const zipCode = defaultOrchard?.zipCode ?? "";

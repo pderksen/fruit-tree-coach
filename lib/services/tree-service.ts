@@ -15,6 +15,16 @@ export async function fetchTrees(orchardId: string): Promise<Tree[]> {
   return (data ?? []).map((row) => treeSchema.parse(row));
 }
 
+export async function fetchTree(id: string): Promise<Tree | null> {
+  const { data, error } = await supabase
+    .from("trees")
+    .select(TREE_COLUMNS)
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? treeSchema.parse(data) : null;
+}
+
 export async function createTree(tree: NewTree): Promise<Tree> {
   const { data, error } = await supabase
     .from("trees")

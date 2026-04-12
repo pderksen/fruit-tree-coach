@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { View, Text, ScrollView, Pressable, Image } from "react-native";
+import { ActivityIndicator, View, Text, ScrollView, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { GardenerInsight } from "@/components/GardenerInsight";
@@ -9,14 +9,15 @@ import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useTrees } from "@/hooks/use-trees";
 import { MOCK_TASKS } from "@/lib/mocks/tasks";
-import { useTreeStore } from "@/stores/tree-store";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const trees = useTreeStore((s) => s.trees);
   const orchard = useDefaultOrchard();
   const gardeningZone = orchard?.zone ?? "—";
+  const treesQuery = useTrees(orchard?.id);
+  const trees = treesQuery.data ?? [];
   const pendingTasks = MOCK_TASKS.filter((t) => !t.done);
   const nextTaskTitle = pendingTasks[0]?.title ?? "None";
 
@@ -115,15 +116,44 @@ export default function HomeScreen() {
         </View>
 
         <View className="px-5 pt-3">
-          {trees.map((tree) => (
-            <TreeCard
-              key={tree.id}
-              tree={tree}
-              onViewCareGuide={(id) =>
-                router.push({ pathname: "/tree/[id]", params: { id } })
-              }
-            />
-          ))}
+          {treesQuery.isLoading ? (
+            <View className="items-center py-8">
+              <ActivityIndicator color="#15803d" />
+            </View>
+          ) : treesQuery.isError ? (
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Text className="text-sm text-red-500">
+                Could not load your trees. Pull down to try again.
+              </Text>
+            </View>
+          ) : trees.length === 0 ? (
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Text className="text-base font-semibold text-gray-900">
+                No trees yet
+              </Text>
+              <Text className="mt-1 text-center text-sm text-gray-500">
+                Add your first tree to start getting care guidance.
+              </Text>
+              <Pressable
+                className="mt-4 rounded-xl bg-brand-700 px-5 py-2.5"
+                onPress={() => router.push("/tree/new")}
+              >
+                <Text className="text-sm font-semibold text-white">
+                  + Add your first tree
+                </Text>
+              </Pressable>
+            </View>
+          ) : (
+            trees.map((tree) => (
+              <TreeCard
+                key={tree.id}
+                tree={tree}
+                onViewCareGuide={(id) =>
+                  router.push({ pathname: "/tree/[id]", params: { id } })
+                }
+              />
+            ))
+          )}
         </View>
 
         {/* Watering Info */}

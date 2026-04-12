@@ -5,7 +5,8 @@ import { View, Text, SectionList } from "react-native";
 import { FruitIcon } from "@/components/FruitIcon";
 import { Screen } from "@/components/Screen";
 import { getWateringGuide, type WateringGuide } from "@/lib/care/watering";
-import { useTreeStore } from "@/stores/tree-store";
+import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useTrees } from "@/hooks/use-trees";
 import type { FruitTreeType } from "@/lib/types";
 
 interface WateringSection {
@@ -108,7 +109,9 @@ function WateringCard({ guide }: { guide: WateringGuide }) {
 }
 
 export default function WateringScreen() {
-  const trees = useTreeStore((s) => s.trees);
+  const orchard = useDefaultOrchard();
+  const treesData = useTrees(orchard?.id).data;
+  const trees = useMemo(() => treesData ?? [], [treesData]);
 
   const sections: WateringSection[] = useMemo(() => {
     const seen = new Set<FruitTreeType>();

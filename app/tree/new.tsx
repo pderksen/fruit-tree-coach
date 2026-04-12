@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  Alert,
 } from "react-native";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,9 +19,9 @@ import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
+import { useCreateTree } from "@/hooks/use-trees";
 import { MOCK_COACH_TIPS } from "@/lib/mocks/care-details";
-import { useTreeStore } from "@/stores/tree-store";
-import type { AgeBracket, FruitTreeType, Tree } from "@/lib/types";
+import type { AgeBracket, FruitTreeType } from "@/lib/types";
 
 const addTreeSchema = z.object({
   name: z.string().optional(),
@@ -32,9 +33,9 @@ type AddTreeForm = z.infer<typeof addTreeSchema>;
 
 export default function AddTreeScreen() {
   const router = useRouter();
-  const addTree = useTreeStore((s) => s.addTree);
   const defaultOrchard = useDefaultOrchard();
   const zone = defaultOrchard?.zone ?? "";
+  const createTree = useCreateTree();
 
   const { control, handleSubmit, setValue, watch } = useForm<AddTreeForm>({
     resolver: zodResolver(addTreeSchema),
@@ -44,22 +45,25 @@ export default function AddTreeScreen() {
   const typeField = useController({ name: "type", control });
   const selectedType = typeField.field.value as FruitTreeType | "";
 
-  function onSubmit(data: AddTreeForm) {
+  async function onSubmit(data: AddTreeForm) {
     if (!defaultOrchard) return;
     const treeType = data.type as FruitTreeType;
     const variety = data.name || undefined;
-    const newTree: Tree = {
-      id: Date.now().toString(),
-      name: variety ? `${variety} ${treeType}` : treeType,
-      type: treeType,
-      variety,
-      orchardId: defaultOrchard.id,
-      ageBracket: (data.ageBracket as AgeBracket) || undefined,
-      statusLabel: "Just planted",
-      statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
-    };
-    addTree(newTree);
-    router.replace("/(tabs)");
+    try {
+      await createTree.mutateAsync({
+        orchardId: defaultOrchard.id,
+        name: variety ? `${variety} ${treeType}` : treeType,
+        type: treeType,
+        variety,
+        ageBracket: (data.ageBracket as AgeBracket) || undefined,
+        statusLabel: "Just planted",
+        statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
+      });
+      router.replace("/(tabs)");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Please try again.";
+      Alert.alert("Could not add tree", message);
+    }
   }
 
   const coachTip = selectedType
@@ -127,8 +131,9 @@ export default function AddTreeScreen() {
           {/* Actions */}
           <View className="mt-6">
             <PrimaryButton
-              title="Add to My Orchard"
+              title={createTree.isPending ? "Adding…" : "Add to My Orchard"}
               onPress={handleSubmit(onSubmit)}
+              disabled={createTree.isPending}
             />
           </View>
           <Pressable className="mt-3 items-center py-2" onPress={() => router.replace("/(tabs)")}>

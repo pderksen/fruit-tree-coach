@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { ActivityIndicator, View, Text, ScrollView } from "react-native";
 
 import { ExpertTipsCard } from "@/components/ExpertTipsCard";
 import { LaterTaskList } from "@/components/LaterTaskList";
@@ -9,6 +9,7 @@ import { PriorityTaskCard } from "@/components/PriorityTaskCard";
 import { Screen } from "@/components/Screen";
 import { SeasonalLifeCycle } from "@/components/SeasonalLifeCycle";
 import { TreeDetailHeader } from "@/components/TreeDetailHeader";
+import { useTree } from "@/hooks/use-trees";
 import {
   compareByUpcomingSeason,
   getRotatedSeasonOrder,
@@ -18,12 +19,12 @@ import {
   MOCK_DETAILED_TASKS,
   MOCK_EXPERT_TIPS,
 } from "@/lib/mocks/care-details";
-import { MOCK_TREES } from "@/lib/mocks/trees";
 
 export default function TreeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const tree = MOCK_TREES.find((t) => t.id === id);
+  const treeQuery = useTree(id);
+  const tree = treeQuery.data;
 
   const allTasks = useMemo(
     () => MOCK_DETAILED_TASKS[id ?? ""] ?? [],
@@ -38,11 +39,23 @@ export default function TreeDetailScreen() {
     );
   }, [allTasks]);
 
+  if (treeQuery.isLoading) {
+    return (
+      <Screen>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator color="#15803d" />
+        </View>
+      </Screen>
+    );
+  }
+
   if (!tree) {
     return (
       <Screen>
         <View className="flex-1 items-center justify-center">
-          <Text className="text-base text-gray-500">Tree not found</Text>
+          <Text className="text-base text-gray-500">
+            {treeQuery.isError ? "Could not load tree" : "Tree not found"}
+          </Text>
         </View>
       </Screen>
     );
