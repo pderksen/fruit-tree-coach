@@ -168,3 +168,49 @@ export const newTaskSchema = z.object({
 });
 
 export type NewTask = z.infer<typeof newTaskSchema>;
+
+const productCategorySchema = z.enum([
+  "fertilizer",
+  "pruning-tool",
+  "pest-control",
+  "other",
+]);
+
+const guideStepSchema = z.object({
+  stepNumber: z.number().int(),
+  title: z.string(),
+  description: z.string(),
+  tip: z.string().optional(),
+  diagramImage: z.boolean().optional(),
+});
+
+const productRecommendationSchema = z.object({
+  name: z.string(),
+  category: productCategorySchema,
+  description: z.string(),
+  affiliateUrl: z.string().optional(),
+});
+
+export const guideContentSchema = z.object({
+  treeType: fruitTreeTypeSchema,
+  title: z.string(),
+  introduction: z.string(),
+  steps: z.array(guideStepSchema),
+  toolsNeeded: z.array(z.string()),
+  productRecommendations: z.array(productRecommendationSchema),
+  researchNotes: z.string().optional(),
+});
+
+export const guideRowSchema = z.object({
+  id: z.string(),
+  content: guideContentSchema,
+  source: z.string(),
+});
+
+export const guideSchema = guideRowSchema.transform((row) => ({
+  id: row.id,
+  source: row.source,
+  ...row.content,
+}));
+
+export type GuideRow = z.infer<typeof guideRowSchema>;

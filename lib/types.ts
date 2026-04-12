@@ -91,6 +91,34 @@ export interface Task {
   guideTaskId?: string;
 }
 
+export interface GuideStep {
+  stepNumber: number;
+  title: string;
+  description: string;
+  tip?: string;
+  /** Optional diagram image for visual guides (e.g. pruning diagrams). */
+  diagramImage?: boolean;
+}
+
+export interface ProductRecommendation {
+  name: string;
+  category: "fertilizer" | "pruning-tool" | "pest-control" | "other";
+  description: string;
+  affiliateUrl?: string;
+}
+
+export interface Guide {
+  id: string;
+  treeType: FruitTreeType;
+  title: string;
+  introduction: string;
+  steps: GuideStep[];
+  toolsNeeded: string[];
+  productRecommendations: ProductRecommendation[];
+  source: string;
+  researchNotes?: string;
+}
+
 export interface ExpertTip {
   quote: string;
   attribution: string;

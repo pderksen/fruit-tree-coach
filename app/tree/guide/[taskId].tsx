@@ -13,8 +13,9 @@ import {
 
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Screen } from "@/components/Screen";
+import { useGuide } from "@/hooks/use-guide";
 import { useTask, useToggleTask } from "@/hooks/use-tasks";
-import { MOCK_GUIDES, type Guide, type ProductRecommendation } from "@/lib/mocks/guides";
+import type { Guide, ProductRecommendation } from "@/lib/types";
 
 export default function GuideScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
@@ -23,9 +24,10 @@ export default function GuideScreen() {
   const toggleTask = useToggleTask();
   const task = taskQuery.data;
   const guideKey = task?.guideTaskId ?? taskId;
-  const guide = guideKey ? MOCK_GUIDES[guideKey] : undefined;
+  const guideQuery = useGuide(guideKey);
+  const guide = guideQuery.data ?? undefined;
 
-  if (taskQuery.isLoading) {
+  if (taskQuery.isLoading || guideQuery.isLoading) {
     return (
       <Screen>
         <View className="flex-1 items-center justify-center">
