@@ -40,6 +40,11 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `npx supabase migration repair --status reverted|applied <version...>` only edits the `schema_migrations` tracking table — runs no SQL, never changes schema. Safe for reconciling history
 - If local/remote history diverges, `supabase migration list` shows both columns side-by-side — start debugging there
 - Never commit the DB password or `supabase login` token; `supabase/.temp/` is already gitignored
+- `npx supabase db dump` requires Docker Desktop running. Without Docker, snapshot ad-hoc via the Supabase MCP `execute_sql` tool with `jsonb_agg(to_jsonb(t))` per table
+- `npx supabase db execute` does not exist in the current CLI — for ad-hoc SELECTs against the linked DB, use the Supabase MCP `execute_sql` tool instead
+- Before writing a migration with new CHECK or NOT NULL constraints, query current data via MCP `execute_sql` to find rows that would violate it. Fold any needed normalization/deletion into the same migration so it applies atomically
+- Before `CREATE OR REPLACE FUNCTION` in a migration, run `pg_get_functiondef(oid)` on the current definition and preserve the body verbatim — migrations should pin metadata (like `search_path`), not silently change behavior
+- Supabase performance advisor `unused_index` INFO is expected on tables with no query traffic yet (e.g. empty new tables). Not actionable until real usage exists
 
 ## Database backups (phased plan)
 - **Now (pre-launch):** no backup beyond Supabase's free-tier daily snapshot (~7-day retention, restore via support ticket). Schema is in git; test data is disposable
