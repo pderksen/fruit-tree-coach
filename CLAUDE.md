@@ -80,6 +80,25 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - `metro.config.js` Metro bundler config with NativeWind plugin
 - `app.json` Expo app config
 
+## Guide content sourcing
+- Guides are generated in batches by running a Claude Code session
+  that reads extension-service pages from `docs/fruit_tree_care_resources.md`
+  and writes each guide as an INSERT row in a new migration file.
+  No runtime API calls, no edge function — guides are content, but
+  they live in migrations so git history is the record of what
+  shipped and when
+- Each (tree_type, task_category) pair gets at most one row, enforced
+  by the partial unique index from migration
+  `20260412230000_guides_approval_and_lookup.sql`
+- The `approved` column gates RLS visibility. Batches can ship with
+  `approved = true` after developer review of the SQL diff, or
+  `approved = false` if a second dashboard review is wanted before
+  content goes live
+- **Revisit before public launch:** audit the curated resource list
+  in `docs/fruit_tree_care_resources.md` for licensing,
+  fetch-friendliness, and content stability. Prefer tightening the
+  list rather than swapping sources out wholesale
+
 ## Domain concepts
 - **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
 - **Task**: a recommended action for a tree, such as pruning, fertilizing, thinning, or waiting
