@@ -22,12 +22,17 @@ import { TreeDetailHeader } from "@/components/TreeDetailHeader";
 import { useTasks, useToggleTask } from "@/hooks/use-tasks";
 import { useDeleteTree, useTree } from "@/hooks/use-trees";
 import { EXPERT_TIPS } from "@/lib/care/expert-tips";
-import {
-  compareByUpcomingSeason,
-  getRotatedSeasonOrder,
-} from "@/lib/care/season-order";
-import { CURRENT_SEASON_STAGE } from "@/lib/care/season-stage";
-import type { Task } from "@/lib/types";
+import type { SeasonStage, Task } from "@/lib/types";
+
+// Rough month → life-cycle stage mapping for the "Seasonal Life Cycle"
+// display. Deliberately generic (not species-aware) — species-specific
+// staging lives in the task template windows.
+function currentStageForMonth(month: number): SeasonStage {
+  if (month >= 2 && month <= 4) return "bloom";
+  if (month >= 5 && month <= 8) return "growth";
+  if (month >= 9 && month <= 10) return "harvest";
+  return "dormant";
+}
 
 export default function TreeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -68,14 +73,20 @@ export default function TreeDetailScreen() {
   };
 
   const allTasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
-  const priorityTask = allTasks.find((t) => t.priority);
+  const pendingTasks = useMemo(
+    () => allTasks.filter((t) => !t.done),
+    [allTasks],
+  );
+  // Priority = the first task that's currently in its window. Late tasks
+  // are shown in "later" with an amber warning tag so they don't dominate.
+  const priorityTask = pendingTasks.find((t) => t.status === "active");
   const laterTasks = useMemo(() => {
-    const raw = allTasks.filter((t) => !t.priority);
-    const rotated = getRotatedSeasonOrder();
-    return [...raw].sort((a, b) =>
-      compareByUpcomingSeason(a.season, b.season, rotated),
-    );
-  }, [allTasks]);
+    const rank = (s?: Task["status"]) =>
+      s === "active" ? 0 : s === "late" ? 1 : 2;
+    return pendingTasks
+      .filter((t) => t.id !== priorityTask?.id)
+      .sort((a, b) => rank(a.status) - rank(b.status));
+  }, [pendingTasks, priorityTask]);
 
   const isRefreshing = treeQuery.isRefetching || tasksQuery.isRefetching;
   const onRefresh = useCallback(() => {
@@ -110,7 +121,7 @@ export default function TreeDetailScreen() {
   }
 
   const tips = EXPERT_TIPS[tree.type] ?? [];
-  const currentStage = CURRENT_SEASON_STAGE[tree.type] ?? "dormant";
+  const currentStage = currentStageForMonth(new Date().getMonth());
 
   return (
     <Screen bg="bg-cream-50">
@@ -145,34 +156,38 @@ export default function TreeDetailScreen() {
                 });
               }}
             />
-          ) : (
+          ) : pendingTasks.length === 0 ? (
             <View className="items-center rounded-2xl bg-white p-6">
-              <Ionicons name="checkmark-circle" size={40} color="#16a34a" />
+              <Text className="text-2xl">🌱</Text>
               <Text className="mt-2 text-base font-semibold text-gray-900">
-                No tasks required right now
+                Your {tree.name} is just growing
               </Text>
               <Text className="mt-1 text-center text-sm text-gray-500">
-                Your {tree.name} is looking good. Check back next week.
+                No tasks this week. Check back soon.
+              </Text>
+            </View>
+          ) : (
+            <View className="items-center rounded-2xl bg-white p-6">
+              <Ionicons name="leaf" size={40} color="#16a34a" />
+              <Text className="mt-2 text-base font-semibold text-gray-900">
+                Nothing urgent right now
+              </Text>
+              <Text className="mt-1 text-center text-sm text-gray-500">
+                See what&apos;s coming up below.
               </Text>
             </View>
           )}
         </View>
 
         {/* What to do later */}
-        <View className="mt-6">
-          <Text className="mb-3 text-lg font-bold text-gray-900">
-            What to do later
-          </Text>
-          {laterTasks.length > 0 ? (
+        {laterTasks.length > 0 ? (
+          <View className="mt-6">
+            <Text className="mb-3 text-lg font-bold text-gray-900">
+              What to do later
+            </Text>
             <LaterTaskList tasks={laterTasks} onToggleDone={handleToggleTask} />
-          ) : (
-            <View className="items-center rounded-2xl bg-white p-6">
-              <Text className="text-sm text-gray-500">
-                No upcoming tasks on the horizon.
-              </Text>
-            </View>
-          )}
-        </View>
+          </View>
+        ) : null}
 
         {/* Expert Tips */}
         {tips.length > 0 ? (

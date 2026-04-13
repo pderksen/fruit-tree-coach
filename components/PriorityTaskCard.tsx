@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Badge } from "@/components/Badge";
+import { TaskStatusTag } from "@/components/TaskStatusTag";
 import type { Task } from "@/lib/types";
 
 interface PriorityTaskCardProps {
@@ -15,8 +15,9 @@ export function PriorityTaskCard({
   onViewGuide,
   onToggleDone,
 }: PriorityTaskCardProps) {
+  const borderColor = task.status === "late" ? "border-amber-500" : "border-brand-600";
   return (
-    <View className="rounded-2xl border-l-4 border-brand-600 bg-white p-5">
+    <View className={`rounded-2xl border-l-4 ${borderColor} bg-white p-5`}>
       <View className="flex-row items-start justify-between">
         <Pressable
           className="flex-1 flex-row items-start gap-3"
@@ -37,14 +38,18 @@ export function PriorityTaskCard({
             >
               {task.title}
             </Text>
-            {task.timeWindow ? (
+            {task.displayWindow ? (
               <Text className="mt-1 text-sm text-gray-500">
-                {task.timeWindow}
+                {task.displayWindow}
               </Text>
+            ) : null}
+            {task.status && task.status !== "active" ? (
+              <View className="mt-2">
+                <TaskStatusTag status={task.status} />
+              </View>
             ) : null}
           </View>
         </Pressable>
-        {task.priority ? <Badge label="Priority" variant="olive" /> : null}
       </View>
 
       {task.description ? (

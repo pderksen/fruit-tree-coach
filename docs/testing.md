@@ -226,6 +226,34 @@ below are parked until the dev client ships (see
 - [ ] Android: hardware/gesture back does not leave the onboarding
       screen back into sign-in
 
+### Date-aware tasks (shipped 2026-04-12)
+
+Tasks now compute `active` / `upcoming` / `late` / `hidden` status from
+today's date vs. each task's month/day window (see
+`lib/care/task-windows.ts`). Most failures show up by time-traveling
+the device clock.
+
+- [ ] On the tree detail screen, the priority card only appears when a
+      task is currently in its seasonal window
+- [ ] A task within 14 days *before* its window start shows in the
+      "later" list with a gray "Coming up" tag
+- [ ] A task within 14 days *after* its window end shows with an amber
+      ⚠ "Do this as soon as possible" tag and an amber left border on
+      the priority card
+- [ ] A task more than 14 days outside its window does not appear
+- [ ] A tree with no active/upcoming/late tasks shows the 🌱 "just
+      growing" empty state — not a red error and not an empty page
+- [ ] Calendar screen still shows tasks in future/past months (uses
+      the unfiltered `useAllTasksByOrchardRaw` hook)
+- [ ] Time-travel: set the device clock to Feb 15 → apple "Winter
+      pruning" is the priority task. Jump to Jul 1 → it's gone, a
+      harvest-adjacent task may be active. Jump to Nov 1 → empty state
+      on most trees
+- [ ] Adding a new Apple / Peach / Lemon / Fig tree seeds the right
+      templates (check `tasks` table in Supabase after creation)
+- [ ] Adding a tree of a species with no templates (e.g. Kiwi) does
+      not error; the detail screen shows the empty state
+
 ## When Vitest and the smoke path aren't enough
 
 - **Schema/RLS changes**: in addition to the smoke path, run the

@@ -9,7 +9,7 @@ import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
 import { TimelineTask } from "@/components/TimelineTask";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
-import { useAllTasks } from "@/hooks/use-tasks";
+import { useAllTasksByOrchardRaw } from "@/hooks/use-tasks";
 import { formatWeekRange, getWeekKey, getWeekStart } from "@/lib/date-utils";
 import type { Task } from "@/lib/types";
 import { useSettingsStore } from "@/stores/settings-store";
@@ -44,17 +44,32 @@ export default function CalendarScreen() {
   const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
   const [showNotifModal, setShowNotifModal] = useState(!hasSeenPrompt);
   const orchard = useDefaultOrchard();
-  const tasksQuery = useAllTasks(orchard?.id);
+  const tasksQuery = useAllTasksByOrchardRaw(orchard?.id);
 
   const filteredTasks = useMemo(() => {
     const selectedMonth = selectedDate.getMonth();
     const selectedYear = selectedDate.getFullYear();
     const source = tasksQuery.data ?? [];
-    return source.filter((t): t is DatedTask => {
-      if (!t.dueDate) return false;
-      const d = new Date(t.dueDate);
-      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
-    });
+    // Tasks have either an explicit dueDate or a seasonal window. Synthesize
+    // a dueDate from the window start so the calendar can place them.
+    return source
+      .map((t): DatedTask | null => {
+        if (t.dueDate) return { ...t, dueDate: t.dueDate };
+        if (t.windowStart) {
+          const synthetic = new Date(
+            selectedYear,
+            t.windowStart.month - 1,
+            t.windowStart.day,
+          );
+          return { ...t, dueDate: synthetic.toISOString() };
+        }
+        return null;
+      })
+      .filter((t): t is DatedTask => {
+        if (!t) return false;
+        const d = new Date(t.dueDate);
+        return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+      });
   }, [selectedDate, tasksQuery.data]);
 
   const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);

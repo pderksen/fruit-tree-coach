@@ -23,7 +23,13 @@ export default function HomeScreen() {
   const trees = treesQuery.data ?? [];
   const tasksQuery = useAllTasks(orchard?.id);
   const pendingTasks = (tasksQuery.data ?? []).filter((t) => !t.done);
-  const nextTaskTitle = pendingTasks[0]?.title ?? "None";
+  // Surface active tasks first, then late, then upcoming — whichever is
+  // most time-relevant shows up in the "next task" summary.
+  const nextTask =
+    pendingTasks.find((t) => t.status === "active") ??
+    pendingTasks.find((t) => t.status === "late") ??
+    pendingTasks[0];
+  const nextTaskTitle = nextTask?.title ?? "None";
 
   const isRefreshing = treesQuery.isRefetching || tasksQuery.isRefetching;
   const onRefresh = useCallback(() => {

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, View, Text } from "react-native";
 
+import { TaskStatusTag } from "@/components/TaskStatusTag";
 import type { Task } from "@/lib/types";
 
 interface LaterTaskListProps {
@@ -36,10 +37,18 @@ export function LaterTaskList({ tasks, onToggleDone }: LaterTaskListProps) {
             >
               {task.title}
             </Text>
-            <Text className="mt-0.5 text-sm text-gray-500">
-              {task.season}
-              {task.description ? ` \u2022 ${task.description}` : ""}
-            </Text>
+            {task.displayWindow || task.description ? (
+              <Text className="mt-0.5 text-sm text-gray-500">
+                {task.displayWindow}
+                {task.displayWindow && task.description ? " \u2022 " : ""}
+                {task.description}
+              </Text>
+            ) : null}
+            {task.status && task.status !== "active" ? (
+              <View className="mt-2">
+                <TaskStatusTag status={task.status} />
+              </View>
+            ) : null}
           </View>
         </Pressable>
       ))}

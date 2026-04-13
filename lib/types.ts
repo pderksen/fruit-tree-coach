@@ -74,6 +74,8 @@ export type TaskCategory =
   | "harvesting"
   | "protection";
 
+export type TaskStatus = "upcoming" | "active" | "late";
+
 export interface Task {
   id: string;
   treeId: string;
@@ -84,11 +86,15 @@ export interface Task {
   done: boolean;
   dueDate?: string;
   category?: TaskCategory;
-  priority: boolean;
-  season?: string;
-  timeWindow?: string;
   description?: string;
   guideTaskId?: string;
+  templateId?: string;
+  windowStart?: { month: number; day: number };
+  windowEnd?: { month: number; day: number };
+  /** Computed at read time from today + window; not stored. */
+  status?: TaskStatus;
+  /** Computed at read time; short human label like "This week" or "Ended Mar 15". */
+  displayWindow?: string;
 }
 
 export interface GuideStep {

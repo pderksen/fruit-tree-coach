@@ -3,7 +3,7 @@ import { taskSchema, type NewTask } from "@/lib/schemas";
 import type { Task } from "@/lib/types";
 
 const TASK_COLUMNS =
-  "id, tree_id, title, why, done, created_at, due_date, category, priority, season, time_window, description, guide_task_id, trees!inner(name, type)";
+  "id, tree_id, title, why, done, created_at, due_date, category, description, guide_task_id, template_id, window_start_month, window_start_day, window_end_month, window_end_day, trees!inner(name, type)";
 
 export async function fetchTasks(treeId: string): Promise<Task[]> {
   const { data, error } = await supabase
@@ -45,11 +45,13 @@ export async function createTask(task: NewTask): Promise<Task> {
       done: task.done ?? false,
       due_date: task.dueDate ?? null,
       category: task.category ?? null,
-      priority: task.priority ?? false,
-      season: task.season ?? null,
-      time_window: task.timeWindow ?? null,
       description: task.description ?? null,
       guide_task_id: task.guideTaskId ?? null,
+      template_id: task.templateId ?? null,
+      window_start_month: task.windowStart?.month ?? null,
+      window_start_day: task.windowStart?.day ?? null,
+      window_end_month: task.windowEnd?.month ?? null,
+      window_end_day: task.windowEnd?.day ?? null,
     })
     .select(TASK_COLUMNS)
     .single();
@@ -63,9 +65,6 @@ export interface TaskUpdateFields {
   done?: boolean;
   dueDate?: string | null;
   category?: Task["category"] | null;
-  priority?: boolean;
-  season?: string | null;
-  timeWindow?: string | null;
   description?: string | null;
   guideTaskId?: string | null;
 }
@@ -80,9 +79,6 @@ export async function updateTask(
   if (fields.done !== undefined) patch.done = fields.done;
   if (fields.dueDate !== undefined) patch.due_date = fields.dueDate;
   if (fields.category !== undefined) patch.category = fields.category;
-  if (fields.priority !== undefined) patch.priority = fields.priority;
-  if (fields.season !== undefined) patch.season = fields.season;
-  if (fields.timeWindow !== undefined) patch.time_window = fields.timeWindow;
   if (fields.description !== undefined) patch.description = fields.description;
   if (fields.guideTaskId !== undefined)
     patch.guide_task_id = fields.guideTaskId;

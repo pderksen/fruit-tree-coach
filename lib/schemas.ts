@@ -114,6 +114,13 @@ const taskCategorySchema = z.enum([
   "protection",
 ]);
 
+const monthDaySchema = z
+  .object({
+    month: z.number().int().min(1).max(12),
+    day: z.number().int().min(1).max(31),
+  })
+  .optional();
+
 export const taskRowSchema = z.object({
   id: z.string().uuid(),
   tree_id: z.string().uuid(),
@@ -123,16 +130,25 @@ export const taskRowSchema = z.object({
   created_at: z.string(),
   due_date: z.string().nullable(),
   category: taskCategorySchema.nullable(),
-  priority: z.boolean(),
-  season: z.string().nullable(),
-  time_window: z.string().nullable(),
   description: z.string().nullable(),
   guide_task_id: z.string().nullable(),
+  template_id: z.string().nullable(),
+  window_start_month: z.number().int().nullable(),
+  window_start_day: z.number().int().nullable(),
+  window_end_month: z.number().int().nullable(),
+  window_end_day: z.number().int().nullable(),
   trees: z
     .object({ name: z.string(), type: fruitTreeTypeSchema })
     .nullable()
     .optional(),
 });
+
+function toMonthDay(
+  month: number | null,
+  day: number | null,
+): { month: number; day: number } | undefined {
+  return month !== null && day !== null ? { month, day } : undefined;
+}
 
 export const taskSchema = taskRowSchema.transform((row) => ({
   id: row.id,
@@ -144,11 +160,11 @@ export const taskSchema = taskRowSchema.transform((row) => ({
   done: row.done,
   dueDate: optional(row.due_date),
   category: optional(row.category),
-  priority: row.priority,
-  season: optional(row.season),
-  timeWindow: optional(row.time_window),
   description: optional(row.description),
   guideTaskId: optional(row.guide_task_id),
+  templateId: optional(row.template_id),
+  windowStart: toMonthDay(row.window_start_month, row.window_start_day),
+  windowEnd: toMonthDay(row.window_end_month, row.window_end_day),
 }));
 
 export type TaskRow = z.infer<typeof taskRowSchema>;
@@ -160,11 +176,11 @@ export const newTaskSchema = z.object({
   done: z.boolean().default(false),
   dueDate: z.string().optional(),
   category: taskCategorySchema.optional(),
-  priority: z.boolean().default(false),
-  season: z.string().optional(),
-  timeWindow: z.string().optional(),
   description: z.string().optional(),
   guideTaskId: z.string().optional(),
+  templateId: z.string().optional(),
+  windowStart: monthDaySchema,
+  windowEnd: monthDaySchema,
 });
 
 export type NewTask = z.infer<typeof newTaskSchema>;
