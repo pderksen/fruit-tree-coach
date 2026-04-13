@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { useForm, useController } from "react-hook-form";
 import {
   View,
@@ -17,6 +18,10 @@ import { CoachTipCard } from "@/components/CoachTipCard";
 import { FormField } from "@/components/FormField";
 import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
+import {
+  RequestTreeModal,
+  type RequestTreeSubmission,
+} from "@/components/RequestTreeModal";
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { useCreateTree } from "@/hooks/use-trees";
@@ -44,6 +49,16 @@ export default function AddTreeScreen() {
 
   const typeField = useController({ name: "type", control });
   const selectedType = typeField.field.value as FruitTreeType | "";
+
+  const [requestModalVisible, setRequestModalVisible] = useState(false);
+
+  function handleTreeRequest(submission: RequestTreeSubmission) {
+    console.log("[tree-request]", {
+      ...submission,
+      timestamp: new Date().toISOString(),
+    });
+    Alert.alert("Thanks!", "We'll look into adding it to the app.");
+  }
 
   async function onSubmit(data: AddTreeForm) {
     if (!defaultOrchard) return;
@@ -96,6 +111,7 @@ export default function AddTreeScreen() {
             selected={selectedType || null}
             onSelect={(t) => typeField.field.onChange(t)}
             zone={zone}
+            onRequestTree={() => setRequestModalVisible(true)}
           />
           {typeField.fieldState.error ? (
             <Text className="mt-1 text-xs text-red-500">
@@ -141,6 +157,11 @@ export default function AddTreeScreen() {
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
+      <RequestTreeModal
+        visible={requestModalVisible}
+        onClose={() => setRequestModalVisible(false)}
+        onSubmit={handleTreeRequest}
+      />
     </Screen>
   );
 }

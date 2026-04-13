@@ -46,6 +46,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - Before `CREATE OR REPLACE FUNCTION` in a migration, run `pg_get_functiondef(oid)` on the current definition and preserve the body verbatim — migrations should pin metadata (like `search_path`), not silently change behavior
 - When a new migration replaces an earlier constraint that's referenced by a drift test (e.g. `lib/fruit-tree-data.test.ts` parses the `trees_type_check` definition), update the test's hardcoded `MIGRATION_PATH` to the new file in the same change — the test won't fail loudly, it'll just keep validating the old constraint
 - Supabase performance advisor `unused_index` INFO is expected on tables with no query traffic yet (e.g. empty new tables). Not actionable until real usage exists
+- Vitest is configured for plain TS only (`environment: "node"`, no RN preset). Tests that import `@testing-library/react-native` or render RN components will fail with a transform syntax error. Verify component behavior manually via `docs/testing.md` until a proper RN + jsdom setup is added
 
 ## Database backups (phased plan)
 - **Now (pre-launch):** no backup beyond Supabase's free-tier daily snapshot (~7-day retention, restore via support ticket). Schema is in git; test data is disposable
@@ -182,6 +183,7 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Ask before making architectural decisions
 - When stuck, surface the problem instead of guessing
 - Prefer the boring, idiomatic solution over the clever one
+- Match process weight to feature size. Mock UIs and throwaway scaffolding don't need spec docs, implementation plans, or QA checklist updates — just build it and test manually. Reserve heavier planning for features with real complexity or durable behavior
 
 ## Useful commands
 - `npm run dev` start Expo dev server

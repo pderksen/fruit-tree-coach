@@ -14,9 +14,10 @@ interface FruitTypeGridProps {
   selected: FruitTreeType | null;
   onSelect: (type: FruitTreeType) => void;
   zone?: string;
+  onRequestTree?: () => void;
 }
 
-export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
+export function FruitTypeGrid({ selected, onSelect, onRequestTree }: FruitTypeGridProps) {
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState(false);
 
@@ -122,6 +123,20 @@ export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
           }}
         >
           <Text className="text-sm font-semibold text-brand-600">Show fewer</Text>
+        </Pressable>
+      )}
+
+      {/* Request a tree type that isn't in the grid */}
+      {onRequestTree && (
+        <Pressable
+          className="mt-4 flex-row items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-transparent px-4 py-4"
+          onPress={onRequestTree}
+        >
+          <Ionicons name="add-outline" size={20} color="#6b7280" />
+          <Text className="ml-2 text-sm font-medium text-gray-600">
+            Don&apos;t see your tree?{" "}
+            <Text className="font-semibold text-brand-700">Request it</Text>
+          </Text>
         </Pressable>
       )}
     </View>
