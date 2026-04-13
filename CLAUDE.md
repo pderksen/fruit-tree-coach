@@ -195,7 +195,7 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 
 ## Environment setup
 1. `npm install`
-2. Create `.env` with:
+2. Copy `.env.example` to `.env` and fill in:
    - `EXPO_PUBLIC_SUPABASE_URL`
    - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
 3. `npm run dev` to start
