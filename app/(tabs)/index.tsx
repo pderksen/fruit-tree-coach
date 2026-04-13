@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { RefreshControl, View, Text, ScrollView, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { DevTools } from "@/components/DevTools";
 import { ErrorState } from "@/components/ErrorState";
 import { GardenerInsight } from "@/components/GardenerInsight";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -186,6 +187,14 @@ export default function HomeScreen() {
           <SeasonalForecast />
         </View>
 
+        <DevTools
+          buttons={[
+            {
+              label: "Test user login",
+              onPress: () => router.push("/dev-login"),
+            },
+          ]}
+        />
       </ScrollView>
     </SafeAreaView>
   );
