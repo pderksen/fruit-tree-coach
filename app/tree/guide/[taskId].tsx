@@ -13,7 +13,7 @@ import {
 
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Screen } from "@/components/Screen";
-import { useGuide } from "@/hooks/use-guide";
+import { useGuideByCategory } from "@/hooks/use-guide";
 import { useTask, useToggleTask } from "@/hooks/use-tasks";
 import type { Guide, ProductRecommendation } from "@/lib/types";
 
@@ -22,8 +22,8 @@ export default function GuideScreen() {
   const router = useRouter();
   const taskQuery = useTask(taskId);
   const toggleTask = useToggleTask();
-  const task = taskQuery.data;
-  const guideQuery = useGuide(taskId);
+  const task = taskQuery.data ?? null;
+  const guideQuery = useGuideByCategory(task?.treeType, task?.category);
   const guide = guideQuery.data ?? undefined;
 
   if (taskQuery.isLoading || guideQuery.isLoading) {
