@@ -149,6 +149,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - Use `Partial<Record<K, V>>` for mock data maps that don't need entries for every union member
 - Screens read trees from `useTreeStore`, not from `MOCK_TREES` directly
 - New stack screens: register in `app/_layout.tsx` (title only — `headerBackTitle: ""` is set globally)
+- Tests live next to source as `<name>.test.ts` (Vitest), not in a separate `__tests__/` directory
 
 ## Before declaring a task done
 1. `npm run typecheck` passes
