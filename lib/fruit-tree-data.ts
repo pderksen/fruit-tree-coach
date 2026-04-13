@@ -60,41 +60,25 @@ export const FRUIT_TREE_TYPES: FruitTreeType[] = [
   "Pawpaw",
 ];
 
-/** Number of "popular" types shown before the categorized groups. */
-export const POPULAR_TYPE_COUNT = 9;
-
 // ---------------------------------------------------------------------------
-// Zone-aware popular types
-// Recommendations based on USDA hardiness zones and common backyard plantings.
-// Source: University extension service planting guides (various states).
+// Popular types — top 10 most common US backyard fruit trees.
+// Rough ordering based on USDA NASS noncitrus/citrus production reports and
+// extension-service "common backyard fruit" guides. Zone-aware filtering will
+// come back post-v1 once we have real planting data.
 // ---------------------------------------------------------------------------
 
-type ZoneRange = "cold" | "moderate" | "warm";
-
-const POPULAR_BY_ZONE: Record<ZoneRange, FruitTreeType[]> = {
-  // Zones 3–5: short seasons, cold-hardy varieties
-  cold: ["Apple", "Pear", "Cherry", "Plum", "Peach", "Apricot", "Mulberry", "Pawpaw"],
-  // Zones 6–8: widest variety, classic backyard fruit trees
-  moderate: ["Apple", "Peach", "Pear", "Cherry", "Plum", "Fig", "Persimmon", "Pomegranate"],
-  // Zones 9–13: citrus and subtropical thrive
-  warm: ["Orange", "Lemon", "Lime", "Grapefruit", "Fig", "Pomegranate", "Avocado", "Mango"],
-};
-
-function zoneToRange(zone: string): ZoneRange {
-  // Zone string is like "8b", "5a", "10a" — parse the leading number
-  const num = parseInt(zone, 10);
-  if (isNaN(num) || num <= 5) return "cold";
-  if (num <= 8) return "moderate";
-  return "warm";
-}
-
-/**
- * Returns the 8 most popular fruit tree types for a given USDA zone.
- * Falls back to the "moderate" list if zone is missing or unparseable.
- */
-export function getPopularTypesForZone(zone: string): FruitTreeType[] {
-  return POPULAR_BY_ZONE[zoneToRange(zone)];
-}
+export const POPULAR_TYPES: FruitTreeType[] = [
+  "Apple",
+  "Peach",
+  "Pear",
+  "Cherry",
+  "Plum",
+  "Lemon",
+  "Orange",
+  "Fig",
+  "Apricot",
+  "Lime",
+];
 
 // ---------------------------------------------------------------------------
 // Category map

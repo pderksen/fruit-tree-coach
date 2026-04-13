@@ -5,8 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { FruitIcon } from "@/components/FruitIcon";
 import {
   FRUIT_TREE_TYPES,
+  POPULAR_TYPES,
   TREE_CATEGORY_MAP,
-  getPopularTypesForZone,
 } from "@/lib/fruit-tree-data";
 import type { FruitTreeType } from "@/lib/types";
 
@@ -16,11 +16,11 @@ interface FruitTypeGridProps {
   zone?: string;
 }
 
-export function FruitTypeGrid({ selected, onSelect, zone = "6" }: FruitTypeGridProps) {
+export function FruitTypeGrid({ selected, onSelect }: FruitTypeGridProps) {
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState(false);
 
-  const popularTypes = useMemo(() => getPopularTypesForZone(zone), [zone]);
+  const popularTypes = POPULAR_TYPES;
 
   const allNonPopular = useMemo(() => {
     const popularSet = new Set<FruitTreeType>(popularTypes);
@@ -54,7 +54,7 @@ export function FruitTypeGrid({ selected, onSelect, zone = "6" }: FruitTypeGridP
       {!isSearching && (
         <>
           <Text className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">
-            Popular in your zone
+            Most popular
           </Text>
           <TypeRow types={popularTypes} selected={selected} onSelect={onSelect} />
         </>
