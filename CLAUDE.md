@@ -52,6 +52,9 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - **At first beta users:** add a nightly GitHub Actions workflow that runs `pg_dump` against the remote DB and uploads the `.sql` to a private repo or S3/R2. Runs free, no servers
 - **At public launch:** upgrade to Supabase Pro ($25/mo) for self-serve daily backups + PITR with 7-day retention
 
+### Ad-hoc snapshot workflow
+When the user asks for a database backup or snapshot, save it to `backups/<short-reason>-<YYYY-MM-DD>.json` (e.g. `backups/new-fruit-list-2026-04-13.json`). Pick the `<short-reason>` slug from session context — what's about to change or what just changed — without asking. Use the Supabase MCP `execute_sql` tool with one query that `UNION ALL`s every public table as `SELECT '<tbl>' AS tbl, COALESCE(jsonb_agg(to_jsonb(x)), '[]'::jsonb) AS rows FROM <tbl> x`, wrapped in `jsonb_agg(t)`. Save the raw MCP response verbatim (the `tool-results/*.json` file) — match the shape of existing files in `backups/`.
+
 ## Project structure
 - `app/` screens and navigation
 - `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
