@@ -6,7 +6,7 @@ export const MOCK_TREES: Tree[] = [
     name: "Honeycrisp Apple",
     type: "Apple",
     variety: "Honeycrisp",
-    plantedYear: 2019,
+    plantedOn: "2019-01-01",
     orchardId: "default",
     description:
       "A crown jewel of the autumn harvest, known for its explosive crunch and honey-sweet flavor profile. Developed at the University of Minnesota, Honeycrisp thrives in cooler climates.",
@@ -16,7 +16,7 @@ export const MOCK_TREES: Tree[] = [
     name: "Elberta Peach",
     type: "Peach",
     variety: "Elberta",
-    plantedYear: 2021,
+    plantedOn: "2021-01-01",
     orchardId: "default",
     description:
       "The Elberta is a classic freestone peach prized for its juicy golden flesh and reliable harvests. One of the most popular varieties for home orchards across the US.",
@@ -26,7 +26,7 @@ export const MOCK_TREES: Tree[] = [
     name: "Meyer Lemon",
     type: "Lemon",
     variety: "Meyer",
-    plantedYear: 2022,
+    plantedOn: "2022-01-01",
     orchardId: "default",
     description:
       "A compact citrus tree that produces wonderfully fragrant, thin-skinned lemons year-round. Meyer lemons are sweeter than grocery-store varieties and perfect for patios.",
@@ -36,7 +36,7 @@ export const MOCK_TREES: Tree[] = [
     name: "Brown Turkey Fig",
     type: "Fig",
     variety: "Brown Turkey",
-    plantedYear: 2020,
+    plantedOn: "2020-01-01",
     orchardId: "default",
     description:
       "Brown Turkey figs are reliable producers that tolerate cooler climates better than most fig varieties. Their sweet, jammy fruit ripens in late summer.",

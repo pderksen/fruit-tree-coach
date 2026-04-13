@@ -44,8 +44,7 @@ export function useCreateTree() {
         name: tree.name,
         type: tree.type,
         variety: tree.variety,
-        plantedYear: tree.plantedYear,
-        plantedDate: tree.plantedDate,
+        plantedOn: tree.plantedOn,
         ageBracket: tree.ageBracket,
         description: tree.description,
       };

@@ -4,7 +4,7 @@ import { treeSchema, type NewTree } from "@/lib/schemas";
 import type { FruitTreeType, Tree } from "@/lib/types";
 
 const TREE_COLUMNS =
-  "id, orchard_id, name, type, variety, planted_year, planted_date, age_bracket, description, created_at";
+  "id, orchard_id, name, type, variety, planted_on, age_bracket, description, created_at";
 
 export async function fetchTrees(orchardId: string): Promise<Tree[]> {
   const { data, error } = await supabase
@@ -34,8 +34,7 @@ export async function createTree(tree: NewTree): Promise<Tree> {
       name: tree.name,
       type: tree.type,
       variety: tree.variety ?? null,
-      planted_year: tree.plantedYear ?? null,
-      planted_date: tree.plantedDate ?? null,
+      planted_on: tree.plantedOn ?? null,
       age_bracket: tree.ageBracket ?? null,
       description: tree.description ?? null,
     })
@@ -77,10 +76,8 @@ export async function updateTree(
   if (fields.name !== undefined) patch.name = fields.name;
   if (fields.type !== undefined) patch.type = fields.type;
   if (fields.variety !== undefined) patch.variety = fields.variety ?? null;
-  if (fields.plantedYear !== undefined)
-    patch.planted_year = fields.plantedYear ?? null;
-  if (fields.plantedDate !== undefined)
-    patch.planted_date = fields.plantedDate ?? null;
+  if (fields.plantedOn !== undefined)
+    patch.planted_on = fields.plantedOn ?? null;
   if (fields.ageBracket !== undefined)
     patch.age_bracket = fields.ageBracket ?? null;
   if (fields.description !== undefined)

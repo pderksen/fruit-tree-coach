@@ -56,8 +56,7 @@ export interface Tree {
   name: string;
   type: FruitTreeType;
   variety?: string;
-  plantedYear?: number;
-  plantedDate?: string;
+  plantedOn?: string; // ISO date (YYYY-MM-DD)
   orchardId: string;
   ageBracket?: AgeBracket;
   description?: string;

@@ -15,8 +15,11 @@ interface TreeDetailHeaderProps {
 export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
   const scientificName = SCIENTIFIC_NAME_MAP[tree.type];
   const category = TREE_CATEGORY_MAP[tree.type];
+  const plantedYear = tree.plantedOn
+    ? new Date(tree.plantedOn).getFullYear()
+    : null;
   const currentYear = new Date().getFullYear();
-  const age = tree.plantedYear ? currentYear - tree.plantedYear : null;
+  const age = plantedYear !== null ? currentYear - plantedYear : null;
   const ageDisplay =
     age !== null
       ? `${age} years old`
