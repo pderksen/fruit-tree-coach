@@ -192,6 +192,8 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Marketplace plugins: run `/plugin` → update any with a newer version available.
 - Arbitrary-GitHub plugins/skills installed under `~/.claude/plugins/` and `~/.claude/skills/`: `git pull` in each dir, or ask Claude to iterate over those paths, run `git fetch` + show what's behind, and pull after review.
 - If the user asks "check for Claude Code updates" or similar, run the above and report which repos had changes — do not auto-pull destructively if there are local modifications.
+- `/plugin` install defaults to `local` scope (project-only). For plugins that should be available everywhere, choose `user` scope explicitly. Check with `cat ~/.claude/plugins/installed_plugins.json`.
+- Installed skill files can live in: `~/.claude/plugins/cache/<marketplace>/<plugin>/<ver>/skills/` (plugin-bundled), `~/.claude/skills/` (user standalone), project `.claude/skills/` and `.agents/skills/` (project standalone, sometimes symlinked). When removing a skill, check all four.
 
 ## Environment setup
 1. `npm install`
