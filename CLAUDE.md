@@ -42,8 +42,9 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - Never commit the DB password or `supabase login` token; `supabase/.temp/` is already gitignored
 - `npx supabase db dump` requires Docker Desktop running. Without Docker, snapshot ad-hoc via the Supabase MCP `execute_sql` tool with `jsonb_agg(to_jsonb(t))` per table
 - `npx supabase db execute` does not exist in the current CLI — for ad-hoc SELECTs against the linked DB, use the Supabase MCP `execute_sql` tool instead
-- Before writing a migration with new CHECK or NOT NULL constraints, query current data via MCP `execute_sql` to find rows that would violate it. Fold any needed normalization/deletion into the same migration so it applies atomically
+- Before writing a migration with new or narrowed CHECK / NOT NULL constraints, query current data via MCP `execute_sql` to find rows that would violate it. Fold any needed normalization/deletion into the same migration so it applies atomically
 - Before `CREATE OR REPLACE FUNCTION` in a migration, run `pg_get_functiondef(oid)` on the current definition and preserve the body verbatim — migrations should pin metadata (like `search_path`), not silently change behavior
+- When a new migration replaces an earlier constraint that's referenced by a drift test (e.g. `lib/fruit-tree-data.test.ts` parses the `trees_type_check` definition), update the test's hardcoded `MIGRATION_PATH` to the new file in the same change — the test won't fail loudly, it'll just keep validating the old constraint
 - Supabase performance advisor `unused_index` INFO is expected on tables with no query traffic yet (e.g. empty new tables). Not actionable until real usage exists
 
 ## Database backups (phased plan)
