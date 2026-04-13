@@ -1,5 +1,8 @@
 # Project: Fruit Tree Coach
 
+## Scope: US-only for v1
+Version 1 targets US users only. USDA hardiness zones, ZIP codes, and US extension-service sources are the basis for all care guidance — extending to other countries means per-country zone datasets and regional horticultural sources, which is post-v1 work. The app should make this scope visible to users (e.g. "Currently available for US locations" on the ZIP prompt and in marketing copy) so non-US users aren't misled.
+
 ## What this is
 A mobile app that helps people know exactly when and how to care for
 their fruit trees each week. It gives simple, location-aware guidance
