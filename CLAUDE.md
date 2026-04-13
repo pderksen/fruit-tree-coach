@@ -87,6 +87,16 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
   No runtime API calls, no edge function — guides are content, but
   they live in migrations so git history is the record of what
   shipped and when
+- When researching a new guide, WebSearch first with `allowed_domains`
+  scoped to the ranked extension sources — do NOT guess deep URLs.
+  University extension sites reorganize frequently and direct-fetch
+  attempts routinely 404. WebSearch returns live URLs; WebFetch the
+  top 1–2 results
+- Runtime on-demand generation (edge function calling Claude API) was
+  considered and rejected: adds a secret-management surface, breaks
+  the "git history is schema history" principle, and the ~60–80
+  guide target is a finite, reviewable scope. Revisit only if that
+  scope grows past hand-review capacity
 - Each (tree_type, task_category) pair gets at most one row, enforced
   by the partial unique index from migration
   `20260412230000_guides_approval_and_lookup.sql`
