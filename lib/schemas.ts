@@ -170,6 +170,24 @@ export const newTaskSchema = z.object({
 
 export type NewTask = z.infer<typeof newTaskSchema>;
 
+export const taskCompletionRowSchema = z.object({
+  id: z.string().uuid(),
+  task_id: z.string().uuid(),
+  tree_id: z.string().uuid(),
+  completed_at: z.string(),
+  notes: z.string().nullable(),
+});
+
+export const taskCompletionSchema = taskCompletionRowSchema.transform((row) => ({
+  id: row.id,
+  taskId: row.task_id,
+  treeId: row.tree_id,
+  completedAt: row.completed_at,
+  notes: optional(row.notes),
+}));
+
+export type TaskCompletionRow = z.infer<typeof taskCompletionRowSchema>;
+
 const productCategorySchema = z.enum([
   "fertilizer",
   "pruning-tool",

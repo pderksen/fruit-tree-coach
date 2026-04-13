@@ -52,7 +52,7 @@ export default function GuideScreen() {
   const handleMarkDone = () => {
     if (!task) return;
     toggleTask.mutate(
-      { id: task.id, done: true },
+      { task, done: true },
       { onSuccess: () => router.back() },
     );
   };

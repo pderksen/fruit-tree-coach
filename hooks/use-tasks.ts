@@ -2,6 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { computeTaskStatus, type TaskStatusResult } from "@/lib/care/task-windows";
 import {
+  createCompletion,
+  deleteCompletion,
+  fetchCompletionsForTask,
+} from "@/lib/services/completion-service";
+import {
   createTask,
   deleteTask,
   fetchTask,
@@ -91,14 +96,39 @@ export function useCreateTask() {
 }
 
 /**
- * Mark a task done / undone for the current window.
- *
- * Stub implementation — Task 4 replaces this with a completion-based mutation.
+ * Toggle task done-ness for the current window:
+ * - done=true  → insert a completion row
+ * - done=false → delete the most recent completion that falls within the
+ *   current window (no-op if none)
  */
 export function useToggleTask() {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (_args: { id: string; done: boolean }) => {
-      // No-op stub; Task 4 replaces with real completion insert/delete.
+    mutationFn: async (args: { task: Task; done: boolean }) => {
+      if (args.done) {
+        await createCompletion({
+          taskId: args.task.id,
+          treeId: args.task.treeId,
+        });
+        return;
+      }
+      const { resolvedStart, resolvedEnd } = computeTaskStatus(
+        args.task,
+        new Date(),
+      );
+      const completions = await fetchCompletionsForTask(args.task.id);
+      const inWindow =
+        resolvedStart && resolvedEnd
+          ? completions.find((c) => {
+              const ts = new Date(c.completedAt);
+              return ts >= resolvedStart && ts <= resolvedEnd;
+            })
+          : completions[0];
+      if (inWindow) await deleteCompletion(inWindow.id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["completions"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 }

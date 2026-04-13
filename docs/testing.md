@@ -254,6 +254,25 @@ the device clock.
 - [ ] Adding a tree of a species with no templates (e.g. Kiwi) does
       not error; the detail screen shows the empty state
 
+### Task completions — append-only done state (shipped 2026-04-13)
+
+`useToggleTask` now writes to / deletes from `task_completions`. Done state
+is window-scoped: a completion only counts if its `completed_at` falls within
+the task&apos;s resolved seasonal window.
+
+- [ ] Open tree detail → tap the circle icon on a task → confirm the UI updates
+      (once real done-state UI lands; for now the toggle fires silently)
+- [ ] In the Supabase dashboard → Table Editor → `task_completions` → confirm
+      a new row appears with the correct `task_id` and `tree_id`
+- [ ] Open the step-by-step guide for a task → tap "Mark as done" → screen
+      navigates back → in Supabase dashboard confirm the row was inserted
+- [ ] Trigger an undo (done=false path): row for that task&apos;s current window
+      should be deleted; prior-window rows should be untouched
+- [ ] Close and reopen the app → same task still shows as done (roundtrip
+      through RLS + TanStack Query refetch)
+- [ ] Verify RLS: sign in as a second user account → confirm that user cannot
+      see or delete the first user&apos;s `task_completions` rows
+
 ## When Vitest and the smoke path aren't enough
 
 - **Schema/RLS changes**: in addition to the smoke path, run the

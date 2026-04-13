@@ -88,6 +88,14 @@ export interface Task {
   displayWindow?: string;
 }
 
+export interface TaskCompletion {
+  id: string;
+  taskId: string;
+  treeId: string;
+  completedAt: string; // ISO timestamp
+  notes?: string;
+}
+
 export interface GuideStep {
   stepNumber: number;
   title: string;

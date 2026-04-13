@@ -44,7 +44,7 @@ export default function TreeDetailScreen() {
   const toggleTaskMutation = useToggleTask();
 
   const handleToggleTask = (task: Task) => {
-    toggleTaskMutation.mutate({ id: task.id, done: true });
+    toggleTaskMutation.mutate({ task, done: true });
   };
 
   const handleDelete = () => {
