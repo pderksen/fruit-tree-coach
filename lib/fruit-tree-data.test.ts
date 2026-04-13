@@ -10,7 +10,7 @@ const MIGRATION_PATH = join(
   "..",
   "supabase",
   "migrations",
-  "20260413202040_tree_check_constraints.sql",
+  "20260413210853_tree_v1_list_constraint.sql",
 );
 
 function parseCheckConstraintTypes(sql: string): string[] {

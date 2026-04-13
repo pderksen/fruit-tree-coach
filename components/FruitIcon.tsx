@@ -9,7 +9,7 @@ interface FruitIconProps {
 
 /**
  * Renders the SVG fruit icon for a given tree type.
- * All 34 fruit types have dedicated SVG illustrations.
+ * All FruitTreeType values have dedicated SVG illustrations.
  */
 export function FruitIcon({ type, size = 24 }: FruitIconProps) {
   const SvgIcon = FRUIT_SVG_MAP[type];
