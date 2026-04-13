@@ -58,7 +58,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 
 ## Project structure
 - `app/` screens and navigation
-- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering; `trees`/`advice`/`settings` exist but hidden from tab bar via layout)
+- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering)
 - `app/profile.tsx` user profile/account screen (stack, not tab)
 - `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
 - `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts`, `hooks/use-session.ts`, `hooks/use-guide.ts` TanStack Query hooks backed by `lib/services/`
