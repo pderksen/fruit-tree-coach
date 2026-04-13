@@ -23,8 +23,7 @@ export default function GuideScreen() {
   const taskQuery = useTask(taskId);
   const toggleTask = useToggleTask();
   const task = taskQuery.data;
-  const guideKey = task?.guideTaskId ?? taskId;
-  const guideQuery = useGuide(guideKey);
+  const guideQuery = useGuide(taskId);
   const guide = guideQuery.data ?? undefined;
 
   if (taskQuery.isLoading || guideQuery.isLoading) {
@@ -53,7 +52,7 @@ export default function GuideScreen() {
   const handleMarkDone = () => {
     if (!task) return;
     toggleTask.mutate(
-      { id: task.id, done: !task.done },
+      { id: task.id, done: true },
       { onSuccess: () => router.back() },
     );
   };
@@ -129,12 +128,12 @@ export default function GuideScreen() {
             ) : (
               <>
                 <Ionicons
-                  name={task.done ? "refresh" : "checkmark-circle"}
+                  name="checkmark-circle"
                   size={18}
                   color="white"
                 />
                 <Text className="text-base font-semibold text-white">
-                  {task.done ? "Mark as not done" : "Mark as done"}
+                  Mark as done
                 </Text>
               </>
             )}

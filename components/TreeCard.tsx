@@ -1,6 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 
 import { FruitIcon } from "@/components/FruitIcon";
+import { useTasks } from "@/hooks/use-tasks";
 import type { Tree } from "@/lib/types";
 
 interface TreeCardProps {
@@ -9,19 +10,24 @@ interface TreeCardProps {
 }
 
 export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
+  const { data: tasks } = useTasks(tree.id);
+  const activeTask = tasks?.find((t) => t.status === "active");
+  const statusLine = activeTask?.title;
+  const statusDescription = activeTask?.why;
+
   return (
     <View className="mb-4 rounded-3xl bg-white p-5">
       <FruitIcon type={tree.type} size={36} />
 
       <Text className="mt-3 text-xl font-bold text-gray-900">{tree.name}</Text>
-      {tree.statusLabel ? (
+      {statusLine ? (
         <Text className="mt-0.5 text-sm font-medium text-brand-600">
-          {tree.statusLabel}
+          {statusLine}
         </Text>
       ) : null}
-      {tree.statusDescription ? (
+      {statusDescription ? (
         <Text className="mt-2 text-sm leading-5 text-gray-600">
-          {tree.statusDescription}
+          {statusDescription}
         </Text>
       ) : null}
 

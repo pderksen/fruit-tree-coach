@@ -22,7 +22,7 @@ export default function HomeScreen() {
   const treesQuery = useTrees(orchard?.id);
   const trees = treesQuery.data ?? [];
   const tasksQuery = useAllTasks(orchard?.id);
-  const pendingTasks = (tasksQuery.data ?? []).filter((t) => !t.done);
+  const pendingTasks = tasksQuery.data ?? [];
   // Surface active tasks first, then late, then upcoming — whichever is
   // most time-relevant shows up in the "next task" summary.
   const nextTask =

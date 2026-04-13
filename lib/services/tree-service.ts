@@ -4,7 +4,7 @@ import { treeSchema, type NewTree } from "@/lib/schemas";
 import type { FruitTreeType, Tree } from "@/lib/types";
 
 const TREE_COLUMNS =
-  "id, orchard_id, name, type, variety, planted_year, planted_date, age_bracket, description, status_label, status_description, created_at";
+  "id, orchard_id, name, type, variety, planted_year, planted_date, age_bracket, description, created_at";
 
 export async function fetchTrees(orchardId: string): Promise<Tree[]> {
   const { data, error } = await supabase
@@ -38,8 +38,6 @@ export async function createTree(tree: NewTree): Promise<Tree> {
       planted_date: tree.plantedDate ?? null,
       age_bracket: tree.ageBracket ?? null,
       description: tree.description ?? null,
-      status_label: tree.statusLabel ?? null,
-      status_description: tree.statusDescription ?? null,
     })
     .select(TREE_COLUMNS)
     .single();
@@ -66,7 +64,6 @@ async function seedStarterTasks(
     window_start_day: t.windowStart.day,
     window_end_month: t.windowEnd.month,
     window_end_day: t.windowEnd.day,
-    done: false,
   }));
   const { error } = await supabase.from("tasks").insert(rows);
   if (error) throw error;
@@ -88,10 +85,6 @@ export async function updateTree(
     patch.age_bracket = fields.ageBracket ?? null;
   if (fields.description !== undefined)
     patch.description = fields.description ?? null;
-  if (fields.statusLabel !== undefined)
-    patch.status_label = fields.statusLabel ?? null;
-  if (fields.statusDescription !== undefined)
-    patch.status_description = fields.statusDescription ?? null;
 
   const { data, error } = await supabase
     .from("trees")

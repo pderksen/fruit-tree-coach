@@ -26,15 +26,15 @@ export function PriorityTaskCard({
         >
           {onToggleDone ? (
             <Ionicons
-              name={task.done ? "checkmark-circle" : "ellipse-outline"}
+              name="ellipse-outline"
               size={22}
-              color={task.done ? "#16a34a" : "#9ca3af"}
+              color="#9ca3af"
               style={{ marginTop: 2 }}
             />
           ) : null}
           <View className="flex-1">
             <Text
-              className={`text-lg font-bold ${task.done ? "text-gray-400 line-through" : "text-gray-900"}`}
+              className="text-lg font-bold text-gray-900"
             >
               {task.title}
             </Text>

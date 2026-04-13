@@ -56,8 +56,6 @@ export default function AddTreeScreen() {
         type: treeType,
         variety,
         ageBracket: (data.ageBracket as AgeBracket) || undefined,
-        statusLabel: "Just planted",
-        statusDescription: `Your new ${treeType.toLowerCase()} tree has been added to your orchard.`,
       });
       router.replace("/(tabs)");
     } catch (err) {

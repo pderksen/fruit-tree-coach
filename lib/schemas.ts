@@ -68,8 +68,6 @@ export const treeRowSchema = z.object({
   planted_date: z.string().nullable(),
   age_bracket: ageBracketSchema.nullable(),
   description: z.string().nullable(),
-  status_label: z.string().nullable(),
-  status_description: z.string().nullable(),
   created_at: z.string(),
 });
 
@@ -85,8 +83,6 @@ export const treeSchema = treeRowSchema.transform((row) => ({
   plantedDate: optional(row.planted_date),
   ageBracket: optional(row.age_bracket),
   description: optional(row.description),
-  statusLabel: optional(row.status_label),
-  statusDescription: optional(row.status_description),
 }));
 
 export type TreeRow = z.infer<typeof treeRowSchema>;
@@ -100,8 +96,6 @@ export const newTreeSchema = z.object({
   plantedDate: z.string().optional(),
   ageBracket: ageBracketSchema.optional(),
   description: z.string().optional(),
-  statusLabel: z.string().optional(),
-  statusDescription: z.string().optional(),
 });
 
 export type NewTree = z.infer<typeof newTreeSchema>;
@@ -126,12 +120,10 @@ export const taskRowSchema = z.object({
   tree_id: z.string().uuid(),
   title: z.string(),
   why: z.string().nullable(),
-  done: z.boolean(),
   created_at: z.string(),
   due_date: z.string().nullable(),
   category: taskCategorySchema.nullable(),
   description: z.string().nullable(),
-  guide_task_id: z.string().nullable(),
   template_id: z.string().nullable(),
   window_start_month: z.number().int().nullable(),
   window_start_day: z.number().int().nullable(),
@@ -157,11 +149,9 @@ export const taskSchema = taskRowSchema.transform((row) => ({
   treeType: row.trees?.type,
   title: row.title,
   why: row.why ?? "",
-  done: row.done,
   dueDate: optional(row.due_date),
   category: optional(row.category),
   description: optional(row.description),
-  guideTaskId: optional(row.guide_task_id),
   templateId: optional(row.template_id),
   windowStart: toMonthDay(row.window_start_month, row.window_start_day),
   windowEnd: toMonthDay(row.window_end_month, row.window_end_day),
@@ -173,11 +163,9 @@ export const newTaskSchema = z.object({
   treeId: z.string().uuid(),
   title: z.string().min(1),
   why: z.string().optional(),
-  done: z.boolean().default(false),
   dueDate: z.string().optional(),
   category: taskCategorySchema.optional(),
   description: z.string().optional(),
-  guideTaskId: z.string().optional(),
   templateId: z.string().optional(),
   windowStart: monthDaySchema,
   windowEnd: monthDaySchema,

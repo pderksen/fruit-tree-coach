@@ -48,8 +48,6 @@ export function useCreateTree() {
         plantedDate: tree.plantedDate,
         ageBracket: tree.ageBracket,
         description: tree.description,
-        statusLabel: tree.statusLabel,
-        statusDescription: tree.statusDescription,
       };
       queryClient.setQueryData<Tree[]>(listKey, [...(previous ?? []), optimistic]);
       return { listKey, previous };

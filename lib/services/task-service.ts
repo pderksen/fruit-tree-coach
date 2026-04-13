@@ -3,7 +3,7 @@ import { taskSchema, type NewTask } from "@/lib/schemas";
 import type { Task } from "@/lib/types";
 
 const TASK_COLUMNS =
-  "id, tree_id, title, why, done, created_at, due_date, category, description, guide_task_id, template_id, window_start_month, window_start_day, window_end_month, window_end_day, trees!inner(name, type)";
+  "id, tree_id, title, why, created_at, due_date, category, description, template_id, window_start_month, window_start_day, window_end_month, window_end_day, trees!inner(name, type)";
 
 export async function fetchTasks(treeId: string): Promise<Task[]> {
   const { data, error } = await supabase
@@ -42,11 +42,9 @@ export async function createTask(task: NewTask): Promise<Task> {
       tree_id: task.treeId,
       title: task.title,
       why: task.why ?? null,
-      done: task.done ?? false,
       due_date: task.dueDate ?? null,
       category: task.category ?? null,
       description: task.description ?? null,
-      guide_task_id: task.guideTaskId ?? null,
       template_id: task.templateId ?? null,
       window_start_month: task.windowStart?.month ?? null,
       window_start_day: task.windowStart?.day ?? null,
@@ -62,11 +60,9 @@ export async function createTask(task: NewTask): Promise<Task> {
 export interface TaskUpdateFields {
   title?: string;
   why?: string;
-  done?: boolean;
   dueDate?: string | null;
   category?: Task["category"] | null;
   description?: string | null;
-  guideTaskId?: string | null;
 }
 
 export async function updateTask(
@@ -76,12 +72,9 @@ export async function updateTask(
   const patch: Record<string, unknown> = {};
   if (fields.title !== undefined) patch.title = fields.title;
   if (fields.why !== undefined) patch.why = fields.why;
-  if (fields.done !== undefined) patch.done = fields.done;
   if (fields.dueDate !== undefined) patch.due_date = fields.dueDate;
   if (fields.category !== undefined) patch.category = fields.category;
   if (fields.description !== undefined) patch.description = fields.description;
-  if (fields.guideTaskId !== undefined)
-    patch.guide_task_id = fields.guideTaskId;
 
   const { data, error } = await supabase
     .from("tasks")

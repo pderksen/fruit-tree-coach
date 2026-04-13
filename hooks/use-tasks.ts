@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { computeTaskStatus } from "@/lib/care/task-windows";
+import { computeTaskStatus, type TaskStatusResult } from "@/lib/care/task-windows";
 import {
   createTask,
   deleteTask,
   fetchTask,
   fetchTasks,
   fetchTasksByOrchard,
-  updateTask,
 } from "@/lib/services/task-service";
 import type { NewTask } from "@/lib/schemas";
 import type { Task } from "@/lib/types";
@@ -21,17 +20,16 @@ const tasksByOrchardKey = (orchardId: string | undefined) => [
 
 /**
  * Decorate tasks with today-relative status and drop anything hidden.
- * Done tasks stay visible (users want to see what they've checked off)
- * regardless of window — their status is taken from the window if present.
  */
 function filterAndDecorate(tasks: Task[], today: Date): Task[] {
   const out: Task[] = [];
   for (const task of tasks) {
-    const { status, displayWindow } = computeTaskStatus(task, today);
-    if (status === "hidden" && !task.done) continue;
+    const result: TaskStatusResult = computeTaskStatus(task, today);
+    const { status, displayWindow } = result;
+    if (status === "hidden") continue;
     out.push({
       ...task,
-      status: status === "hidden" ? undefined : status,
+      status,
       displayWindow: displayWindow || undefined,
     });
   }
@@ -92,33 +90,15 @@ export function useCreateTask() {
   });
 }
 
+/**
+ * Mark a task done / undone for the current window.
+ *
+ * Stub implementation — Task 4 replaces this with a completion-based mutation.
+ */
 export function useToggleTask() {
-  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (args: { id: string; done: boolean }) =>
-      updateTask(args.id, { done: args.done }),
-    onMutate: async (args) => {
-      await queryClient.cancelQueries({ queryKey: ["tasks"] });
-      const snapshots = queryClient.getQueriesData<Task[]>({
-        queryKey: ["tasks"],
-      });
-      for (const [key, data] of snapshots) {
-        if (!data) continue;
-        queryClient.setQueryData<Task[]>(
-          key,
-          data.map((t) => (t.id === args.id ? { ...t, done: args.done } : t)),
-        );
-      }
-      return { snapshots };
-    },
-    onError: (_err, _args, context) => {
-      if (!context) return;
-      for (const [key, data] of context.snapshots) {
-        queryClient.setQueryData(key, data);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    mutationFn: async (_args: { id: string; done: boolean }) => {
+      // No-op stub; Task 4 replaces with real completion insert/delete.
     },
   });
 }

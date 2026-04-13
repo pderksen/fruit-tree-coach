@@ -44,7 +44,7 @@ export default function TreeDetailScreen() {
   const toggleTaskMutation = useToggleTask();
 
   const handleToggleTask = (task: Task) => {
-    toggleTaskMutation.mutate({ id: task.id, done: !task.done });
+    toggleTaskMutation.mutate({ id: task.id, done: true });
   };
 
   const handleDelete = () => {
@@ -72,11 +72,7 @@ export default function TreeDetailScreen() {
     );
   };
 
-  const allTasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
-  const pendingTasks = useMemo(
-    () => allTasks.filter((t) => !t.done),
-    [allTasks],
-  );
+  const pendingTasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
   // Priority = the first task that's currently in its window. Late tasks
   // are shown in "later" with an amber warning tag so they don't dominate.
   const priorityTask = pendingTasks.find((t) => t.status === "active");

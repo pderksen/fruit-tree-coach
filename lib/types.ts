@@ -61,10 +61,6 @@ export interface Tree {
   orchardId: string;
   ageBracket?: AgeBracket;
   description?: string;
-  /** Short status label shown on collection cards */
-  statusLabel?: string;
-  /** Brief description of current care state */
-  statusDescription?: string;
 }
 
 export type TaskCategory =
@@ -83,17 +79,13 @@ export interface Task {
   treeType?: FruitTreeType;
   title: string;
   why: string;
-  done: boolean;
   dueDate?: string;
   category?: TaskCategory;
   description?: string;
-  guideTaskId?: string;
   templateId?: string;
   windowStart?: { month: number; day: number };
   windowEnd?: { month: number; day: number };
-  /** Computed at read time from today + window; not stored. */
   status?: TaskStatus;
-  /** Computed at read time; short human label like "This week" or "Ended Mar 15". */
   displayWindow?: string;
 }
 

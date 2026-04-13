@@ -23,9 +23,9 @@ export function LaterTaskList({ tasks, onToggleDone }: LaterTaskListProps) {
         >
           {onToggleDone ? (
             <Ionicons
-              name={task.done ? "checkmark-circle" : "ellipse-outline"}
+              name="ellipse-outline"
               size={20}
-              color={task.done ? "#16a34a" : "#9ca3af"}
+              color="#9ca3af"
               style={{ marginRight: 10, marginTop: 1 }}
             />
           ) : (
@@ -33,7 +33,7 @@ export function LaterTaskList({ tasks, onToggleDone }: LaterTaskListProps) {
           )}
           <View className="flex-1">
             <Text
-              className={`text-base font-semibold ${task.done ? "text-gray-400 line-through" : "text-gray-900"}`}
+              className="text-base font-semibold text-gray-900"
             >
               {task.title}
             </Text>
