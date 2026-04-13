@@ -94,3 +94,11 @@ fix that before scaling the problem to tasks.
 - If ~60–80 guides stops being feasible to review by hand, revisit
   on-demand generation. The `approved` column is already there for
   that future path
+- **Medlar and Mulberry have thin US Cooperative Extension coverage.**
+  Their current overview guides (in migrations `20260413000100` and
+  `20260413000700`) draw from broader horticultural references rather
+  than grounded extension pages. Revisit when better US extension
+  sources become available — possibly from newer state publications
+  or by switching to international authoritative sources (RHS, etc.)
+  if the app's US-only scope relaxes. Flagged explicitly in each
+  guide's `researchNotes` so users see the caveat
