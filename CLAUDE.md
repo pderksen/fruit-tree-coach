@@ -187,6 +187,12 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - `eas build --profile preview` cloud build for testing
 - `eas build --profile production` production build
 
+## Claude Code tooling updates (monthly)
+- Plugins and skills are git-backed and do not auto-update. Check roughly once a month.
+- Marketplace plugins: run `/plugin` → update any with a newer version available.
+- Arbitrary-GitHub plugins/skills installed under `~/.claude/plugins/` and `~/.claude/skills/`: `git pull` in each dir, or ask Claude to iterate over those paths, run `git fetch` + show what's behind, and pull after review.
+- If the user asks "check for Claude Code updates" or similar, run the above and report which repos had changes — do not auto-pull destructively if there are local modifications.
+
 ## Environment setup
 1. `npm install`
 2. Create `.env` with:

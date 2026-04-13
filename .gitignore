@@ -15,6 +15,7 @@ android/
 *.p8
 *.p12
 *.key
+*.pem
 *.mobileprovision
 *.orig.*
 
@@ -25,8 +26,8 @@ android/
 # Android
 *.hprof
 
-# Turborepo
-.turbo/
+# Supabase
+supabase/.temp/
 
 # Environment
 .env
@@ -51,6 +52,9 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+
+# ESLint
+.eslintcache
 
 # Debug
 npm-debug.*
