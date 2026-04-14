@@ -203,7 +203,7 @@ real device or simulator with location services configurable.
 Expo Go because the native permission string only lands in a custom dev
 client. In Expo Go, only manual entry is testable. The location items
 below are parked until the dev client ships (see
-`docs/plans-2026-04-12/`).
+`docs/plans/dev-client-migration/`).
 
 - [ ] Sign up as a new user → lands on Onboarding ZIP screen (not
       directly on the tabs)
