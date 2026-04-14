@@ -129,6 +129,10 @@ export default function RootLayout() {
           options={{ title: "New Tree" }}
         />
         <Stack.Screen
+          name="tree/edit/[id]"
+          options={{ title: "Edit tree" }}
+        />
+        <Stack.Screen
           name="tree/guide/[taskId]"
           options={{ title: "Step-by-Step Guide" }}
         />

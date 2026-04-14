@@ -273,6 +273,28 @@ the task&apos;s resolved seasonal window.
 - [ ] Verify RLS: sign in as a second user account → confirm that user cannot
       see or delete the first user&apos;s `task_completions` rows
 
+### Edit tree details (shipped 2026-04-14)
+
+Pencil icon on the tree detail header opens `app/tree/edit/[id].tsx`,
+which can change `variety` and `ageBracket`. Tree `type` is deliberately
+read-only. `name` is re-derived from `${variety} ${type}` to match the
+new-tree flow.
+
+- [ ] Open a tree → header title shows the tree's name (e.g.
+      "Honeycrisp Apple") and a green "Edit" button appears top-right
+- [ ] Tap Edit → Edit tree screen opens with current variety and age
+      pre-filled, and tree type shown as read-only
+- [ ] Change variety → Save → returns to detail screen → header name
+      updates to `"{new variety} {type}"`
+- [ ] Clear variety entirely → Save → header name falls back to the
+      bare tree type (no leading space)
+- [ ] Change age bracket → Save → detail screen reflects new age
+- [ ] Tap Cancel → returns to detail with no change applied
+- [ ] Edit screen shows a loading spinner while the tree is fetching,
+      and an error state (with retry) if fetch fails
+- [ ] Edit while offline (airplane mode) → change appears immediately
+      in the list and detail (optimistic) → reconnect → edit persists
+
 ## When Vitest and the smoke path aren't enough
 
 - **Schema/RLS changes**: in addition to the smoke path, run the

@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useMemo } from "react";
 import {
   ActivityIndicator,
@@ -121,6 +121,26 @@ export default function TreeDetailScreen() {
 
   return (
     <Screen bg="bg-cream-50">
+      <Stack.Screen
+        options={{
+          title: tree.name,
+          headerRight: () => (
+            <Pressable
+              hitSlop={8}
+              onPress={() =>
+                router.push({
+                  pathname: "/tree/edit/[id]",
+                  params: { id: tree.id },
+                })
+              }
+            >
+              <Text className="text-base font-semibold text-brand-700">
+                Edit
+              </Text>
+            </Pressable>
+          ),
+        }}
+      />
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
