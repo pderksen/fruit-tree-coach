@@ -141,6 +141,10 @@ export default function RootLayout() {
           options={{ title: "Profile" }}
         />
         <Stack.Screen
+          name="watering-guide"
+          options={{ title: "Watering Guide" }}
+        />
+        <Stack.Screen
           name="onboarding-zip"
           options={{ headerShown: false, gestureEnabled: false }}
         />

@@ -19,7 +19,7 @@ export function WateringInfoCard() {
       </Text>
       <Pressable
         className="mt-3 flex-row items-center gap-1"
-        onPress={() => router.push("/(tabs)/watering")}
+        onPress={() => router.push("/watering-guide")}
       >
         <Text className="text-sm font-medium text-blue-600">
           See watering details

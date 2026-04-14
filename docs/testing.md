@@ -295,6 +295,22 @@ new-tree flow.
 - [ ] Edit while offline (airplane mode) → change appears immediately
       in the list and detail (optimistic) → reconnect → edit persists
 
+### Watering guide stack route (shipped 2026-04-14)
+
+The "See watering details" link on the home screen now pushes a dedicated
+stack screen (`app/watering-guide.tsx`) instead of switching to the Watering
+tab, so the global back chevron returns the user to Home. The Watering tab
+still exists and renders the same content via `WateringGuideContent`.
+
+- [ ] Home → tap "See watering details" on the About Watering card →
+      opens a screen titled "Watering Guide" with a back chevron top-left
+- [ ] Tap the back chevron → returns to Home with scroll position
+      preserved
+- [ ] Android hardware/gesture back from the watering guide returns to
+      Home (does not exit the app)
+- [ ] Watering tab still renders the same guide content with its own
+      large heading (no duplicate header bar)
+
 ## When Vitest and the smoke path aren't enough
 
 - **Schema/RLS changes**: in addition to the smoke path, run the
