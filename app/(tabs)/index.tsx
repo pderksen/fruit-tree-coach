@@ -64,16 +64,11 @@ export default function HomeScreen() {
               Fruit Tree Coach
             </Text>
           </View>
-          <View className="flex-row items-center gap-4">
-            <Pressable>
-              <Ionicons name="search-outline" size={22} color="#374151" />
-            </Pressable>
-            <Pressable onPress={() => router.push("/profile")}>
-              <View className="h-8 w-8 items-center justify-center rounded-full bg-brand-100">
-                <Ionicons name="person" size={16} color="#15803d" />
-              </View>
-            </Pressable>
-          </View>
+          <Pressable onPress={() => router.push("/profile")}>
+            <View className="h-8 w-8 items-center justify-center rounded-full bg-brand-100">
+              <Ionicons name="person" size={16} color="#15803d" />
+            </View>
+          </Pressable>
         </View>
 
         {/* Gardening Zone */}
