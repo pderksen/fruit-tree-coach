@@ -8,7 +8,7 @@ export function useGuideByCategory(
 ) {
   return useQuery({
     queryKey: ["guides", "by-category", treeType, category],
-    queryFn: () => fetchGuideByCategory(treeType!, category ?? "overview"),
+    queryFn: () => fetchGuideByCategory(treeType!, category),
     enabled: !!treeType,
     staleTime: 1000 * 60 * 60,
   });

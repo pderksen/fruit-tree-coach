@@ -322,3 +322,25 @@ still exists and renders the same content via `WateringGuideContent`.
 - **Dependency bumps**: `npx expo install --fix`, full smoke path
   on both platforms, and check the Gotchas section of CLAUDE.md
   for any pins that conflict.
+
+### Peach per-task guides pilot (shipped 2026-04-14)
+
+Migration `20260415010312_guides_peach_per_task.sql` adds four
+per-task guides for Peach (protection, pruning, monitoring/thinning,
+harvesting). Guide lookup in `lib/services/guide-service.ts` now
+prefers the per-task row and falls back to the tree-wide overview.
+
+- [ ] Create a Peach tree → open a Peach pruning task → guide title
+      reads "Peach Tree Pruning" and steps cover pruning only (no
+      harvest, feeding, or spray content)
+- [ ] Open the Peach leaf-curl (protection) task → guide reads
+      "Peach Leaf Curl Prevention" and covers copper-spray steps only
+- [ ] Open the Peach thinning (monitoring) task → guide reads
+      "Bloom and Fruit Thinning" and covers spacing/thinning only
+- [ ] Open the Peach harvest task → guide reads "Peach Harvest
+      Window" and covers picking only
+- [ ] Open any task for a tree without per-task guides yet (e.g.
+      Cherry, Plum) → the tree-wide overview guide still renders as
+      a fallback
+- [ ] Each guide's "Tools Needed" list is scoped to that task (no
+      pruners on the harvest guide, no basket on the pruning guide)
