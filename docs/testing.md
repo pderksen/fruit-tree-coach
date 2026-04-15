@@ -344,3 +344,26 @@ prefers the per-task row and falls back to the tree-wide overview.
       a fallback
 - [ ] Each guide's "Tools Needed" list is scoped to that task (no
       pruners on the harvest guide, no basket on the pruning guide)
+
+### Task completions with missed outcome (shipped 2026-04-15)
+
+Migration `20260415222715_task_completions_outcome.sql` adds an
+`outcome` column ('completed' | 'missed') to `task_completions`. When
+a task's window expires >28 days past end with no completion row for
+the current cycle, `hooks/use-tasks.ts` fires a `missed` insert so the
+task stays hidden until next year's window reopens.
+
+- [ ] Mark a task done → row in `task_completions` has
+      `outcome = 'completed'` (spot-check via Supabase dashboard)
+- [ ] Simulate an expired task: in dev, temporarily set a tree's task
+      window to end >28 days in the past → open the tree → task does
+      not appear in the active list → Supabase shows a new
+      `outcome = 'missed'` row for that task
+- [ ] After a `missed` row is recorded, re-opening the tree does NOT
+      insert another `missed` row for the same cycle (idempotent)
+- [ ] Unmark toggle (undo) still works for `completed` rows — the
+      delete path is scoped to the current window and should not
+      touch `missed` rows from prior cycles
+- [ ] Next year's window for the same task template generates a fresh
+      task that is visible (manual — requires time travel or a
+      hand-crafted task row with windowStart in the near future)

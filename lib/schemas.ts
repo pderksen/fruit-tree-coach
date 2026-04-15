@@ -131,7 +131,12 @@ export const taskRowSchema = z.object({
     .nullable()
     .optional(),
   task_completions: z
-    .array(z.object({ completed_at: z.string() }))
+    .array(
+      z.object({
+        completed_at: z.string(),
+        outcome: z.enum(["completed", "missed"]).optional(),
+      }),
+    )
     .optional(),
 });
 
@@ -161,6 +166,18 @@ export const taskSchema = taskRowSchema.transform((row) => ({
         row.task_completions[0].completed_at,
       )
     : undefined,
+  lastCompletedOutcome: row.task_completions?.length
+    ? row.task_completions.reduce<{ at: string; outcome: "completed" | "missed" }>(
+        (latest, c) =>
+          c.completed_at > latest.at
+            ? { at: c.completed_at, outcome: c.outcome ?? "completed" }
+            : latest,
+        {
+          at: row.task_completions[0].completed_at,
+          outcome: row.task_completions[0].outcome ?? "completed",
+        },
+      ).outcome
+    : undefined,
 }));
 
 export type TaskRow = z.infer<typeof taskRowSchema>;
@@ -185,6 +202,7 @@ export const taskCompletionRowSchema = z.object({
   tree_id: z.string().uuid(),
   completed_at: z.string(),
   notes: z.string().nullable(),
+  outcome: z.enum(["completed", "missed"]).optional(),
 });
 
 export const taskCompletionSchema = taskCompletionRowSchema.transform((row) => ({
@@ -193,6 +211,7 @@ export const taskCompletionSchema = taskCompletionRowSchema.transform((row) => (
   treeId: row.tree_id,
   completedAt: row.completed_at,
   notes: optional(row.notes),
+  outcome: row.outcome ?? "completed",
 }));
 
 export type TaskCompletionRow = z.infer<typeof taskCompletionRowSchema>;

@@ -75,6 +75,8 @@ export interface Task {
   displayWindow?: string;
   /** Latest completion timestamp for this task, across all windows. */
   lastCompletedAt?: string;
+  /** Outcome of the latest completion row: user-done vs window-expired. */
+  lastCompletedOutcome?: "completed" | "missed";
 }
 
 export interface TaskCompletion {
@@ -83,6 +85,7 @@ export interface TaskCompletion {
   treeId: string;
   completedAt: string; // ISO timestamp
   notes?: string;
+  outcome: "completed" | "missed";
 }
 
 export interface GuideStep {

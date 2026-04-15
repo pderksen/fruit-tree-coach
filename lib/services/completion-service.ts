@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { taskCompletionSchema } from "@/lib/schemas";
 import type { TaskCompletion } from "@/lib/types";
 
-const COLS = "id, task_id, tree_id, completed_at, notes";
+const COLS = "id, task_id, tree_id, completed_at, notes, outcome";
 
 export async function fetchCompletionsForTask(
   taskId: string,
@@ -32,6 +32,7 @@ export async function createCompletion(args: {
   taskId: string;
   treeId: string;
   notes?: string;
+  outcome?: "completed" | "missed";
 }): Promise<TaskCompletion> {
   const { data, error } = await supabase
     .from("task_completions")
@@ -39,6 +40,7 @@ export async function createCompletion(args: {
       task_id: args.taskId,
       tree_id: args.treeId,
       notes: args.notes ?? null,
+      outcome: args.outcome ?? "completed",
     })
     .select(COLS)
     .single();

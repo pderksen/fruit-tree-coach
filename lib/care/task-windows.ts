@@ -29,6 +29,12 @@ export interface TaskStatusResult {
   resolvedStart?: Date;
   /** Resolved end date for the nearest instance of the window, if any. */
   resolvedEnd?: Date;
+  /**
+   * True when the task's current window expired without any completion row
+   * covering it — caller should persist a `missed` completion so next year's
+   * window is the only thing that brings this task back.
+   */
+  expiredWithoutRecord?: boolean;
 }
 
 const SLACK_DAYS_BEFORE = 14;
@@ -151,18 +157,19 @@ export function computeTaskStatus(
   const t = atMidnight(today);
   const { start, end } = resolveWindow(task.windowStart, task.windowEnd, t);
 
-  // If the task was completed on or after this window's start, it's done for
-  // this cycle — hide it until next year's window approaches.
-  if (task.lastCompletedAt) {
-    const completed = new Date(task.lastCompletedAt);
-    if (completed >= start) {
-      return {
-        status: "hidden",
-        displayWindow: "",
-        resolvedStart: start,
-        resolvedEnd: end,
-      };
-    }
+  // If this cycle is already closed (completed or recorded as missed on/after
+  // window start), hide until next year's window approaches.
+  const cycleClosedAt =
+    task.lastCompletedAt && new Date(task.lastCompletedAt) >= start
+      ? new Date(task.lastCompletedAt)
+      : undefined;
+  if (cycleClosedAt) {
+    return {
+      status: "hidden",
+      displayWindow: "",
+      resolvedStart: start,
+      resolvedEnd: end,
+    };
   }
 
   const daysToStart = diffDays(start, t);
@@ -186,11 +193,17 @@ export function computeTaskStatus(
     status = "hidden";
   }
 
+  // Window expired with no completion/miss row covering it → caller should
+  // persist a 'missed' row so next year's window is the only trigger.
+  const expiredWithoutRecord =
+    status === "hidden" && daysAfterEnd > URGENT_DAYS_AFTER && !cycleClosedAt;
+
   return {
     status,
     displayWindow: status === "hidden" ? "" : formatDisplay(status, start, end, t),
     resolvedStart: start,
     resolvedEnd: end,
+    expiredWithoutRecord: expiredWithoutRecord || undefined,
   };
 }
 

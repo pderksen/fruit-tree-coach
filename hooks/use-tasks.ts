@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { computeTaskStatus, type TaskStatusResult } from "@/lib/care/task-windows";
@@ -41,13 +42,59 @@ function filterAndDecorate(tasks: Task[], today: Date): Task[] {
   return out;
 }
 
+/**
+ * Find tasks whose current window expired without any completion row —
+ * those need a `missed` row recorded so the history is complete and next
+ * year's window is the only trigger that brings them back.
+ */
+function pickExpiredTasks(tasks: Task[], today: Date): Task[] {
+  return tasks.filter((t) => computeTaskStatus(t, today).expiredWithoutRecord);
+}
+
+/**
+ * Fire-and-forget: persist `missed` rows for any tasks whose current window
+ * has expired. Runs whenever the raw query data changes. Duplicates across
+ * renders are prevented by the cycle-closed check in computeTaskStatus —
+ * once a miss row exists, the task is no longer flagged as expired.
+ */
+function useRecordExpiredMisses(rawTasks: Task[] | undefined) {
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (!rawTasks?.length) return;
+    const expired = pickExpiredTasks(rawTasks, new Date());
+    if (!expired.length) return;
+    (async () => {
+      const seen = new Set<string>();
+      for (const task of expired) {
+        if (seen.has(task.id)) continue;
+        seen.add(task.id);
+        try {
+          await createCompletion({
+            taskId: task.id,
+            treeId: task.treeId,
+            outcome: "missed",
+          });
+        } catch {
+          // Swallow — RLS or offline will retry on next query refresh.
+        }
+      }
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["completions"] });
+    })();
+  }, [rawTasks, queryClient]);
+}
+
 export function useTasks(treeId: string | undefined) {
-  return useQuery({
+  const query = useQuery({
     queryKey: tasksByTreeKey(treeId),
     queryFn: () => fetchTasks(treeId!),
     enabled: !!treeId,
-    select: (data) => filterAndDecorate(data, new Date()),
   });
+  useRecordExpiredMisses(query.data);
+  return {
+    ...query,
+    data: query.data ? filterAndDecorate(query.data, new Date()) : undefined,
+  };
 }
 
 /** Unfiltered variant — use for calendar views that must show future months. */
@@ -68,12 +115,16 @@ export function useTask(id: string | undefined) {
 }
 
 export function useAllTasks(orchardId: string | undefined) {
-  return useQuery({
+  const query = useQuery({
     queryKey: tasksByOrchardKey(orchardId),
     queryFn: () => fetchTasksByOrchard(orchardId!),
     enabled: !!orchardId,
-    select: (data) => filterAndDecorate(data, new Date()),
   });
+  useRecordExpiredMisses(query.data);
+  return {
+    ...query,
+    data: query.data ? filterAndDecorate(query.data, new Date()) : undefined,
+  };
 }
 
 /** Unfiltered orchard-wide tasks. Calendar uses this to show all months. */
