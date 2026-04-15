@@ -12,7 +12,7 @@ export interface MonthDay {
   day: number; // 1-31
 }
 
-export type TaskStatus = "upcoming" | "active" | "late";
+export type TaskStatus = "upcoming" | "active" | "late" | "urgent";
 
 export interface WindowedTask {
   windowStart?: MonthDay;
@@ -32,6 +32,8 @@ export interface TaskStatusResult {
 }
 
 const SLACK_DAYS_BEFORE = 14;
+const LATE_DAYS_AFTER = 14;
+const URGENT_DAYS_AFTER = 28;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function atMidnight(d: Date): Date {
@@ -122,7 +124,8 @@ function formatDisplay(
   const daysToStart = diffDays(start, today);
   const daysToEnd = diffDays(end, today);
   if (status === "upcoming") return `Starts ${formatShort(start)}`;
-  if (status === "late") return `Ended ${formatShort(end)}`;
+  if (status === "late" || status === "urgent")
+    return `Ended ${formatShort(end)}`;
   // active
   if (daysToEnd <= 7) return `Ends ${formatShort(end)}`;
   if (daysToStart >= -6) return "This week";
@@ -172,11 +175,15 @@ export function computeTaskStatus(
     status = "upcoming";
   } else if (daysAfterEnd <= 0) {
     status = "active";
-  } else {
-    // Once a window ends, the task stays visible as "late" until next year's
-    // window approaches. Users can still do the task — late just flags that
-    // the recommended window has passed.
+  } else if (daysAfterEnd <= LATE_DAYS_AFTER) {
+    // First two weeks past window end: gentle reminder.
     status = "late";
+  } else if (daysAfterEnd <= URGENT_DAYS_AFTER) {
+    // Weeks 3–4 past window end: stronger signal, task really needs attention.
+    status = "urgent";
+  } else {
+    // After 4 weeks, treat the window as missed and move on.
+    status = "hidden";
   }
 
   return {

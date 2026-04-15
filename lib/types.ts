@@ -56,7 +56,7 @@ export type TaskCategory =
   | "harvesting"
   | "protection";
 
-export type TaskStatus = "upcoming" | "active" | "late";
+export type TaskStatus = "upcoming" | "active" | "late" | "urgent";
 
 export interface Task {
   id: string;

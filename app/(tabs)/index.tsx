@@ -25,7 +25,9 @@ export default function HomeScreen() {
   const pendingTasks = tasksQuery.data ?? [];
 
   const lateTreeIds = new Set(
-    pendingTasks.filter((t) => t.status === "late").map((t) => t.treeId),
+    pendingTasks
+      .filter((t) => t.status === "late" || t.status === "urgent")
+      .map((t) => t.treeId),
   );
   const activeTreeIds = new Set(
     pendingTasks.filter((t) => t.status === "active").map((t) => t.treeId),

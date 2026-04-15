@@ -24,12 +24,19 @@ const SHORT_MONTHS = [
 
 interface TimelineTaskProps {
   task: Task & { dueDate: string };
-  isOverdue: boolean;
   isLast: boolean;
 }
 
-export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
+export function TimelineTask({ task }: TimelineTaskProps) {
   const router = useRouter();
+
+  const isUrgent = task.status === "urgent";
+  const isLate = task.status === "late";
+  const variant: "default" | "warning" | "urgent" = isUrgent
+    ? "urgent"
+    : isLate
+      ? "warning"
+      : "default";
 
   const windowLabel =
     task.windowStart && task.windowEnd
@@ -46,12 +53,12 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
   return (
     <View className="flex-row">
       {/* Timeline line + dot */}
-      <TimelineDot category={task.category} isOverdue={isOverdue} />
+      <TimelineDot category={task.category} isOverdue={isUrgent || isLate} />
 
       {/* Task card */}
       <Card
         onPress={handlePress}
-        variant={isOverdue ? "warning" : "default"}
+        variant={variant}
         className="mb-3 ml-3 flex-1 flex-row items-center p-4"
       >
         {task.treeType ? (
@@ -61,7 +68,26 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
         ) : null}
 
         <View className="flex-1">
-          <Text className="text-sm font-bold text-gray-900">{task.title}</Text>
+          <View className="flex-row items-center gap-2">
+            <Text className="flex-shrink text-sm font-bold text-gray-900">
+              {task.title}
+            </Text>
+            {isUrgent ? (
+              <View className="flex-row items-center gap-1 rounded-full bg-red-100 px-2 py-0.5">
+                <Ionicons name="warning" size={10} color="#dc2626" />
+                <Text className="text-[10px] font-semibold text-red-700">
+                  Urgent
+                </Text>
+              </View>
+            ) : isLate ? (
+              <View className="flex-row items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5">
+                <Ionicons name="alert-circle" size={10} color="#d97706" />
+                <Text className="text-[10px] font-semibold text-amber-700">
+                  Late
+                </Text>
+              </View>
+            ) : null}
+          </View>
           <Text className="mt-0.5 text-xs font-medium text-brand-600">
             {task.treeName}
           </Text>

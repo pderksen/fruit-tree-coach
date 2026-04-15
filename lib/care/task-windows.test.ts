@@ -76,12 +76,21 @@ describe("computeTaskStatus", () => {
     expect(result.displayWindow).toBe("Ended Mar 15");
   });
 
-  it("stays late indefinitely after window end until next year's window", () => {
+  it("urgent between 15 and 28 days after window end", () => {
     const result = computeTaskStatus(
       { windowStart: feb1, windowEnd: mar15 },
-      d(2026, 4, 15),
+      d(2026, 4, 5), // 21 days after Mar 15
     );
-    expect(result.status).toBe("late");
+    expect(result.status).toBe("urgent");
+    expect(result.displayWindow).toBe("Ended Mar 15");
+  });
+
+  it("hidden more than 28 days after window end (auto-moves on)", () => {
+    const result = computeTaskStatus(
+      { windowStart: feb1, windowEnd: mar15 },
+      d(2026, 4, 15), // 31 days after Mar 15
+    );
+    expect(result.status).toBe("hidden");
   });
 
   it("always-active when window bounds missing", () => {
@@ -109,25 +118,24 @@ describe("computeTaskStatus", () => {
       expect(computeTaskStatus(wrap, d(2026, 2, 10)).status).toBe("late");
     });
 
-    it("stays late through summer (visible until next window approaches)", () => {
-      expect(computeTaskStatus(wrap, d(2026, 7, 1)).status).toBe("late");
+    it("hidden in summer (beyond 28-day urgent window)", () => {
+      expect(computeTaskStatus(wrap, d(2026, 7, 1)).status).toBe("hidden");
     });
   });
 });
 
 describe("filterVisibleTasks", () => {
-  it("drops only out-of-view tasks and annotates the rest", () => {
+  it("drops hidden tasks and annotates the rest with urgency", () => {
     const tasks = [
-      { id: "a", windowStart: feb1, windowEnd: mar15 }, // late in Apr 25
+      { id: "a", windowStart: feb1, windowEnd: mar15 }, // 41 days past end -> hidden
       { id: "b", windowStart: { month: 4, day: 1 }, windowEnd: { month: 5, day: 1 } }, // active
       { id: "c" }, // no window -> always-active
-      { id: "d", windowStart: { month: 7, day: 1 }, windowEnd: { month: 7, day: 14 } }, // hidden (too far upcoming)
+      { id: "d", windowStart: { month: 7, day: 1 }, windowEnd: { month: 7, day: 14 } }, // too far upcoming
     ];
     const result = filterVisibleTasks(tasks, d(2026, 4, 25));
-    expect(result.map((t) => t.id)).toEqual(["a", "b", "c"]);
-    expect(result[0].status).toBe("late");
+    expect(result.map((t) => t.id)).toEqual(["b", "c"]);
+    expect(result[0].status).toBe("active");
     expect(result[1].status).toBe("active");
-    expect(result[2].status).toBe("active");
   });
 
   it("preserves input order", () => {

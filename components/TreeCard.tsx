@@ -15,13 +15,19 @@ export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
   const { data: tasks } = useTasks(tree.id);
   const activeTask = tasks?.find((t) => t.status === "active");
   const lateTask = tasks?.find((t) => t.status === "late");
-  const statusTask = lateTask ?? activeTask;
+  const urgentTask = tasks?.find((t) => t.status === "urgent");
+  const statusTask = urgentTask ?? lateTask ?? activeTask;
   const statusLine = statusTask?.title;
   const statusDescription = statusTask?.why;
+  const variant: "default" | "warning" | "urgent" = urgentTask
+    ? "urgent"
+    : lateTask
+      ? "warning"
+      : "default";
 
   return (
     <Card
-      variant={lateTask ? "warning" : "default"}
+      variant={variant}
       className="mb-3 flex-row items-start gap-4 p-4"
       onPress={() => onViewCareGuide(tree.id)}
     >
@@ -31,7 +37,12 @@ export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
           <Text className="text-lg font-bold text-gray-900">{tree.name}</Text>
-          {lateTask ? (
+          {urgentTask ? (
+            <View className="flex-row items-center gap-1 rounded-full bg-red-100 px-2 py-0.5">
+              <Ionicons name="warning" size={12} color="#dc2626" />
+              <Text className="text-xs font-semibold text-red-700">Urgent</Text>
+            </View>
+          ) : lateTask ? (
             <View className="flex-row items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5">
               <Ionicons name="alert-circle" size={12} color="#d97706" />
               <Text className="text-xs font-semibold text-amber-700">Late</Text>
@@ -41,7 +52,11 @@ export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
         {statusLine ? (
           <Text
             className={`mt-0.5 text-sm font-medium ${
-              lateTask ? "text-amber-700" : "text-brand-600"
+              urgentTask
+                ? "text-red-700"
+                : lateTask
+                  ? "text-amber-700"
+                  : "text-brand-600"
             }`}
           >
             {statusLine}

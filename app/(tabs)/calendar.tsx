@@ -74,8 +74,6 @@ export default function CalendarScreen() {
 
   const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);
 
-  const isLate = useCallback((task: DatedTask) => task.status === "late", []);
-
   const currentWeekKey = getWeekKey(today);
 
   const handleDismissNotif = useCallback(() => {
@@ -133,7 +131,6 @@ export default function CalendarScreen() {
                   <TimelineTask
                     key={task.id}
                     task={task}
-                    isOverdue={isLate(task)}
                     isLast={
                       gi === groups.length - 1 && ti === group.items.length - 1
                     }

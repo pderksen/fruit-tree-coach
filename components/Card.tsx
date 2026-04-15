@@ -1,7 +1,7 @@
 import { Pressable, type PressableProps, type ViewStyle } from "react-native";
 
 interface CardProps extends PressableProps {
-  variant?: "default" | "warning";
+  variant?: "default" | "warning" | "urgent";
   className?: string;
 }
 
@@ -21,9 +21,11 @@ export function Card({
   ...pressableProps
 }: CardProps) {
   const borderClass =
-    variant === "warning"
-      ? "border border-amber-300"
-      : "border border-gray-200";
+    variant === "urgent"
+      ? "border-2 border-red-400"
+      : variant === "warning"
+        ? "border border-amber-300"
+        : "border border-gray-200";
 
   return (
     <Pressable
