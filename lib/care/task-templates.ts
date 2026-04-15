@@ -11,7 +11,7 @@
  */
 
 import type { FruitTreeType, TaskCategory } from "@/lib/types";
-import type { MonthDay } from "@/lib/care/task-windows";
+import { computeTaskStatus, type MonthDay } from "@/lib/care/task-windows";
 
 export interface TaskTemplate {
   id: string;
@@ -249,4 +249,22 @@ export const TASK_TEMPLATES: Partial<Record<FruitTreeType, TaskTemplate[]>> = {
 
 export function getTemplatesForSpecies(species: FruitTreeType): TaskTemplate[] {
   return TASK_TEMPLATES[species] ?? [];
+}
+
+/**
+ * When a user adds a tree, we only seed tasks that are still visible today —
+ * skipping any whose window ended more than the urgent threshold (28 days) ago.
+ * Those would render as hidden anyway, so seeding them just clutters the DB.
+ */
+export function selectSeedableTemplates(
+  templates: TaskTemplate[],
+  today: Date,
+): TaskTemplate[] {
+  return templates.filter(
+    (t) =>
+      computeTaskStatus(
+        { windowStart: t.windowStart, windowEnd: t.windowEnd },
+        today,
+      ).status !== "hidden",
+  );
 }

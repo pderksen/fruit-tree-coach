@@ -1,4 +1,7 @@
-import { getTemplatesForSpecies } from "@/lib/care/task-templates";
+import {
+  getTemplatesForSpecies,
+  selectSeedableTemplates,
+} from "@/lib/care/task-templates";
 import { supabase } from "@/lib/supabase";
 import { treeSchema, type NewTree } from "@/lib/schemas";
 import type { FruitTreeType, Tree } from "@/lib/types";
@@ -50,7 +53,10 @@ async function seedStarterTasks(
   treeId: string,
   species: FruitTreeType,
 ): Promise<void> {
-  const templates = getTemplatesForSpecies(species);
+  const templates = selectSeedableTemplates(
+    getTemplatesForSpecies(species),
+    new Date(),
+  );
   if (templates.length === 0) return;
   const rows = templates.map((t) => ({
     tree_id: treeId,
