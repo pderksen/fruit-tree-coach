@@ -130,6 +130,9 @@ export const taskRowSchema = z.object({
     .object({ name: z.string(), type: fruitTreeTypeSchema })
     .nullable()
     .optional(),
+  task_completions: z
+    .array(z.object({ completed_at: z.string() }))
+    .optional(),
 });
 
 function toMonthDay(
@@ -152,6 +155,12 @@ export const taskSchema = taskRowSchema.transform((row) => ({
   templateId: optional(row.template_id),
   windowStart: toMonthDay(row.window_start_month, row.window_start_day),
   windowEnd: toMonthDay(row.window_end_month, row.window_end_day),
+  lastCompletedAt: row.task_completions?.[0]?.completed_at
+    ? row.task_completions.reduce<string>(
+        (latest, c) => (c.completed_at > latest ? c.completed_at : latest),
+        row.task_completions[0].completed_at,
+      )
+    : undefined,
 }));
 
 export type TaskRow = z.infer<typeof taskRowSchema>;

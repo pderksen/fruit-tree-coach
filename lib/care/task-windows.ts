@@ -17,6 +17,8 @@ export type TaskStatus = "upcoming" | "active" | "late";
 export interface WindowedTask {
   windowStart?: MonthDay;
   windowEnd?: MonthDay;
+  /** ISO timestamp of the latest completion for this task, if any. */
+  lastCompletedAt?: string;
 }
 
 export interface TaskStatusResult {
@@ -30,7 +32,6 @@ export interface TaskStatusResult {
 }
 
 const SLACK_DAYS_BEFORE = 14;
-const SLACK_DAYS_AFTER = 14;
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function atMidnight(d: Date): Date {
@@ -137,11 +138,29 @@ export function computeTaskStatus(
   today: Date,
 ): TaskStatusResult {
   if (!task.windowStart || !task.windowEnd) {
+    // Always-active task: if completed at any point, hide it. No cycle to reset.
+    if (task.lastCompletedAt) {
+      return { status: "hidden", displayWindow: "" };
+    }
     return { status: "active", displayWindow: "" };
   }
 
   const t = atMidnight(today);
   const { start, end } = resolveWindow(task.windowStart, task.windowEnd, t);
+
+  // If the task was completed on or after this window's start, it's done for
+  // this cycle — hide it until next year's window approaches.
+  if (task.lastCompletedAt) {
+    const completed = new Date(task.lastCompletedAt);
+    if (completed >= start) {
+      return {
+        status: "hidden",
+        displayWindow: "",
+        resolvedStart: start,
+        resolvedEnd: end,
+      };
+    }
+  }
 
   const daysToStart = diffDays(start, t);
   const daysAfterEnd = diffDays(t, end);
@@ -153,10 +172,11 @@ export function computeTaskStatus(
     status = "upcoming";
   } else if (daysAfterEnd <= 0) {
     status = "active";
-  } else if (daysAfterEnd <= SLACK_DAYS_AFTER) {
-    status = "late";
   } else {
-    status = "hidden";
+    // Once a window ends, the task stays visible as "late" until next year's
+    // window approaches. Users can still do the task — late just flags that
+    // the recommended window has passed.
+    status = "late";
   }
 
   return {

@@ -73,6 +73,8 @@ export interface Task {
   windowEnd?: { month: number; day: number };
   status?: TaskStatus;
   displayWindow?: string;
+  /** Latest completion timestamp for this task, across all windows. */
+  lastCompletedAt?: string;
 }
 
 export interface TaskCompletion {

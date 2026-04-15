@@ -29,9 +29,21 @@ export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
         <FruitIcon type={tree.type} size={36} />
       </View>
       <View className="flex-1">
-        <Text className="text-lg font-bold text-gray-900">{tree.name}</Text>
+        <View className="flex-row items-center gap-2">
+          <Text className="text-lg font-bold text-gray-900">{tree.name}</Text>
+          {lateTask ? (
+            <View className="flex-row items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5">
+              <Ionicons name="alert-circle" size={12} color="#d97706" />
+              <Text className="text-xs font-semibold text-amber-700">Late</Text>
+            </View>
+          ) : null}
+        </View>
         {statusLine ? (
-          <Text className="mt-0.5 text-sm font-medium text-brand-600">
+          <Text
+            className={`mt-0.5 text-sm font-medium ${
+              lateTask ? "text-amber-700" : "text-brand-600"
+            }`}
+          >
             {statusLine}
           </Text>
         ) : null}

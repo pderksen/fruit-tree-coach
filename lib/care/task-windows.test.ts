@@ -76,12 +76,12 @@ describe("computeTaskStatus", () => {
     expect(result.displayWindow).toBe("Ended Mar 15");
   });
 
-  it("hidden when more than 14 days after window end", () => {
+  it("stays late indefinitely after window end until next year's window", () => {
     const result = computeTaskStatus(
       { windowStart: feb1, windowEnd: mar15 },
       d(2026, 4, 15),
     );
-    expect(result.status).toBe("hidden");
+    expect(result.status).toBe("late");
   });
 
   it("always-active when window bounds missing", () => {
@@ -109,24 +109,25 @@ describe("computeTaskStatus", () => {
       expect(computeTaskStatus(wrap, d(2026, 2, 10)).status).toBe("late");
     });
 
-    it("hidden in summer", () => {
-      expect(computeTaskStatus(wrap, d(2026, 7, 1)).status).toBe("hidden");
+    it("stays late through summer (visible until next window approaches)", () => {
+      expect(computeTaskStatus(wrap, d(2026, 7, 1)).status).toBe("late");
     });
   });
 });
 
 describe("filterVisibleTasks", () => {
-  it("drops hidden tasks and annotates the rest", () => {
+  it("drops only out-of-view tasks and annotates the rest", () => {
     const tasks = [
-      { id: "a", windowStart: feb1, windowEnd: mar15 }, // hidden in Apr 25
+      { id: "a", windowStart: feb1, windowEnd: mar15 }, // late in Apr 25
       { id: "b", windowStart: { month: 4, day: 1 }, windowEnd: { month: 5, day: 1 } }, // active
       { id: "c" }, // no window -> always-active
+      { id: "d", windowStart: { month: 7, day: 1 }, windowEnd: { month: 7, day: 14 } }, // hidden (too far upcoming)
     ];
     const result = filterVisibleTasks(tasks, d(2026, 4, 25));
-    expect(result).toHaveLength(2);
-    expect(result.map((t) => t.id)).toEqual(["b", "c"]);
-    expect(result[0].status).toBe("active");
+    expect(result.map((t) => t.id)).toEqual(["a", "b", "c"]);
+    expect(result[0].status).toBe("late");
     expect(result[1].status).toBe("active");
+    expect(result[2].status).toBe("active");
   });
 
   it("preserves input order", () => {

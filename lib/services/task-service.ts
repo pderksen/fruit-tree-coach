@@ -3,7 +3,7 @@ import { taskSchema, type NewTask } from "@/lib/schemas";
 import type { Task } from "@/lib/types";
 
 const TASK_COLUMNS =
-  "id, tree_id, title, why, created_at, due_date, category, description, template_id, window_start_month, window_start_day, window_end_month, window_end_day, trees!inner(name, type)";
+  "id, tree_id, title, why, created_at, due_date, category, description, template_id, window_start_month, window_start_day, window_end_month, window_end_day, trees!inner(name, type), task_completions(completed_at)";
 
 export async function fetchTasks(treeId: string): Promise<Task[]> {
   const { data, error } = await supabase

@@ -9,7 +9,7 @@ import { NotificationOptInModal } from "@/components/NotificationOptInModal";
 import { Screen } from "@/components/Screen";
 import { TimelineTask } from "@/components/TimelineTask";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
-import { useAllTasksByOrchardRaw } from "@/hooks/use-tasks";
+import { useAllTasks } from "@/hooks/use-tasks";
 import { formatWeekRange, getWeekKey, getWeekStart } from "@/lib/date-utils";
 import type { Task } from "@/lib/types";
 import { useSettingsStore } from "@/stores/settings-store";
@@ -44,7 +44,7 @@ export default function CalendarScreen() {
   const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
   const [showNotifModal, setShowNotifModal] = useState(!hasSeenPrompt);
   const orchard = useDefaultOrchard();
-  const tasksQuery = useAllTasksByOrchardRaw(orchard?.id);
+  const tasksQuery = useAllTasks(orchard?.id);
 
   const filteredTasks = useMemo(() => {
     const selectedMonth = selectedDate.getMonth();
@@ -74,14 +74,7 @@ export default function CalendarScreen() {
 
   const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);
 
-  const isOverdue = useCallback(
-    (task: DatedTask) => {
-      const due = new Date(task.dueDate);
-      due.setHours(23, 59, 59, 999);
-      return due < today;
-    },
-    [today],
-  );
+  const isLate = useCallback((task: DatedTask) => task.status === "late", []);
 
   const currentWeekKey = getWeekKey(today);
 
@@ -140,7 +133,7 @@ export default function CalendarScreen() {
                   <TimelineTask
                     key={task.id}
                     task={task}
-                    isOverdue={isOverdue(task)}
+                    isOverdue={isLate(task)}
                     isLast={
                       gi === groups.length - 1 && ti === group.items.length - 1
                     }
