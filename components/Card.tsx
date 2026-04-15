@@ -21,7 +21,7 @@ export function Card({
   ...pressableProps
 }: CardProps) {
   const borderClass =
-    variant === "warning" ? "border border-red-200" : "border border-brand-200";
+    variant === "warning" ? "border border-red-200" : "border border-gray-200";
 
   return (
     <Pressable
