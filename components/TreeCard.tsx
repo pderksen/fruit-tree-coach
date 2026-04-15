@@ -1,5 +1,7 @@
-import { View, Text, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { View, Text } from "react-native";
 
+import { Card } from "@/components/Card";
 import { FruitIcon } from "@/components/FruitIcon";
 import { useTasks } from "@/hooks/use-tasks";
 import type { Tree } from "@/lib/types";
@@ -12,33 +14,36 @@ interface TreeCardProps {
 export function TreeCard({ tree, onViewCareGuide }: TreeCardProps) {
   const { data: tasks } = useTasks(tree.id);
   const activeTask = tasks?.find((t) => t.status === "active");
-  const statusLine = activeTask?.title;
-  const statusDescription = activeTask?.why;
+  const lateTask = tasks?.find((t) => t.status === "late");
+  const statusTask = lateTask ?? activeTask;
+  const statusLine = statusTask?.title;
+  const statusDescription = statusTask?.why;
 
   return (
-    <View className="mb-4 rounded-3xl bg-white p-5">
-      <FruitIcon type={tree.type} size={36} />
-
-      <Text className="mt-3 text-xl font-bold text-gray-900">{tree.name}</Text>
-      {statusLine ? (
-        <Text className="mt-0.5 text-sm font-medium text-brand-600">
-          {statusLine}
-        </Text>
-      ) : null}
-      {statusDescription ? (
-        <Text className="mt-2 text-sm leading-5 text-gray-600">
-          {statusDescription}
-        </Text>
-      ) : null}
-
-      <Pressable
-        className="mt-4 items-center rounded-xl border border-gray-200 py-3"
-        onPress={() => onViewCareGuide(tree.id)}
-      >
-        <Text className="text-sm font-semibold text-gray-700">
-          View Care Guide
-        </Text>
-      </Pressable>
-    </View>
+    <Card
+      variant={lateTask ? "warning" : "default"}
+      className="mb-3 flex-row items-start gap-4 p-4"
+      onPress={() => onViewCareGuide(tree.id)}
+    >
+      <View className="pt-1">
+        <FruitIcon type={tree.type} size={36} />
+      </View>
+      <View className="flex-1">
+        <Text className="text-lg font-bold text-gray-900">{tree.name}</Text>
+        {statusLine ? (
+          <Text className="mt-0.5 text-sm font-medium text-brand-600">
+            {statusLine}
+          </Text>
+        ) : null}
+        {statusDescription ? (
+          <Text className="mt-1 text-sm leading-5 text-gray-600">
+            {statusDescription}
+          </Text>
+        ) : null}
+      </View>
+      <View className="self-center">
+        <Ionicons name="chevron-forward" size={18} color="#9ca3af" />
+      </View>
+    </Card>
   );
 }

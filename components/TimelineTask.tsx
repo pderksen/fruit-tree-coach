@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 
+import { Card } from "@/components/Card";
 import { FruitIcon } from "@/components/FruitIcon";
 import { TimelineDot } from "@/components/TimelineLine";
 import { formatWeekRange } from "@/lib/date-utils";
@@ -31,18 +32,10 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
       <TimelineDot category={task.category} isOverdue={isOverdue} />
 
       {/* Task card */}
-      <Pressable
+      <Card
         onPress={handlePress}
-        className={`mb-3 ml-3 flex-1 flex-row items-center rounded-2xl bg-white p-4 ${
-          isOverdue ? "border border-red-200" : ""
-        }`}
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.05,
-          shadowRadius: 3,
-          elevation: 1,
-        }}
+        variant={isOverdue ? "warning" : "default"}
+        className="mb-3 ml-3 flex-1 flex-row items-center p-4"
       >
         {task.treeType ? (
           <View className="mr-3">
@@ -64,7 +57,7 @@ export function TimelineTask({ task, isOverdue, isLast }: TimelineTaskProps) {
           color="#9ca3af"
           style={{ marginLeft: 8 }}
         />
-      </Pressable>
+      </Card>
     </View>
   );
 }
