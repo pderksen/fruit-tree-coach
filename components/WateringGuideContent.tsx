@@ -94,7 +94,7 @@ function WateringCard({ guide }: { guide: WateringGuide }) {
 
       <View className="mt-4 rounded-xl bg-brand-50 p-3">
         <View className="flex-row items-start gap-2">
-          <Ionicons name="star" size={16} color="#15803d" />
+          <Ionicons name="leaf" size={16} color="#15803d" />
           <Text className="flex-1 text-sm leading-5 text-brand-800">
             {guide.tip}
           </Text>

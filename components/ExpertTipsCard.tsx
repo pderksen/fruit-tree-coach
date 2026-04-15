@@ -13,7 +13,7 @@ export function ExpertTipsCard({ tips }: ExpertTipsCardProps) {
   return (
     <View className="rounded-2xl bg-brand-50 p-5">
       <View className="mb-3 flex-row items-center gap-2">
-        <Ionicons name="star" size={18} color="#15803d" />
+        <Ionicons name="leaf" size={18} color="#15803d" />
         <Text className="text-sm font-bold text-brand-800">Expert Tips</Text>
       </View>
 

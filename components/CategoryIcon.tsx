@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 type IconCategory = "tip" | "pruning-tool" | "tool" | "fertilizer" | "pest-control" | "other";
 
 const CATEGORY_ICONS: Record<IconCategory, keyof typeof Ionicons.glyphMap> = {
-  tip: "star",
+  tip: "leaf",
   "pruning-tool": "cut-outline",
   tool: "build-outline",
   fertilizer: "leaf-outline",

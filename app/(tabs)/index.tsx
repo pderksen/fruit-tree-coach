@@ -6,9 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DevTools } from "@/components/DevTools";
 import { ErrorState } from "@/components/ErrorState";
-import { GardenerInsight } from "@/components/GardenerInsight";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { OrchardHealthCard } from "@/components/OrchardHealthCard";
+import { OrchardStats } from "@/components/OrchardStats";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
@@ -24,13 +23,18 @@ export default function HomeScreen() {
   const trees = treesQuery.data ?? [];
   const tasksQuery = useAllTasks(orchard?.id);
   const pendingTasks = tasksQuery.data ?? [];
-  // Surface active tasks first, then late, then upcoming — whichever is
-  // most time-relevant shows up in the "next task" summary.
-  const nextTask =
-    pendingTasks.find((t) => t.status === "active") ??
-    pendingTasks.find((t) => t.status === "late") ??
-    pendingTasks[0];
-  const nextTaskTitle = nextTask?.title ?? "None";
+
+  const lateTreeIds = new Set(
+    pendingTasks.filter((t) => t.status === "late").map((t) => t.treeId),
+  );
+  const activeTreeIds = new Set(
+    pendingTasks.filter((t) => t.status === "active").map((t) => t.treeId),
+  );
+  const lateCount = trees.filter((t) => lateTreeIds.has(t.id)).length;
+  const readyCount = trees.filter(
+    (t) => !lateTreeIds.has(t.id) && activeTreeIds.has(t.id),
+  ).length;
+  const waitingCount = trees.length - lateCount - readyCount;
 
   const isRefreshing = treesQuery.isRefetching || tasksQuery.isRefetching;
   const onRefresh = useCallback(() => {
@@ -83,36 +87,13 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* This Week Hero */}
-        <View className="px-5 pt-4">
-          <View className="flex-row items-center gap-3">
-            <Text className="text-3xl font-bold text-gray-900">This Week</Text>
-            <View className="rounded-full bg-brand-100 px-3 py-1">
-              <Text className="text-xs font-semibold uppercase text-brand-700">
-                Early Spring
-              </Text>
-            </View>
-          </View>
-          <Text className="mt-2 text-base leading-6 text-gray-600">
-            The morning frost is lifting. Your trees are beginning to wake from
-            their winter slumber.
-          </Text>
-        </View>
-
-        {/* Orchard Health */}
-        <View className="px-5 pt-5">
-          <OrchardHealthCard
-            readinessPercent={85}
-            onStartChecklist={() => router.push("/(tabs)/calendar")}
-          />
-        </View>
-
-        {/* Gardener's Insight */}
-        <View className="px-5 pt-5">
-          <GardenerInsight
-            quote="The best time to plant a tree was 20 years ago. The second best time is today."
-            pendingTasks={pendingTasks.length}
-            nextTask={nextTaskTitle}
+        {/* Orchard Stats */}
+        <View className="px-5 pt-3">
+          <OrchardStats
+            trees={trees.length}
+            ready={readyCount}
+            late={lateCount}
+            waiting={waitingCount}
           />
         </View>
 
