@@ -172,7 +172,7 @@ export default function TreeDetailScreen() {
                 });
               }}
             />
-          ) : pendingTasks.length === 0 ? (
+          ) : (
             <View className="items-center rounded-2xl bg-white p-6">
               <Text className="text-2xl">🌱</Text>
               <Text className="mt-2 text-base font-semibold text-gray-900">
@@ -180,16 +180,6 @@ export default function TreeDetailScreen() {
               </Text>
               <Text className="mt-1 text-center text-sm text-gray-500">
                 No tasks this week. Check back soon.
-              </Text>
-            </View>
-          ) : (
-            <View className="items-center rounded-2xl bg-white p-6">
-              <Ionicons name="leaf" size={40} color="#16a34a" />
-              <Text className="mt-2 text-base font-semibold text-gray-900">
-                Nothing urgent right now
-              </Text>
-              <Text className="mt-1 text-center text-sm text-gray-500">
-                See what&apos;s coming up below.
               </Text>
             </View>
           )}
