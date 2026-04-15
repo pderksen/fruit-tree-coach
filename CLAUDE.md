@@ -157,6 +157,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Tests live next to source as `<name>.test.ts` (Vitest), not in a separate `__tests__/` directory
 - Dev-only UI uses the `<DevTools>` component (`components/DevTools.tsx`), gated by `__DEV__` and rendered at the bottom of a screen with a `buttons` array. Use this for any dev/test affordances rather than ad-hoc env flags
 - Drill-in cards (tappable rows that navigate to a detail screen) use `<Card>` from `@/components/Card` — gray-200 border + subtle shadow, pass `variant="warning"` for late/overdue (red-200). Non-tappable info cards stay plain
+- `seedStarterTasks` filters templates through `computeTaskStatus` so tasks already past the urgent window aren't seeded. Tune thresholds in `lib/care/task-windows.ts`, not at seed sites
 
 ## Before declaring a task done
 1. `npm run typecheck` passes
@@ -239,3 +240,4 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Ionicons: `tree-outline` does not exist — use `leaf-outline` for tree-related icons
 - Back button text: `headerBackTitle: ""` is set globally in `app/_layout.tsx` `screenOptions` — don't set it per-screen
 - Expo Router auto-registers files in `app/` — deleting a tab file is required when replacing it (hiding via layout isn't enough)
+- A commit hook may auto-commit file edits mid-task. If `git log` shows a commit you didn't explicitly create, check the diff — it's likely your own in-progress work. Use `git reset --soft HEAD~1` to unstage if you want to fold it into a later commit
