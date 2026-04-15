@@ -156,6 +156,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - New stack screens: register in `app/_layout.tsx` (title only — `headerBackTitle: ""` is set globally)
 - Tests live next to source as `<name>.test.ts` (Vitest), not in a separate `__tests__/` directory
 - Dev-only UI uses the `<DevTools>` component (`components/DevTools.tsx`), gated by `__DEV__` and rendered at the bottom of a screen with a `buttons` array. Use this for any dev/test affordances rather than ad-hoc env flags
+- Drill-in cards (tappable rows that navigate to a detail screen) use `<Card>` from `@/components/Card` — gray-200 border + subtle shadow, pass `variant="warning"` for late/overdue (red-200). Non-tappable info cards stay plain
 
 ## Before declaring a task done
 1. `npm run typecheck` passes
