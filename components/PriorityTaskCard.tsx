@@ -60,7 +60,7 @@ export function PriorityTaskCard({
           onPress={onViewGuide}
         >
           <Text className="text-sm font-semibold text-white">
-            View Step-by-Step Guide
+            Start this task
           </Text>
           <Ionicons
             name="arrow-forward"
