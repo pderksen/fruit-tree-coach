@@ -258,4 +258,5 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Ionicons: `tree-outline` does not exist — use `leaf-outline` for tree-related icons
 - Back button text: `headerBackTitle: ""` is set globally in `app/_layout.tsx` `screenOptions` — don't set it per-screen
 - Expo Router auto-registers files in `app/` — deleting a tab file is required when replacing it (hiding via layout isn't enough)
+- `Screen` component defaults `edges=[]` — Stack screens (with a header) get no safe-area padding by default. Tab screens without a Stack header must pass `edges={["top"]}` explicitly to avoid content hiding under the status bar
 - A commit hook may auto-commit file edits mid-task. If `git log` shows a commit you didn't explicitly create, check the diff — it's likely your own in-progress work. Use `git reset --soft HEAD~1` to unstage if you want to fold it into a later commit
