@@ -260,3 +260,5 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Expo Router auto-registers files in `app/` — deleting a tab file is required when replacing it (hiding via layout isn't enough)
 - `Screen` component defaults `edges=[]` — Stack screens (with a header) get no safe-area padding by default. Tab screens without a Stack header must pass `edges={["top"]}` explicitly to avoid content hiding under the status bar
 - A commit hook may auto-commit file edits mid-task. If `git log` shows a commit you didn't explicitly create, check the diff — it's likely your own in-progress work. Use `git reset --soft HEAD~1` to unstage if you want to fold it into a later commit
+- NativeWind fixed-width classes (`w-24`, `w-28`) are unreliable on `Pressable` — use inline `style={{ flexBasis, flexGrow, maxWidth }}` for grid layouts instead
+- Stack screens reached via `<Redirect>` (e.g. a tab file that redirects to `/tree/new`) have no back history, so `canGoBack` is false and the global `headerLeft` won't render — add an explicit `headerLeft` on that `Stack.Screen` in `app/_layout.tsx` using `router.replace("/(tabs)")`
