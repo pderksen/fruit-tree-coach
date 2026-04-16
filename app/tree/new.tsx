@@ -1,13 +1,13 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm, useController } from "react-hook-form";
 import {
   View,
   Text,
   ScrollView,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
-  Pressable,
   Alert,
 } from "react-native";
 import { z } from "zod";
@@ -51,6 +51,24 @@ export default function AddTreeScreen() {
   const selectedType = typeField.field.value as FruitTreeType | "";
 
   const [requestModalVisible, setRequestModalVisible] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+  const formCardYRef = useRef(0);
+
+  const hasScrolledToFormRef = useRef(false);
+
+  function handleTypeSelect(t: FruitTreeType) {
+    typeField.field.onChange(t);
+    if (!hasScrolledToFormRef.current) {
+      hasScrolledToFormRef.current = true;
+      scrollRef.current?.scrollTo({ y: formCardYRef.current, animated: true });
+    }
+  }
+
+  function handleAgeChange(age: AgeBracket) {
+    setValue("ageBracket", age);
+    Keyboard.dismiss();
+    scrollRef.current?.scrollToEnd({ animated: true });
+  }
 
   function handleTreeRequest(submission: RequestTreeSubmission) {
     console.log("[tree-request]", {
@@ -91,8 +109,10 @@ export default function AddTreeScreen() {
         keyboardVerticalOffset={100}
       >
         <ScrollView
+          ref={scrollRef}
           contentContainerStyle={{ paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
           {/* Hero */}
           <Text className="mt-2 text-3xl font-bold text-gray-900">
@@ -109,7 +129,7 @@ export default function AddTreeScreen() {
           </Text>
           <FruitTypeGrid
             selected={selectedType || null}
-            onSelect={(t) => typeField.field.onChange(t)}
+            onSelect={handleTypeSelect}
             zone={zone}
             onRequestTree={() => setRequestModalVisible(true)}
           />
@@ -120,7 +140,12 @@ export default function AddTreeScreen() {
           ) : null}
 
           {/* Form card */}
-          <View className="mt-6 rounded-3xl bg-white p-5">
+          <View
+            className="mt-6 rounded-3xl bg-white p-5"
+            onLayout={(e) => {
+              formCardYRef.current = e.nativeEvent.layout.y;
+            }}
+          >
             <FormField<AddTreeForm>
               control={control}
               name="name"
@@ -131,7 +156,7 @@ export default function AddTreeScreen() {
             <AgePicker
               label="Est. Age (Years)"
               value={watch("ageBracket") as AgeBracket | null || null}
-              onChange={(v) => setValue("ageBracket", v)}
+              onChange={handleAgeChange}
             />
           </View>
 
@@ -150,11 +175,6 @@ export default function AddTreeScreen() {
               disabled={createTree.isPending}
             />
           </View>
-          <Pressable className="mt-3 items-center py-2" onPress={() => router.replace("/(tabs)")}>
-            <Text className="text-base font-medium text-gray-500">
-              Save as Draft
-            </Text>
-          </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
       <RequestTreeModal

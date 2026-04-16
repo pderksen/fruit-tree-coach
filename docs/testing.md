@@ -403,3 +403,29 @@ centered overlay: success haptic + the tree's fruit icon scales in
       `router.back()`; haptic still fires
 - [ ] Web (if it loads): celebration overlay renders without crashing;
       haptic silently no-ops (no console error)
+
+### Add Tree screen polish (shipped 2026-04-16)
+
+Tweaks to `app/tree/new.tsx` + `components/FruitTypeGrid.tsx`: gray
+border on all type cards, single-tap select inside search, auto-scroll
+to the Varietal/Age form on select, "Save as Draft" removed.
+
+- [ ] Every tree-type card (Most popular row + search results +
+      category groups under "Look for more trees") shows a visible
+      gray-200 border in its unselected state
+- [ ] Selected card shows a green (`brand-600`) border and no gray
+      border visible behind it
+- [ ] "Look for more trees" → type a query (e.g. "nect") → tap the
+      Nectarine card ONCE → card becomes selected on the first tap
+      (keyboard may dismiss, but the press still registers)
+- [ ] Selecting any tree type auto-scrolls the screen so the Varietal
+      / Est. Age form card is visible without manual scrolling
+- [ ] Picking an Est. Age option dismisses the keyboard and scrolls
+      to the bottom of the form so "Add to My Orchard" is visible
+      (iOS should NOT auto-refocus the Varietal field)
+- [ ] Tapping a different tree type after the first selection does
+      NOT re-scroll to the form
+- [ ] "Save as Draft" link is gone from below the "Add to My
+      Orchard" button
+- [ ] Form still submits end-to-end: pick type → fill varietal → pick
+      age → "Add to My Orchard" → lands on home with the new tree

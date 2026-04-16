@@ -162,7 +162,7 @@ function TypeRow({
             className={`items-center rounded-2xl bg-white px-4 py-3 ${
               isSelected
                 ? "border-2 border-brand-600"
-                : "border-2 border-transparent"
+                : "border-2 border-gray-200"
             }`}
             onPress={() => onSelect(type)}
           >
