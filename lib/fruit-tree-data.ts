@@ -10,7 +10,7 @@ import type { FruitTreeType } from "@/lib/types";
 // Categories
 // ---------------------------------------------------------------------------
 
-export type TreeCategory =
+export type FruitCategory =
   | "Citrus"
   | "Stone Fruit"
   | "Pome Fruit"
@@ -81,7 +81,7 @@ export const POPULAR_TYPES: FruitTreeType[] = [
 // Category map
 // ---------------------------------------------------------------------------
 
-export const TREE_CATEGORY_MAP: Record<FruitTreeType, TreeCategory> = {
+export const FRUIT_CATEGORY_MAP: Record<FruitTreeType, FruitCategory> = {
   // Citrus
   Lemon: "Citrus",
   Orange: "Citrus",

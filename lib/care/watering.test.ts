@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   FRUIT_TREE_TYPES,
-  type TreeCategory,
+  type FruitCategory,
 } from "@/lib/fruit-tree-data";
 
 import { getWateringGuide, getWateringGuideByCategory } from "./watering";
 
-const ALL_CATEGORIES: TreeCategory[] = [
+const ALL_CATEGORIES: FruitCategory[] = [
   "Citrus",
   "Stone Fruit",
   "Pome Fruit",
@@ -38,7 +38,7 @@ describe("getWateringGuide", () => {
 });
 
 describe("getWateringGuideByCategory", () => {
-  it("returns a guide for every TreeCategory", () => {
+  it("returns a guide for every FruitCategory", () => {
     for (const category of ALL_CATEGORIES) {
       const guide = getWateringGuideByCategory(category);
       expect(guide.frequency).toBeTruthy();

@@ -9,7 +9,7 @@ import type { TaskTemplate } from "./index";
 export const nectarine: TaskTemplate[] = [
   {
     id: "nectarine-leaf-curl-prevention",
-    species: "Nectarine",
+    fruitType: "Nectarine",
     title: "Peach leaf curl prevention",
     why: "Leaf curl fungus overwinters on bark — one well-timed copper spray prevents it.",
     description:
@@ -21,7 +21,7 @@ export const nectarine: TaskTemplate[] = [
   },
   {
     id: "nectarine-winter-pruning",
-    species: "Nectarine",
+    fruitType: "Nectarine",
     title: "Open-vase pruning",
     why: "Nectarines fruit on last year's wood — annual pruning keeps the tree productive.",
     description:
@@ -33,7 +33,7 @@ export const nectarine: TaskTemplate[] = [
   },
   {
     id: "nectarine-spring-feeding",
-    species: "Nectarine",
+    fruitType: "Nectarine",
     title: "Spring fertilizing",
     why: "Nectarines need consistent nitrogen for fruit set and growth.",
     description:
@@ -45,7 +45,7 @@ export const nectarine: TaskTemplate[] = [
   },
   {
     id: "nectarine-fruit-thinning",
-    species: "Nectarine",
+    fruitType: "Nectarine",
     title: "Fruit thinning",
     why: "Thinning early produces larger fruit and prevents limb breakage.",
     description:
@@ -57,7 +57,7 @@ export const nectarine: TaskTemplate[] = [
   },
   {
     id: "nectarine-harvest",
-    species: "Nectarine",
+    fruitType: "Nectarine",
     title: "Nectarine harvest",
     why: "Nectarines won't sweeten after picking — wait for the background color shift.",
     description:

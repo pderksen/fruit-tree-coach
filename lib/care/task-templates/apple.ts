@@ -3,7 +3,7 @@ import type { TaskTemplate } from "./index";
 export const apple: TaskTemplate[] = [
   {
     id: "apple-winter-pruning",
-    species: "Apple",
+    fruitType: "Apple",
     title: "Winter pruning",
     why: "Removing crossing branches improves air circulation and reduces disease risk.",
     description:
@@ -15,7 +15,7 @@ export const apple: TaskTemplate[] = [
   },
   {
     id: "apple-dormant-oil",
-    species: "Apple",
+    fruitType: "Apple",
     title: "Dormant oil spray",
     why: "Smothers overwintering scale, mites, and aphid eggs before they hatch.",
     description:
@@ -27,7 +27,7 @@ export const apple: TaskTemplate[] = [
   },
   {
     id: "apple-spring-feeding",
-    species: "Apple",
+    fruitType: "Apple",
     title: "Organic fertilizing",
     why: "Supports healthy spring growth and fruit set.",
     description: "Apply compost around the drip line before bloom.",
@@ -38,7 +38,7 @@ export const apple: TaskTemplate[] = [
   },
   {
     id: "apple-thinning",
-    species: "Apple",
+    fruitType: "Apple",
     title: "Thinning fruits",
     why: "Prevents limb breakage and ensures larger fruit size.",
     description:
@@ -50,7 +50,7 @@ export const apple: TaskTemplate[] = [
   },
   {
     id: "apple-harvest-check",
-    species: "Apple",
+    fruitType: "Apple",
     title: "Harvest readiness check",
     why: "Picking at the right time ensures best flavor and storage life.",
     description:

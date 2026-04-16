@@ -9,7 +9,7 @@ function tpl(
 ): TaskTemplate {
   return {
     id,
-    species: "Apple",
+    fruitType: "Apple",
     title: id,
     why: "",
     description: "",

@@ -11,7 +11,7 @@
  */
 
 import type { FruitTreeType } from "@/lib/types";
-import { TREE_CATEGORY_MAP, type TreeCategory } from "@/lib/fruit-tree-data";
+import { FRUIT_CATEGORY_MAP, type FruitCategory } from "@/lib/fruit-tree-data";
 
 export interface WateringGuide {
   frequency: string;
@@ -24,7 +24,7 @@ export interface WateringGuide {
 // Guidance grouped by tree category since watering needs
 // are broadly similar within categories.
 // Source: UC Davis Fruit & Nut Research and Information Center
-const WATERING_BY_CATEGORY: Record<TreeCategory, WateringGuide> = {
+const WATERING_BY_CATEGORY: Record<FruitCategory, WateringGuide> = {
   Citrus: {
     frequency: "Water every 5–7 days in summer, every 2–3 weeks in winter",
     amount: "5–10 gallons depending on tree size",
@@ -118,12 +118,12 @@ const WATERING_BY_CATEGORY: Record<TreeCategory, WateringGuide> = {
 };
 
 export function getWateringGuide(treeType: FruitTreeType): WateringGuide {
-  const category = TREE_CATEGORY_MAP[treeType];
+  const category = FRUIT_CATEGORY_MAP[treeType];
   return WATERING_BY_CATEGORY[category];
 }
 
 export function getWateringGuideByCategory(
-  category: TreeCategory,
+  category: FruitCategory,
 ): WateringGuide {
   return WATERING_BY_CATEGORY[category];
 }

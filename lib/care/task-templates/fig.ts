@@ -3,7 +3,7 @@ import type { TaskTemplate } from "./index";
 export const fig: TaskTemplate[] = [
   {
     id: "fig-drainage-check",
-    species: "Fig",
+    fruitType: "Fig",
     title: "Check drainage",
     why: "Figs are drought-tolerant but hate wet feet.",
     description:
@@ -15,7 +15,7 @@ export const fig: TaskTemplate[] = [
   },
   {
     id: "fig-beetle-monitoring",
-    species: "Fig",
+    fruitType: "Fig",
     title: "Fig beetle monitoring",
     why: "Green fig beetles feed on ripe fruit — early monitoring reduces losses.",
     description:
@@ -27,7 +27,7 @@ export const fig: TaskTemplate[] = [
   },
   {
     id: "fig-ripeness-check",
-    species: "Fig",
+    fruitType: "Fig",
     title: "Fig ripeness check",
     why: "Figs must ripen on the tree — they stop ripening once picked.",
     description:

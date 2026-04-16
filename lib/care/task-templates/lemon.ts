@@ -3,7 +3,7 @@ import type { TaskTemplate } from "./index";
 export const lemon: TaskTemplate[] = [
   {
     id: "lemon-spring-feeding",
-    species: "Lemon",
+    fruitType: "Lemon",
     title: "Spring feeding",
     why: "Citrus are heavy feeders and need consistent nutrition.",
     description:
@@ -15,7 +15,7 @@ export const lemon: TaskTemplate[] = [
   },
   {
     id: "lemon-pest-inspection",
-    species: "Lemon",
+    fruitType: "Lemon",
     title: "Scale and aphid inspection",
     why: "Early detection prevents colonies from establishing and weakening the tree.",
     description:
@@ -27,7 +27,7 @@ export const lemon: TaskTemplate[] = [
   },
   {
     id: "lemon-summer-feeding",
-    species: "Lemon",
+    fruitType: "Lemon",
     title: "Summer feeding",
     why: "Citrus need 3–4 feedings per year to sustain fruit development.",
     description:
@@ -39,7 +39,7 @@ export const lemon: TaskTemplate[] = [
   },
   {
     id: "lemon-harvest",
-    species: "Lemon",
+    fruitType: "Lemon",
     title: "Citrus harvest",
     why: "Meyer lemons can be picked once they reach full color.",
     description:

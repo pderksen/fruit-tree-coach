@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import { View, Text, Pressable } from "react-native";
 
 import { FruitIcon } from "@/components/FruitIcon";
-import { FRUIT_TREE_TYPES, TREE_CATEGORY_MAP } from "@/lib/fruit-tree-data";
-import type { TreeCategory } from "@/lib/fruit-tree-data";
+import { FRUIT_TREE_TYPES, FRUIT_CATEGORY_MAP } from "@/lib/fruit-tree-data";
+import type { FruitCategory } from "@/lib/fruit-tree-data";
 import type { FruitTreeType } from "@/lib/types";
 
-const CATEGORY_ORDER: TreeCategory[] = [
+const CATEGORY_ORDER: FruitCategory[] = [
   "Citrus",
   "Stone Fruit",
   "Pome Fruit",
@@ -23,10 +23,10 @@ interface FruitTypeGridProps {
 
 export function FruitTypeGrid({ selected, onSelect, onRequestTree }: FruitTypeGridProps) {
   const grouped = useMemo(() => {
-    const map = new Map<TreeCategory, FruitTreeType[]>();
+    const map = new Map<FruitCategory, FruitTreeType[]>();
     for (const cat of CATEGORY_ORDER) map.set(cat, []);
     for (const t of FRUIT_TREE_TYPES) {
-      const cat = TREE_CATEGORY_MAP[t];
+      const cat = FRUIT_CATEGORY_MAP[t];
       map.get(cat)!.push(t);
     }
     return Array.from(map.entries());

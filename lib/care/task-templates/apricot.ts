@@ -8,7 +8,7 @@ import type { TaskTemplate } from "./index";
 export const apricot: TaskTemplate[] = [
   {
     id: "apricot-summer-pruning",
-    species: "Apricot",
+    fruitType: "Apricot",
     title: "Summer pruning",
     why: "Apricots pruned in summer avoid Eutypa dieback — winter cuts get infected during rain.",
     description:
@@ -20,7 +20,7 @@ export const apricot: TaskTemplate[] = [
   },
   {
     id: "apricot-leaf-fall-copper",
-    species: "Apricot",
+    fruitType: "Apricot",
     title: "Leaf-fall copper spray",
     why: "Bacterial canker enters through leaf scars in fall — a copper spray at leaf-fall closes the door.",
     description:
@@ -32,7 +32,7 @@ export const apricot: TaskTemplate[] = [
   },
   {
     id: "apricot-spring-feeding",
-    species: "Apricot",
+    fruitType: "Apricot",
     title: "Spring fertilizing",
     why: "Apricots respond to modest spring nitrogen — over-feeding makes bacterial canker worse.",
     description:
@@ -44,7 +44,7 @@ export const apricot: TaskTemplate[] = [
   },
   {
     id: "apricot-fruit-thinning",
-    species: "Apricot",
+    fruitType: "Apricot",
     title: "Fruit thinning",
     why: "Apricots overproduce, then drop — early thinning gives bigger, better fruit.",
     description:
@@ -56,7 +56,7 @@ export const apricot: TaskTemplate[] = [
   },
   {
     id: "apricot-harvest",
-    species: "Apricot",
+    fruitType: "Apricot",
     title: "Apricot harvest",
     why: "Apricots have a brief window — once they soften, they go quickly.",
     description:

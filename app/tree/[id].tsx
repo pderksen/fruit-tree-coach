@@ -25,7 +25,7 @@ import { EXPERT_TIPS } from "@/lib/care/expert-tips";
 import type { SeasonStage, Task } from "@/lib/types";
 
 // Rough month → life-cycle stage mapping for the "Seasonal Life Cycle"
-// display. Deliberately generic (not species-aware) — species-specific
+// display. Deliberately generic (not fruit-type-aware) — fruit-type-specific
 // staging lives in the task template windows.
 function currentStageForMonth(month: number): SeasonStage {
   if (month >= 2 && month <= 4) return "bloom";

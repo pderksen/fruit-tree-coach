@@ -20,7 +20,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Screen } from "@/components/Screen";
 import { useTree, useUpdateTree } from "@/hooks/use-trees";
-import { TREE_CATEGORY_MAP } from "@/lib/fruit-tree-data";
+import { FRUIT_CATEGORY_MAP } from "@/lib/fruit-tree-data";
 import type { AgeBracket, FruitTreeType } from "@/lib/types";
 import { AGE_BRACKET_LABELS } from "@/lib/types";
 
@@ -94,7 +94,7 @@ export default function EditTreeScreen() {
   }
 
   const selectedAge = watch("ageBracket") as AgeBracket | "" | null;
-  const category = TREE_CATEGORY_MAP[tree.type as FruitTreeType];
+  const category = FRUIT_CATEGORY_MAP[tree.type as FruitTreeType];
 
   return (
     <Screen bg="bg-cream-50">
@@ -131,7 +131,7 @@ export default function EditTreeScreen() {
             <FormField<EditTreeForm>
               control={control}
               name="variety"
-              label="Varietal (optional)"
+              label="Variety (optional)"
               placeholder="e.g. Honeycrisp, Meyer, Elberta"
             />
 

@@ -3,7 +3,7 @@ import type { TaskTemplate } from "./index";
 export const peach: TaskTemplate[] = [
   {
     id: "peach-leaf-curl-prevention",
-    species: "Peach",
+    fruitType: "Peach",
     title: "Peach leaf curl prevention",
     why: "Leaf curl fungus overwinters on bark — a single well-timed spray prevents it.",
     description:
@@ -15,7 +15,7 @@ export const peach: TaskTemplate[] = [
   },
   {
     id: "peach-winter-pruning",
-    species: "Peach",
+    fruitType: "Peach",
     title: "Peach tree pruning",
     why: "Peaches fruit on last year's wood — annual pruning encourages fresh fruiting wood.",
     description:
@@ -27,7 +27,7 @@ export const peach: TaskTemplate[] = [
   },
   {
     id: "peach-bud-monitoring",
-    species: "Peach",
+    fruitType: "Peach",
     title: "Bud monitoring",
     why: "Early detection of bud swell helps time pest sprays.",
     description:
@@ -39,7 +39,7 @@ export const peach: TaskTemplate[] = [
   },
   {
     id: "peach-bloom-thinning",
-    species: "Peach",
+    fruitType: "Peach",
     title: "Bloom and fruit thinning",
     why: "Thinning early produces larger, sweeter peaches and protects limbs.",
     description:
@@ -51,7 +51,7 @@ export const peach: TaskTemplate[] = [
   },
   {
     id: "peach-harvest",
-    species: "Peach",
+    fruitType: "Peach",
     title: "Harvest window",
     why: "Peaches don't improve after picking — timing is everything.",
     description:

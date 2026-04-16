@@ -12,7 +12,7 @@ import type { TaskTemplate } from "./index";
 export const cherry: TaskTemplate[] = [
   {
     id: "cherry-summer-pruning",
-    species: "Cherry",
+    fruitType: "Cherry",
     title: "Summer pruning",
     why: "Sweet cherry pruned in summer heals faster and resists silver leaf and bacterial canker.",
     description:
@@ -24,7 +24,7 @@ export const cherry: TaskTemplate[] = [
   },
   {
     id: "cherry-bloom-fungicide",
-    species: "Cherry",
+    fruitType: "Cherry",
     title: "Brown rot blossom protection",
     why: "Brown rot infects open blossoms in cool wet weather and ruins the crop weeks before harvest.",
     description:
@@ -36,7 +36,7 @@ export const cherry: TaskTemplate[] = [
   },
   {
     id: "cherry-spring-feeding",
-    species: "Cherry",
+    fruitType: "Cherry",
     title: "Spring nitrogen",
     why: "Cherries need a single, modest nitrogen application in early spring — over-feeding worsens canker.",
     description:
@@ -48,7 +48,7 @@ export const cherry: TaskTemplate[] = [
   },
   {
     id: "cherry-fruit-fly-monitoring",
-    species: "Cherry",
+    fruitType: "Cherry",
     title: "Cherry fruit fly watch",
     why: "Cherry fruit fly and spotted-wing drosophila lay eggs in ripening fruit — early monitoring saves the crop.",
     description:
@@ -60,7 +60,7 @@ export const cherry: TaskTemplate[] = [
   },
   {
     id: "cherry-harvest",
-    species: "Cherry",
+    fruitType: "Cherry",
     title: "Cherry harvest",
     why: "Sweet cherries don't ripen further off the tree — leave them on until full color.",
     description:

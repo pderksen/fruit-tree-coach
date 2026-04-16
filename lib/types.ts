@@ -132,5 +132,5 @@ export const AGE_BRACKET_LABELS: Record<AgeBracket, string> = {
   mature: "Mature (8+ yr)",
 };
 
-// Data tables (TREE_EMOJI, SCIENTIFIC_NAME_MAP, TREE_CATEGORY_MAP, etc.)
+// Data tables (TREE_EMOJI, SCIENTIFIC_NAME_MAP, FRUIT_CATEGORY_MAP, etc.)
 // are in @/lib/fruit-tree-data to keep this file under 200 lines.

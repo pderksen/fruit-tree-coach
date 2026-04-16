@@ -5,7 +5,7 @@ import type { Tree } from "@/lib/types";
 import { AGE_BRACKET_LABELS } from "@/lib/types";
 import {
   SCIENTIFIC_NAME_MAP,
-  TREE_CATEGORY_MAP,
+  FRUIT_CATEGORY_MAP,
 } from "@/lib/fruit-tree-data";
 
 interface TreeDetailHeaderProps {
@@ -14,7 +14,7 @@ interface TreeDetailHeaderProps {
 
 export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
   const scientificName = SCIENTIFIC_NAME_MAP[tree.type];
-  const category = TREE_CATEGORY_MAP[tree.type];
+  const category = FRUIT_CATEGORY_MAP[tree.type];
   const plantedYear = tree.plantedOn
     ? new Date(tree.plantedOn).getFullYear()
     : null;
@@ -49,9 +49,9 @@ export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
         </Text>
       ) : null}
 
-      {/* Row 4: Tree category */}
+      {/* Row 4: Fruit category */}
       <Text className="mt-1 text-sm text-gray-500">
-        Type of tree: {category}
+        Fruit category: {category}
       </Text>
 
       {/* Description */}

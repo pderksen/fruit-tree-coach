@@ -1,11 +1,11 @@
 /**
- * Care task templates keyed by species.
+ * Care task templates keyed by fruitType.
  *
  * Each template declares a seasonal window as month/day pairs. The
  * date-aware layer in `task-windows.ts` uses today's date to pick which
  * templates surface as active / upcoming / late.
  *
- * Per-species template arrays live in sibling files (one per tree).
+ * Per-fruitType template arrays live in sibling files (one per tree).
  * This barrel re-exports the public API so callers can keep importing
  * from `@/lib/care/task-templates` unchanged.
  *
@@ -28,7 +28,7 @@ import { nectarine } from "./nectarine";
 
 export interface TaskTemplate {
   id: string;
-  species: FruitTreeType;
+  fruitType: FruitTreeType;
   title: string;
   why: string;
   description: string;
@@ -49,8 +49,8 @@ export const TASK_TEMPLATES: Partial<Record<FruitTreeType, TaskTemplate[]>> = {
   Nectarine: nectarine,
 };
 
-export function getTemplatesForSpecies(species: FruitTreeType): TaskTemplate[] {
-  return TASK_TEMPLATES[species] ?? [];
+export function getTemplatesForFruitType(fruitType: FruitTreeType): TaskTemplate[] {
+  return TASK_TEMPLATES[fruitType] ?? [];
 }
 
 /**

@@ -9,7 +9,7 @@ import type { TaskTemplate } from "./index";
 export const plum: TaskTemplate[] = [
   {
     id: "plum-winter-pruning",
-    species: "Plum",
+    fruitType: "Plum",
     title: "Open-vase pruning",
     why: "Plums fruit on long-lived spurs — annual pruning keeps the canopy open and productive.",
     description:
@@ -21,7 +21,7 @@ export const plum: TaskTemplate[] = [
   },
   {
     id: "plum-black-knot-removal",
-    species: "Plum",
+    fruitType: "Plum",
     title: "Black knot removal",
     why: "Black knot galls release spores that spread the disease — removing them while dormant breaks the cycle.",
     description:
@@ -33,7 +33,7 @@ export const plum: TaskTemplate[] = [
   },
   {
     id: "plum-spring-feeding",
-    species: "Plum",
+    fruitType: "Plum",
     title: "Spring fertilizing",
     why: "A single early-spring feeding supports steady growth and good fruit set.",
     description:
@@ -45,7 +45,7 @@ export const plum: TaskTemplate[] = [
   },
   {
     id: "plum-fruit-thinning",
-    species: "Plum",
+    fruitType: "Plum",
     title: "Fruit thinning",
     why: "Plums set heavily — thinning produces larger fruit and prevents limb breakage.",
     description:
@@ -57,7 +57,7 @@ export const plum: TaskTemplate[] = [
   },
   {
     id: "plum-harvest",
-    species: "Plum",
+    fruitType: "Plum",
     title: "Plum harvest",
     why: "Plums show full color a week before they're truly ripe — wait for the gentle give.",
     description:

@@ -140,7 +140,7 @@ export default function AddTreeScreen() {
             <FormField<AddTreeForm>
               control={control}
               name="name"
-              label="Varietal (optional)"
+              label="Variety (optional)"
               placeholder="e.g. Honeycrisp, Meyer, Elberta"
             />
 

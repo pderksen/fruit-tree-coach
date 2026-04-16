@@ -1,5 +1,5 @@
 import {
-  getTemplatesForSpecies,
+  getTemplatesForFruitType,
   selectSeedableTemplates,
 } from "@/lib/care/task-templates";
 import { supabase } from "@/lib/supabase";
@@ -51,10 +51,10 @@ export async function createTree(tree: NewTree): Promise<Tree> {
 
 async function seedStarterTasks(
   treeId: string,
-  species: FruitTreeType,
+  fruitType: FruitTreeType,
 ): Promise<void> {
   const templates = selectSeedableTemplates(
-    getTemplatesForSpecies(species),
+    getTemplatesForFruitType(fruitType),
     new Date(),
   );
   if (templates.length === 0) return;
