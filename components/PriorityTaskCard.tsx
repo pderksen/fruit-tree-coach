@@ -15,7 +15,10 @@ export function PriorityTaskCard({
   onViewGuide,
   onToggleDone,
 }: PriorityTaskCardProps) {
-  const borderColor = task.status === "late" ? "border-amber-500" : "border-brand-600";
+  const borderColor =
+    task.status === "late" || task.status === "urgent"
+      ? "border-amber-500"
+      : "border-brand-600";
 
   return (
     <View className={`rounded-2xl border-l-4 ${borderColor} bg-white p-5`}>

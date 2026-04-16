@@ -73,12 +73,15 @@ export default function TreeDetailScreen() {
   };
 
   const pendingTasks = useMemo(() => tasksQuery.data ?? [], [tasksQuery.data]);
-  // Priority = the first task that's currently in its window. Late tasks
-  // are shown in "later" with an amber warning tag so they don't dominate.
-  const priorityTask = pendingTasks.find((t) => t.status === "active");
+  // Priority slot prefers late > urgent > active so overdue tasks surface
+  // first; remaining tasks (typically upcoming) fall into "later".
+  const priorityTask =
+    pendingTasks.find((t) => t.status === "late") ??
+    pendingTasks.find((t) => t.status === "urgent") ??
+    pendingTasks.find((t) => t.status === "active");
   const laterTasks = useMemo(() => {
     const rank = (s?: Task["status"]) =>
-      s === "active" ? 0 : s === "late" ? 1 : 2;
+      s === "late" ? 0 : s === "urgent" ? 1 : s === "active" ? 2 : 3;
     return pendingTasks
       .filter((t) => t.id !== priorityTask?.id)
       .sort((a, b) => rank(a.status) - rank(b.status));

@@ -233,16 +233,22 @@ today's date vs. each task's month/day window (see
 `lib/care/task-windows.ts`). Most failures show up by time-traveling
 the device clock.
 
-- [ ] On the tree detail screen, the priority card only appears when a
-      task is currently in its seasonal window
+- [ ] On the tree detail screen, the priority card appears whenever a
+      task is active, late, or urgent (priority slot preference: late
+      > urgent > active)
 - [ ] A task within 14 days *before* its window start shows in the
       "later" list with a gray "Coming up" tag
-- [ ] A task within 14 days *after* its window end shows with an amber
-      ⚠ "Do this as soon as possible" tag and an amber left border on
-      the priority card
-- [ ] A task more than 14 days outside its window does not appear
-- [ ] A tree with no active/upcoming/late tasks shows the 🌱 "just
-      growing" empty state — not a red error and not an empty page
+- [ ] A task within 14 days *after* its window end shows as the
+      priority card with an amber ⚠ "Do this as soon as possible" tag
+      and an amber left border — and the "View Step-by-Step Guide"
+      button is visible
+- [ ] An urgent task (15–28 days after window end) also shows as the
+      priority card with the amber treatment and the step-by-step
+      guide button
+- [ ] A task more than 28 days past its window end does not appear
+- [ ] A tree with no active/upcoming/late/urgent tasks shows the 🌱
+      "just growing" empty state — not a red error and not an empty
+      page
 - [ ] Calendar screen still shows tasks in future/past months (uses
       the unfiltered `useAllTasksByOrchardRaw` hook)
 - [ ] Time-travel: set the device clock to Feb 15 → apple "Winter
