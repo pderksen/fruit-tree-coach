@@ -69,6 +69,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - `components/` reusable UI components
 - `lib/` shared logic, helpers, and app services
 - `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
+- `lib/schemas.ts` Zod schemas for parsing Supabase responses (runtime boundary)
 - `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
 - `lib/supabase.ts` Supabase client init
 - `lib/auth.ts` auth helpers
@@ -78,7 +79,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - `lib/date-utils.ts` date formatting and calculation helpers
 - `lib/zone-lookup.ts` USDA zone / climate lookup
 - `lib/mocks/` hardcoded mock data for UI development
-- `lib/care/` care logic — `watering.ts`, `season-order.ts`, `research-sources.ts`
+- `lib/care/` care logic — `task-templates/` (per-tree schedules), `task-windows.ts` (urgency thresholds), `watering.ts`, `season-order.ts`, `expert-tips.ts`, `coach-tips.ts`, `research-sources.ts`
 - `hooks/` custom React hooks (TanStack Query wrappers for server state)
 - `stores/` local app state (device-only, e.g. notification settings)
 
@@ -170,7 +171,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Care recommendations must cite their source in a code comment
   (extension service, university guide, etc.) so claims stay defensible
 - Use `Partial<Record<K, V>>` for mock data maps that don't need entries for every union member
-- Screens read trees from `useTreeStore`, not from `MOCK_TREES` directly
+- Screens read trees via `useTrees()` (TanStack Query, backed by `lib/services/tree-service.ts`), not from `MOCK_TREES` directly — mocks are only for isolated UI scaffolding
 - New stack screens: register in `app/_layout.tsx` (title only — `headerBackTitle: ""` is set globally)
 - Tests live next to source as `<name>.test.ts` (Vitest), not in a separate `__tests__/` directory
 - Dev-only UI uses the `<DevTools>` component (`components/DevTools.tsx`), gated by `__DEV__` and rendered at the bottom of a screen with a `buttons` array. Use this for any dev/test affordances rather than ad-hoc env flags

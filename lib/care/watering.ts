@@ -21,7 +21,7 @@ export interface WateringGuide {
   tip: string;
 }
 
-// Guidance grouped by tree category since watering needs
+// Guidance grouped by fruit category since watering needs
 // are broadly similar within categories.
 // Source: UC Davis Fruit & Nut Research and Information Center
 const WATERING_BY_CATEGORY: Record<FruitCategory, WateringGuide> = {
