@@ -83,7 +83,7 @@ export default function CalendarScreen() {
   const totalTasks = filteredTasks.length;
 
   return (
-    <Screen>
+    <Screen edges={["top"]}>
       <View className="mb-1 mt-2 flex-row items-center justify-between">
         <Text className="text-sm text-gray-500">
           {totalTasks} {totalTasks === 1 ? "task" : "tasks"} this month

@@ -17,7 +17,8 @@ import { TaskDoneCelebration } from "@/components/TaskDoneCelebration";
 import { useGuideByCategory } from "@/hooks/use-guide";
 import { useTask, useToggleTask } from "@/hooks/use-tasks";
 import { successHaptic } from "@/lib/haptics";
-import type { Guide, ProductRecommendation } from "@/lib/types";
+import { TREE_EMOJI } from "@/lib/fruit-tree-data";
+import type { Guide, ProductRecommendation, TaskCategory } from "@/lib/types";
 
 export default function GuideScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
@@ -71,11 +72,25 @@ export default function GuideScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <Text className="mt-2 text-2xl font-bold text-gray-900">
+        <View className="mt-2 flex-row flex-wrap gap-2">
+          {task?.treeType && (
+            <View className="flex-row items-center gap-1 rounded-full bg-brand-50 px-3 py-1">
+              <Text className="text-sm">{TREE_EMOJI[task.treeType]}</Text>
+              <Text className="text-xs font-semibold text-brand-700">
+                {task.treeType} Tree
+              </Text>
+            </View>
+          )}
+          {task?.category && (
+            <View className="flex-row items-center gap-1 rounded-full bg-gray-100 px-3 py-1">
+              <Text className="text-xs font-semibold capitalize text-gray-600">
+                {task.category}
+              </Text>
+            </View>
+          )}
+        </View>
+        <Text className="mt-3 text-2xl font-bold text-gray-900">
           {guide.title}
-        </Text>
-        <Text className="mt-1 text-xs font-medium text-brand-600">
-          Resource: {guide.source}
         </Text>
         <Text className="mt-3 text-sm leading-5 text-gray-600">
           {guide.introduction}
@@ -118,6 +133,11 @@ export default function GuideScreen() {
             <AffiliateDisclaimer products={guide.productRecommendations} />
           </View>
         )}
+
+        {/* Source attribution */}
+        <Text className="mt-6 text-xs text-gray-400">
+          Source: {guide.source}
+        </Text>
 
         {/* Research Notes (collapsible) */}
         {guide.researchNotes ? (

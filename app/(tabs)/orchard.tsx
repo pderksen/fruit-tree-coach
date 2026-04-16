@@ -16,7 +16,7 @@ export default function OrchardScreen() {
   const trees = treesQuery.data ?? [];
 
   return (
-    <Screen>
+    <Screen edges={["top"]}>
       <View className="mb-4 mt-2">
         <Text className="text-2xl font-bold text-gray-900">
           {defaultOrchard?.name ?? "My Orchard"}

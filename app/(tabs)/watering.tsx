@@ -3,7 +3,7 @@ import { WateringGuideContent } from "@/components/WateringGuideContent";
 
 export default function WateringScreen() {
   return (
-    <Screen>
+    <Screen edges={["top"]}>
       <WateringGuideContent />
     </Screen>
   );

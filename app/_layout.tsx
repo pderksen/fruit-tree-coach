@@ -134,7 +134,7 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="tree/guide/[taskId]"
-          options={{ title: "Step-by-Step Guide" }}
+          options={{ title: "How-To" }}
         />
         <Stack.Screen
           name="profile"
