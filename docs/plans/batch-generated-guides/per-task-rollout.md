@@ -9,12 +9,13 @@ grouped into reviewable phases.
 ## Where we are today
 - `FRUIT_TREE_TYPES` (`lib/fruit-tree-data.ts`) has 25 species
 - Overview guides: 25 / 25 (all approved; done in earlier phases)
-- Per-task guides: **Peach, Apple, Lemon, Fig** — 14 rows (Peach 4,
-  Apple 5, Lemon 3, Fig 2). Phase A complete
-- Task templates (`lib/care/task-templates.ts`): only Apple, Peach,
-  Lemon, Fig. Every other tree has no calendar tasks, which means
-  the guide screen can't open — per-task guides aren't reachable
-  without templates first
+- Per-task guides: **Peach, Apple, Lemon, Fig, Cherry, Plum, Apricot,
+  Nectarine** — 34 rows (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5,
+  Plum 5, Apricot 5, Nectarine 5). Phases A and B complete
+- Task templates (`lib/care/task-templates/<species>.ts` + barrel):
+  Apple, Peach, Lemon, Fig, Cherry, Plum, Apricot, Nectarine. The
+  remaining 17 trees still need templates before their per-task
+  guides can ship
 
 ## How each tree reaches "done"
 For every species:
@@ -60,29 +61,33 @@ Texas A&M AgriLife / UC IPM / Clemson for Fig.
 Shipped: 3 migrations, +10 guide rows. Backup
 `backups/phase-a-per-task-guides-2026-04-16.json`.
 
-### Phase B — Stone fruit (4 trees) (NEXT)
-Cherry, Plum, Apricot, Nectarine. Care pattern close to Peach.
-- `pruning` — dormant, open-vase for Plum/Apricot/Nectarine; sweet
-  cherry uses modified central leader (per-tree difference)
-- `protection` — dormant oil + copper. Brown rot is the headline for
-  cherry; bacterial canker for apricot
-- `monitoring` — fruit thinning (apricot, nectarine, plum). Sweet
-  cherry not thinned
-- `harvesting` — per-tree color / firmness / pit-color cues
+### Phase B — Stone fruit (4 trees) (DONE)
+Cherry, Plum, Apricot, Nectarine. All four got templates + per-task
+guides covering pruning, protection, feeding, monitoring, harvesting.
 
-Sources: Clemson HGIC, UGA Extension, UC IPM, Michigan State
-Extension (sweet cherry).
-Expected: 4 template entries, ~14 new guide rows.
+Per-tree quirks captured:
+- **Cherry**: summer pruning (not dormant) to avoid silver leaf and
+  bacterial canker on fresh cuts; modified central leader, not
+  open-vase
+- **Apricot**: late-summer pruning (July–August) to avoid Eutypa
+  dieback infection; leaf-fall copper for bacterial canker
+- **Plum**: black knot removal during dormant pruning is the
+  headline protection job
+- **Nectarine**: leaf curl + open-vase + thinning, all mirroring peach
+  (botanically the same species)
 
-**Prerequisite for Phase B**: `lib/care/task-templates.ts` is already
-at 270 lines after Phase A. Adding 4 more trees pushes it past ~450.
-Split it before Phase B — recommend per-species files
-(`lib/care/task-templates/apple.ts`, `peach.ts`, etc.) + a barrel, since
-the per-tree files stay focused and avoid cross-file churn when a
-single tree's windows are tweaked. Decide the split shape in the
-`phase-b-stone-fruit.md` prep doc.
+Prerequisite was completed before adding new trees: split
+`lib/care/task-templates.ts` into per-species files at
+`lib/care/task-templates/<species>.ts` + a barrel `index.ts`. Old
+import path `@/lib/care/task-templates` keeps working unchanged.
 
-### Phase C — Citrus (7 trees)
+Shipped: 4 migrations (cherry, plum, apricot, nectarine), +20 guide
+rows, 4 template files. Backup
+`backups/phase-b-stone-fruit-2026-04-16.json`. Sources: MSU Extension
+(PNW 667), UC IPM, USU Extension, UGA Extension, PSU Extension, UMN
+Extension, Clemson HGIC, UC ANR, University of Maryland Extension.
+
+### Phase C — Citrus (7 trees) (NEXT)
 Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. Care
 pattern close to Lemon; harvest timing is where trees actually
 diverge.
