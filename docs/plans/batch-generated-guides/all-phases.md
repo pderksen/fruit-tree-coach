@@ -46,6 +46,11 @@ to `approved = true` in the same migration.
 
 This phase is complete and already pushed to the remote DB.
 
+## Per-task guide rollout across all 25 trees (CURRENT)
+See [per-task-rollout.md](per-task-rollout.md) — one plan, phased A–E.
+Phase A (Apple / Lemon / Fig) is up next; the remaining 21 trees need
+task templates added before their per-task guides can ship.
+
 ## Phase 2: Pilot guide + template (CURRENT)
 Generate one guide end-to-end to prove the pattern works:
 - Pick a pair we can sanity-check against existing guides (e.g.
