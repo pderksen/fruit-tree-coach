@@ -9,8 +9,8 @@ grouped into reviewable phases.
 ## Where we are today
 - `FRUIT_TREE_TYPES` (`lib/fruit-tree-data.ts`) has 25 species
 - Overview guides: 25 / 25 (all approved; done in earlier phases)
-- Per-task guides: **Peach only** — 4 rows (protection / pruning /
-  monitoring / harvesting)
+- Per-task guides: **Peach, Apple, Lemon, Fig** — 14 rows (Peach 4,
+  Apple 5, Lemon 3, Fig 2). Phase A complete
 - Task templates (`lib/care/task-templates.ts`): only Apple, Peach,
   Lemon, Fig. Every other tree has no calendar tasks, which means
   the guide screen can't open — per-task guides aren't reachable
@@ -21,12 +21,16 @@ For every species:
 1. **Template** — entry in `lib/care/task-templates.ts` declaring a
    `TaskTemplate[]` with seasonal windows grounded in a cited
    US-extension source
-2. **Per-task guides** — one migration per tree, one guide per
-   distinct `task_category` declared by the template, following the
-   shape of `20260415010312_guides_peach_per_task.sql`
-3. **Verification** — `npm run typecheck` + `npm test` + `npm run lint`,
-   manual seed + open-guide smoke in simulator, DB snapshot to
-   `backups/<short-reason>-<date>.json`
+2. **Per-task guides** — one migration per tree (locked in after Phase
+   A — three trees = three migrations), one guide per distinct
+   `task_category` declared by the template, following the shape of
+   `20260415010312_guides_peach_per_task.sql`
+3. **Verification** — `npm run typecheck` + `npm test` + `npm run lint`
+   all clean. These migrations are data-only so the full UI smoke from
+   `docs/testing.md` is not required; a spot-check that the guide
+   screen opens the new per-task row for one tree per phase is enough.
+   DB snapshot once per phase to
+   `backups/phase-<letter>-<short>-<date>.json`
 
 Constraints carried from the pilot:
 - `(tree_type, task_category)` is unique — two tasks in the same
@@ -40,22 +44,23 @@ Constraints carried from the pilot:
 
 ## Phases
 
-### Phase A — Finish the four species with templates (NEXT)
-Apple, Lemon, Fig each get a per-task migration matching Peach.
+### Phase A — Finish the four species with templates (DONE)
+Apple, Lemon, Fig each got a per-task migration matching Peach.
 - Apple (5 guides): pruning, protection, feeding, monitoring
-  (thinning), harvesting
-- Lemon (3 guides): feeding, monitoring (scale/aphid), harvesting.
-  Template has two `feeding` tasks — one guide covers both
+  (thinning), harvesting — `20260416181748_guides_apple_per_task.sql`
+- Lemon (3 guides): feeding (one guide covers both feeding tasks),
+  monitoring, harvesting — `20260416181949_guides_lemon_per_task.sql`
 - Fig (2 guides): monitoring (drainage + fig beetle combined),
-  harvesting
+  harvesting — `20260416182121_guides_fig_per_task.sql`
 
-Sources: Oregon State PNW 400 / UMN / Penn State / UGA for Apple;
-UC IPM / UC Master Gardeners / Clemson for Lemon; Texas A&M /
-UC IPM / Clemson for Fig.
+Sources used: UMN / Oregon State PNW 400 / WSU / Penn State / UGA /
+UC IPM for Apple; UC Master Gardeners / UC IPM / Clemson for Lemon;
+Texas A&M AgriLife / UC IPM / Clemson for Fig.
 
-Expected: 3 migrations, +10 guide rows.
+Shipped: 3 migrations, +10 guide rows. Backup
+`backups/phase-a-per-task-guides-2026-04-16.json`.
 
-### Phase B — Stone fruit (4 trees)
+### Phase B — Stone fruit (4 trees) (NEXT)
 Cherry, Plum, Apricot, Nectarine. Care pattern close to Peach.
 - `pruning` — dormant, open-vase for Plum/Apricot/Nectarine; sweet
   cherry uses modified central leader (per-tree difference)
@@ -68,6 +73,14 @@ Cherry, Plum, Apricot, Nectarine. Care pattern close to Peach.
 Sources: Clemson HGIC, UGA Extension, UC IPM, Michigan State
 Extension (sweet cherry).
 Expected: 4 template entries, ~14 new guide rows.
+
+**Prerequisite for Phase B**: `lib/care/task-templates.ts` is already
+at 270 lines after Phase A. Adding 4 more trees pushes it past ~450.
+Split it before Phase B — recommend per-species files
+(`lib/care/task-templates/apple.ts`, `peach.ts`, etc.) + a barrel, since
+the per-tree files stay focused and avoid cross-file churn when a
+single tree's windows are tweaked. Decide the split shape in the
+`phase-b-stone-fruit.md` prep doc.
 
 ### Phase C — Citrus (7 trees)
 Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. Care
@@ -118,20 +131,21 @@ Expected: 5 template entries, ~12 new guide rows.
 1. Write a short plan file in this folder (`phase-b-stone-fruit.md`
    etc.) before coding — covers per-tree template shape, the exact
    source list for each tree, and any per-tree quirks
-2. Edit `task-templates.ts` adding that phase's trees. Split into
-   `lib/care/task-templates/<category>.ts` + a barrel once the main
-   file crosses ~200 lines (per CLAUDE.md's file-size convention)
-3. One migration per tree (or one per phase if the phase is small)
-   for the per-task guides
-4. Run `typecheck` / `test` / `lint`; cite `docs/testing.md` steps
-   exercised
-5. `npx supabase db push`; snapshot `backups/<short>-<date>.json`
+2. Add that phase's trees to `lib/care/task-templates.ts` (or its
+   per-species split once that lands — see Phase B prerequisite)
+3. One migration per tree for the per-task guides — each named
+   `<timestamp>_guides_<tree>_per_task.sql`
+4. Run `typecheck` / `test` / `lint` — all clean. No full UI smoke
+   needed for data-only guide rows; spot-check one guide screen in the
+   simulator per phase
+5. `npx supabase db push`; snapshot
+   `backups/phase-<letter>-<short>-<date>.json` via the
+   `UNION ALL` / `jsonb_agg` shape in CLAUDE.md's ad-hoc snapshot
+   workflow
 6. Delete this folder once the last phase ships — git preserves the
    history
 
 ## Risks / things to watch
-- **Template sprawl**: `task-templates.ts` will grow past ~200 lines
-  quickly. Split per-category before it hurts
 - **Thin extension coverage** (Mulberry, Pawpaw, Date): don't paper
   over with folklore. If only 2 categories are defensible, ship 2
 - **Seed-time stale filter**: dormant-season tasks (Jan–Feb pruning)
@@ -141,8 +155,9 @@ Expected: 5 template entries, ~12 new guide rows.
 - **Zone shifts still deferred**: templates use typical-zone windows
   from the cited source. User-zone-shifted windows are post-v1
 - **Unique `(tree_type, task_category)` constraint**: two tasks in
-  the same category collapse to one guide. Pick which task the
-  guide describes first and document in `researchNotes`
+  the same category collapse to one guide (Lemon feeding and Fig
+  monitoring demonstrated this in Phase A). Document which task the
+  guide was written against in `researchNotes`
 - **Some trees don't need 5 categories**: declare fewer templates
   rather than invent filler. Pomegranate barely needs pruning;
   Persimmon barely needs protection

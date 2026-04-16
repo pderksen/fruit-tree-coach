@@ -54,7 +54,7 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 - **At public launch:** upgrade to Supabase Pro ($25/mo) for self-serve daily backups + PITR with 7-day retention
 
 ### Ad-hoc snapshot workflow
-When the user asks for a database backup or snapshot, save it to `backups/<short-reason>-<YYYY-MM-DD>.json` (e.g. `backups/new-fruit-list-2026-04-13.json`). Pick the `<short-reason>` slug from session context — what's about to change or what just changed — without asking. Use the Supabase MCP `execute_sql` tool with one query that `UNION ALL`s every public table as `SELECT '<tbl>' AS tbl, COALESCE(jsonb_agg(to_jsonb(x)), '[]'::jsonb) AS rows FROM <tbl> x`, wrapped in `jsonb_agg(t)`. Save the raw MCP response verbatim (the `tool-results/*.json` file) — match the shape of existing files in `backups/`.
+When the user asks for a database backup or snapshot, save it to `backups/<short-reason>-<YYYY-MM-DD>.json` (e.g. `backups/new-fruit-list-2026-04-13.json`). Pick the `<short-reason>` slug from session context — what's about to change or what just changed — without asking. Use the Supabase MCP `execute_sql` tool with one query that `UNION ALL`s every public table as `SELECT '<tbl>' AS tbl, COALESCE(jsonb_agg(to_jsonb(x)), '[]'::jsonb) AS rows FROM <tbl> x`, wrapped in `jsonb_agg(t)`. Save the raw MCP response verbatim (the `tool-results/*.txt` file) — match the shape of existing files in `backups/`. The full-DB snapshot routinely exceeds the MCP response token cap; the error points to the saved `tool-results/*.txt` file — `cp` that file into `backups/<name>.json` verbatim. This is the expected path, not a failure.
 
 ## Project structure
 - `app/` screens and navigation
@@ -120,6 +120,15 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
   `approved = true` after developer review of the SQL diff, or
   `approved = false` if a second dashboard review is wanted before
   content goes live
+- Guide row conventions: ID prefix = tree slug (e.g. `apple-pruning`,
+  `fig-monitoring`); `source` column is a short semicolon-delimited
+  list of institutions; `researchNotes` cites full page titles in
+  double-doubled single quotes; `productRecommendations` stays `[]`
+  until the affiliate pass
+- Inside a guide's JSON body, apostrophes in English prose must be
+  doubled (`year''s`, `Peach''s`) — the outer SQL literal is
+  single-quoted, so a lone apostrophe in the JSON terminates the
+  string early. Grep for `[a-z]'[a-z]` before pushing a migration
 - **Revisit before public launch:** audit the curated resource list
   in `docs/fruit_tree_care_resources.md` for licensing,
   fetch-friendliness, and content stability. Prefer tightening the
