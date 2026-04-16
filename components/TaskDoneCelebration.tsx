@@ -1,52 +1,58 @@
-import { useEffect, useState } from "react";
-import { AccessibilityInfo, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { AccessibilityInfo, useWindowDimensions, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withSequence,
   withTiming,
 } from "react-native-reanimated";
 
-import { FRUIT_SVG_MAP } from "@/lib/fruit-icons";
+import { FRUIT_SVG_MAP, type FruitSvgProps } from "@/lib/fruit-icons";
 import type { FruitTreeType } from "@/lib/types";
 
-const SCENE_HEIGHT = 140;
-const FRUIT_SIZE = 56;
-const LEAF_COUNT = 8;
-const LEAF_DURATION = 1500;
-const FRUIT_DURATION = 600;
+const FRUIT_COUNT = 22;
+const DURATION = 1800;
+const TOTAL_MS = DURATION + 200;
 
 interface TaskDoneCelebrationProps {
   fruitType?: FruitTreeType;
   onComplete: () => void;
 }
 
-interface LeafConfig {
-  startX: number;
-  endX: number;
-  rotateEnd: number;
-  delay: number;
+interface FruitConfig {
+  xPercent: number;
   size: number;
+  delay: number;
+  rotateStart: number;
+  rotateEnd: number;
+  drift: number;
+  startYOffset: number;
 }
 
-const LEAVES: LeafConfig[] = [
-  { startX: -4, endX: -72, rotateEnd: -65, delay: 60, size: 16 },
-  { startX: 2, endX: 56, rotateEnd: 50, delay: 0, size: 18 },
-  { startX: -2, endX: -34, rotateEnd: -30, delay: 140, size: 14 },
-  { startX: 4, endX: 28, rotateEnd: 25, delay: 200, size: 15 },
-  { startX: 0, endX: -10, rotateEnd: 12, delay: 90, size: 17 },
-  { startX: -6, endX: -52, rotateEnd: -45, delay: 280, size: 13 },
-  { startX: 6, endX: 42, rotateEnd: 35, delay: 320, size: 16 },
-  { startX: -1, endX: 14, rotateEnd: 18, delay: 380, size: 14 },
-];
+function buildFruits(screenWidth: number, screenHeight: number): FruitConfig[] {
+  const configs: FruitConfig[] = [];
+  for (let i = 0; i < FRUIT_COUNT; i++) {
+    configs.push({
+      xPercent: Math.random(),
+      size: 36 + Math.random() * 32,
+      delay: Math.random() * 600,
+      rotateStart: (Math.random() - 0.5) * 60,
+      rotateEnd: (Math.random() - 0.5) * 240,
+      drift: (Math.random() - 0.5) * screenWidth * 0.2,
+      startYOffset: screenHeight * (0.1 + Math.random() * 0.7),
+    });
+  }
+  return configs;
+}
 
 export function TaskDoneCelebration({
   fruitType,
   onComplete,
 }: TaskDoneCelebrationProps) {
   const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);
+  const { width, height } = useWindowDimensions();
+  const fruits = useMemo(() => buildFruits(width, height), [width, height]);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,7 +66,7 @@ export function TaskDoneCelebration({
 
   useEffect(() => {
     if (reduceMotion === null) return;
-    const total = reduceMotion ? 250 : LEAF_DURATION + 100;
+    const total = reduceMotion ? 250 : TOTAL_MS;
     const timer = setTimeout(onComplete, total);
     return () => clearTimeout(timer);
   }, [reduceMotion, onComplete]);
@@ -69,82 +75,81 @@ export function TaskDoneCelebration({
     return null;
   }
 
-  return (
-    <View
-      pointerEvents="none"
-      style={{ height: SCENE_HEIGHT, alignItems: "center", justifyContent: "flex-end" }}
-    >
-      {LEAVES.slice(0, LEAF_COUNT).map((leaf, i) => (
-        <Leaf key={i} config={leaf} />
-      ))}
-      <Fruit fruitType={fruitType} />
-    </View>
-  );
-}
-
-function Fruit({ fruitType }: { fruitType?: FruitTreeType }) {
-  const scale = useSharedValue(0);
-
-  useEffect(() => {
-    scale.value = withSequence(
-      withTiming(1.15, { duration: FRUIT_DURATION * 0.7, easing: Easing.out(Easing.back(1.4)) }),
-      withTiming(1, { duration: FRUIT_DURATION * 0.3, easing: Easing.out(Easing.quad) }),
-    );
-  }, [scale]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
   const FruitIcon = fruitType ? FRUIT_SVG_MAP[fruitType] : null;
   if (!FruitIcon) return null;
 
   return (
-    <Animated.View style={[{ position: "absolute", bottom: 4 }, animatedStyle]}>
-      <FruitIcon size={FRUIT_SIZE} />
-    </Animated.View>
+    <View
+      pointerEvents="none"
+      style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
+    >
+      {fruits.map((config, i) => (
+        <Fruit
+          key={i}
+          config={config}
+          Icon={FruitIcon}
+          screenWidth={width}
+          screenHeight={height}
+        />
+      ))}
+    </View>
   );
 }
 
-function Leaf({ config }: { config: LeafConfig }) {
+function Fruit({
+  config,
+  Icon,
+  screenWidth,
+  screenHeight,
+}: {
+  config: FruitConfig;
+  Icon: React.ComponentType<FruitSvgProps>;
+  screenWidth: number;
+  screenHeight: number;
+}) {
   const progress = useSharedValue(0);
 
   useEffect(() => {
     progress.value = withDelay(
       config.delay,
-      withTiming(1, { duration: LEAF_DURATION, easing: Easing.out(Easing.cubic) }),
+      withTiming(1, { duration: DURATION, easing: Easing.out(Easing.cubic) }),
     );
   }, [progress, config.delay]);
 
   const animatedStyle = useAnimatedStyle(() => {
     const t = progress.value;
-    const liftY = -SCENE_HEIGHT * 0.85 * t;
-    const driftX = config.startX + (config.endX - config.startX) * t;
-    const rotate = config.rotateEnd * t;
-    const opacity = t < 0.1 ? t * 10 : 1 - (t - 0.6) * 2.5;
+    const liftY = -config.startYOffset - screenHeight * 0.15 * t;
+    const driftX = config.drift * t;
+    const rotate = config.rotateStart + (config.rotateEnd - config.rotateStart) * t;
+    const scale = t < 0.15 ? t / 0.15 : 1;
+    const opacity = t < 0.1 ? t * 10 : t > 0.75 ? Math.max(0, 1 - (t - 0.75) * 4) : 1;
     return {
-      opacity: Math.max(0, Math.min(1, opacity)),
+      opacity,
       transform: [
         { translateX: driftX },
         { translateY: liftY },
         { rotate: `${rotate}deg` },
+        { scale },
       ],
     };
   });
+
+  const leftPx = config.xPercent * screenWidth - config.size / 2;
 
   return (
     <Animated.View
       style={[
         {
           position: "absolute",
-          bottom: 8,
+          left: leftPx,
+          bottom: -config.size,
           width: config.size,
-          height: config.size * 0.55,
-          borderRadius: config.size,
-          backgroundColor: "#4ade80",
+          height: config.size,
         },
         animatedStyle,
       ]}
-    />
+    >
+      <Icon size={config.size} />
+    </Animated.View>
   );
 }

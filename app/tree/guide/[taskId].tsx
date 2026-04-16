@@ -124,47 +124,52 @@ export default function GuideScreen() {
           <ResearchNotes notes={guide.researchNotes} />
         ) : null}
 
-        {task ? (
-          <Pressable
-            onPress={handleMarkDone}
-            disabled={toggleTask.isPending || celebrating}
-            className="mt-6 flex-row items-center justify-center gap-2 rounded-2xl bg-brand-700 py-4 active:opacity-80"
-          >
-            {toggleTask.isPending || celebrating ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <>
-                <Ionicons
-                  name="checkmark-circle"
-                  size={18}
-                  color="white"
-                />
-                <Text className="text-base font-semibold text-white">
-                  Mark as done
+        {task ? (() => {
+          const isCompleted =
+            celebrating ||
+            toggleTask.isSuccess ||
+            task.lastCompletedOutcome === "completed";
+
+          if (isCompleted) {
+            return (
+              <View className="mt-6 flex-row items-center justify-center gap-2 rounded-2xl border-2 border-brand-600 bg-white py-4">
+                <Text className="text-base font-semibold text-brand-700">
+                  Completed
                 </Text>
-              </>
-            )}
-          </Pressable>
-        ) : null}
+                <Ionicons name="checkmark" size={18} color="#15803d" />
+              </View>
+            );
+          }
+
+          return (
+            <Pressable
+              onPress={handleMarkDone}
+              disabled={toggleTask.isPending}
+              className="mt-6 flex-row items-center justify-center gap-2 rounded-2xl bg-brand-700 py-4 active:opacity-80"
+            >
+              {toggleTask.isPending ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <>
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={18}
+                    color="white"
+                  />
+                  <Text className="text-base font-semibold text-white">
+                    Mark as done
+                  </Text>
+                </>
+              )}
+            </Pressable>
+          );
+        })() : null}
       </ScrollView>
       {celebrating ? (
-        <View
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <TaskDoneCelebration
-            fruitType={task?.treeType}
-            onComplete={handleCelebrationComplete}
-          />
-        </View>
+        <TaskDoneCelebration
+          fruitType={task?.treeType}
+          onComplete={handleCelebrationComplete}
+        />
       ) : null}
     </Screen>
   );
