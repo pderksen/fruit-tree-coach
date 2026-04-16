@@ -8,13 +8,10 @@ import {
 import { getWateringGuide, getWateringGuideByCategory } from "./watering";
 
 const ALL_CATEGORIES: TreeCategory[] = [
-  "Pome Fruit",
-  "Stone Fruit",
   "Citrus",
-  "Ficus",
-  "Tropical",
-  "Subtropical",
-  "Berry",
+  "Stone Fruit",
+  "Pome Fruit",
+  "Tropical / Subtropical",
   "Other",
 ];
 

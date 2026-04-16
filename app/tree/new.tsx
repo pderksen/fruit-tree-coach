@@ -6,7 +6,6 @@ import {
   Text,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard,
   Platform,
   Alert,
 } from "react-native";
@@ -14,7 +13,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AgePicker } from "@/components/AgePicker";
-import { CoachTipCard } from "@/components/CoachTipCard";
 import { FormField } from "@/components/FormField";
 import { FruitTypeGrid } from "@/components/FruitTypeGrid";
 import { PrimaryButton } from "@/components/PrimaryButton";
@@ -25,12 +23,11 @@ import {
 import { Screen } from "@/components/Screen";
 import { useDefaultOrchard } from "@/hooks/use-orchards";
 import { useCreateTree } from "@/hooks/use-trees";
-import { COACH_TIPS } from "@/lib/care/coach-tips";
 import type { AgeBracket, FruitTreeType } from "@/lib/types";
 
 const addTreeSchema = z.object({
   name: z.string().optional(),
-  type: z.string().min(1, "Pick a tree type"),
+  type: z.string().min(1, "Pick a fruit type"),
   ageBracket: z.string().optional(),
 });
 
@@ -66,8 +63,6 @@ export default function AddTreeScreen() {
 
   function handleAgeChange(age: AgeBracket) {
     setValue("ageBracket", age);
-    Keyboard.dismiss();
-    scrollRef.current?.scrollToEnd({ animated: true });
   }
 
   function handleTreeRequest(submission: RequestTreeSubmission) {
@@ -97,10 +92,6 @@ export default function AddTreeScreen() {
     }
   }
 
-  const coachTip = selectedType
-    ? COACH_TIPS[selectedType as FruitTreeType]
-    : null;
-
   return (
     <Screen bg="bg-cream-50">
       <KeyboardAvoidingView
@@ -125,7 +116,7 @@ export default function AddTreeScreen() {
 
           {/* Tree type selector */}
           <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-500">
-            Select Tree Type
+            Select Fruit Type
           </Text>
           <FruitTypeGrid
             selected={selectedType || null}
@@ -159,13 +150,6 @@ export default function AddTreeScreen() {
               onChange={handleAgeChange}
             />
           </View>
-
-          {/* Coach tip */}
-          {coachTip ? (
-            <View className="mt-5">
-              <CoachTipCard tip={coachTip} />
-            </View>
-          ) : null}
 
           {/* Actions */}
           <View className="mt-6">

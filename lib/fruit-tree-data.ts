@@ -11,13 +11,10 @@ import type { FruitTreeType } from "@/lib/types";
 // ---------------------------------------------------------------------------
 
 export type TreeCategory =
-  | "Pome Fruit"
-  | "Stone Fruit"
   | "Citrus"
-  | "Ficus"
-  | "Tropical"
-  | "Subtropical"
-  | "Berry"
+  | "Stone Fruit"
+  | "Pome Fruit"
+  | "Tropical / Subtropical"
   | "Other";
 
 // ---------------------------------------------------------------------------
@@ -85,15 +82,6 @@ export const POPULAR_TYPES: FruitTreeType[] = [
 // ---------------------------------------------------------------------------
 
 export const TREE_CATEGORY_MAP: Record<FruitTreeType, TreeCategory> = {
-  // Pome
-  Apple: "Pome Fruit",
-  Pear: "Pome Fruit",
-  // Stone
-  Peach: "Stone Fruit",
-  Cherry: "Stone Fruit",
-  Plum: "Stone Fruit",
-  Apricot: "Stone Fruit",
-  Nectarine: "Stone Fruit",
   // Citrus
   Lemon: "Citrus",
   Orange: "Citrus",
@@ -103,19 +91,26 @@ export const TREE_CATEGORY_MAP: Record<FruitTreeType, TreeCategory> = {
   Tangelo: "Citrus",
   Tangerine: "Citrus",
   Kumquat: "Citrus",
-  // Ficus
-  Fig: "Ficus",
-  // Subtropical
-  Avocado: "Subtropical",
-  Pomegranate: "Subtropical",
-  Persimmon: "Subtropical",
-  Olive: "Subtropical",
-  // Tropical
-  Date: "Tropical",
-  Mango: "Tropical",
-  Guava: "Tropical",
-  // Berry / Other
-  Mulberry: "Berry",
+  // Stone Fruit
+  Peach: "Stone Fruit",
+  Cherry: "Stone Fruit",
+  Plum: "Stone Fruit",
+  Apricot: "Stone Fruit",
+  Nectarine: "Stone Fruit",
+  // Pome Fruit
+  Apple: "Pome Fruit",
+  Pear: "Pome Fruit",
+  // Tropical / Subtropical
+  Avocado: "Tropical / Subtropical",
+  Pomegranate: "Tropical / Subtropical",
+  Persimmon: "Tropical / Subtropical",
+  Olive: "Tropical / Subtropical",
+  Date: "Tropical / Subtropical",
+  Mango: "Tropical / Subtropical",
+  Guava: "Tropical / Subtropical",
+  // Other
+  Fig: "Other",
+  Mulberry: "Other",
   Pawpaw: "Other",
 };
 

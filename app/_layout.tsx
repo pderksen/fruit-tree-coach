@@ -126,7 +126,14 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="tree/new"
-          options={{ title: "New Tree" }}
+          options={{
+            title: "Add a Tree",
+            headerLeft: () => (
+              <Pressable onPress={() => router.replace("/(tabs)")} hitSlop={8}>
+                <Ionicons name="chevron-back" size={28} color="#000" />
+              </Pressable>
+            ),
+          }}
         />
         <Stack.Screen
           name="tree/edit/[id]"

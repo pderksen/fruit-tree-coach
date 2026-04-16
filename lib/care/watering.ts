@@ -25,23 +25,23 @@ export interface WateringGuide {
 // are broadly similar within categories.
 // Source: UC Davis Fruit & Nut Research and Information Center
 const WATERING_BY_CATEGORY: Record<TreeCategory, WateringGuide> = {
-  "Pome Fruit": {
-    frequency: "Deep water every 7–10 days during growing season",
-    amount: "10–15 gallons per inch of trunk diameter",
+  Citrus: {
+    frequency: "Water every 5–7 days in summer, every 2–3 weeks in winter",
+    amount: "5–10 gallons depending on tree size",
     bestTime: "Early morning",
     signs: {
       overWatering: [
-        "Yellowing leaves that drop easily",
-        "Soft, mushy root crown",
-        "Fungal growth at soil surface",
+        "Yellowing leaves throughout the canopy",
+        "Leaf drop even with green leaves",
+        "Root rot (sour smell at soil line)",
       ],
       underWatering: [
-        "Wilting leaves that curl inward",
-        "Small, shriveled fruit",
-        "Premature leaf drop",
+        "Leaf curling and wilting",
+        "Dry, hard fruit with thick peel",
+        "Leaf drop starting from the interior",
       ],
     },
-    tip: "Water at the drip line, not the trunk. Apples and pears have shallow feeder roots that extend to the canopy edge.",
+    tip: "Citrus trees are evergreen and need water year-round. Mulch 3–4 inches around the base (keep mulch away from the trunk) to retain moisture.",
   },
   "Stone Fruit": {
     frequency: "Deep water every 7–14 days during growing season",
@@ -61,105 +61,51 @@ const WATERING_BY_CATEGORY: Record<TreeCategory, WateringGuide> = {
     },
     tip: "Reduce watering 2 weeks before harvest to prevent fruit splitting. Resume after picking.",
   },
-  Citrus: {
-    frequency: "Water every 5–7 days in summer, every 2–3 weeks in winter",
-    amount: "5–10 gallons depending on tree size",
+  "Pome Fruit": {
+    frequency: "Deep water every 7–10 days during growing season",
+    amount: "10–15 gallons per inch of trunk diameter",
     bestTime: "Early morning",
     signs: {
       overWatering: [
-        "Yellowing leaves throughout the canopy",
-        "Leaf drop even with green leaves",
-        "Root rot (sour smell at soil line)",
+        "Yellowing leaves that drop easily",
+        "Soft, mushy root crown",
+        "Fungal growth at soil surface",
       ],
       underWatering: [
-        "Leaf curling and wilting",
-        "Dry, hard fruit with thick peel",
-        "Leaf drop starting from the interior",
+        "Wilting leaves that curl inward",
+        "Small, shriveled fruit",
+        "Premature leaf drop",
       ],
     },
-    tip: "Citrus trees are evergreen and need water year-round. Mulch 3–4 inches around the base (keep mulch away from the trunk) to retain moisture.",
+    tip: "Water at the drip line, not the trunk. Apples and pears have shallow feeder roots that extend to the canopy edge.",
   },
-  Ficus: {
-    frequency: "Water every 7–10 days; let soil dry slightly between waterings",
-    amount: "5–10 gallons depending on tree size",
-    bestTime: "Early morning",
-    signs: {
-      overWatering: [
-        "Yellowing and dropping leaves",
-        "Soft, spongy trunk base",
-        "Sour-smelling soil",
-      ],
-      underWatering: [
-        "Premature fruit drop",
-        "Shriveled, dry figs",
-        "Wilting leaves that feel papery",
-      ],
-    },
-    tip: "Figs are drought-tolerant once established, but consistent moisture during fruiting produces much better harvests.",
-  },
-  Tropical: {
-    frequency: "Water every 3–5 days; tropicals prefer consistently moist soil",
-    amount: "10–15 gallons for mature trees",
-    bestTime: "Early morning or late afternoon",
-    signs: {
-      overWatering: [
-        "Brown, mushy roots",
-        "Persistently soggy soil",
-        "Fungal spots on leaves",
-      ],
-      underWatering: [
-        "Brown, crispy leaf tips and edges",
-        "Slow growth and small leaves",
-        "Fruit drop before ripening",
-      ],
-    },
-    tip: "Most tropical fruit trees need high humidity too. Misting leaves in dry climates helps, but good soil drainage is essential to prevent root rot.",
-  },
-  Subtropical: {
-    frequency: "Water every 7–14 days depending on species and season",
+  "Tropical / Subtropical": {
+    frequency: "Water every 5–14 days depending on species; tropicals prefer consistently moist soil, drought-tolerant subtropicals (pomegranate, olive) can go longer",
     amount: "5–15 gallons depending on tree size",
     bestTime: "Early morning",
     signs: {
       overWatering: [
         "Root rot symptoms (wilting despite moist soil)",
-        "Yellowing lower leaves",
-        "Slow, weak new growth",
+        "Persistently soggy soil",
+        "Fungal spots on leaves",
       ],
       underWatering: [
-        "Wilting, especially in afternoon heat",
-        "Leaf scorch on edges",
-        "Reduced fruit set",
+        "Brown, crispy leaf tips and edges",
+        "Wilting in afternoon heat",
+        "Fruit drop before ripening",
       ],
     },
-    tip: "Subtropical trees vary widely. Pomegranates are drought-tolerant once established; avocados need consistently moist (never soggy) soil.",
-  },
-  Berry: {
-    frequency: "Water every 5–7 days; keep soil consistently moist",
-    amount: "3–5 gallons per plant",
-    bestTime: "Early morning",
-    signs: {
-      overWatering: [
-        "Root rot and crown rot",
-        "Yellowing lower leaves",
-        "Stunted growth",
-      ],
-      underWatering: [
-        "Small, dry berries",
-        "Wilting leaves",
-        "Reduced yield",
-      ],
-    },
-    tip: "Berry plants have shallow roots. A thick layer of mulch helps maintain even soil moisture throughout the growing season.",
+    tip: "Avocados need consistently moist (never soggy) soil; pomegranates and olives are drought-tolerant once established. Check soil 4–6 inches deep before watering.",
   },
   Other: {
-    frequency: "Water every 7–10 days during growing season",
+    frequency: "Water every 7–10 days during growing season; figs can go longer once established",
     amount: "5–10 gallons depending on tree size",
     bestTime: "Early morning",
     signs: {
       overWatering: [
-        "Yellowing leaves",
+        "Yellowing leaves that drop easily",
         "Root rot symptoms",
-        "Fungal growth near trunk",
+        "Fungal growth near trunk base",
       ],
       underWatering: [
         "Wilting and leaf curl",

@@ -107,10 +107,10 @@ export default function EditTreeScreen() {
           contentContainerStyle={{ paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Read-only tree type */}
+          {/* Read-only fruit type */}
           <View className="mt-2 rounded-3xl bg-white p-5">
             <Text className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500">
-              Tree type
+              Fruit type
             </Text>
             <Text className="text-base font-semibold text-gray-900">
               {tree.type}
@@ -121,7 +121,7 @@ export default function EditTreeScreen() {
               ) : null}
             </Text>
             <Text className="mt-2 text-xs text-gray-500">
-              Tree type can&apos;t be changed. Delete and re-add the tree if
+              Fruit type can&apos;t be changed. Delete and re-add the tree if
               it&apos;s wrong.
             </Text>
           </View>

@@ -80,7 +80,7 @@ export function RequestTreeModal({
           keyboardShouldPersistTaps="handled"
         >
           <Text className="text-2xl font-bold text-gray-900">
-            Request a tree type
+            Request a fruit type
           </Text>
           <Text className="mb-6 mt-2 text-base leading-6 text-gray-500">
             We&apos;ll look into adding it to the app.
