@@ -16,6 +16,7 @@ export function PriorityTaskCard({
   onToggleDone,
 }: PriorityTaskCardProps) {
   const borderColor = task.status === "late" ? "border-amber-500" : "border-brand-600";
+
   return (
     <View className={`rounded-2xl border-l-4 ${borderColor} bg-white p-5`}>
       <View className="flex-row items-start justify-between">

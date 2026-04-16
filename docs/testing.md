@@ -367,3 +367,39 @@ task stays hidden until next year's window reopens.
 - [ ] Next year's window for the same task template generates a fresh
       task that is visible (manual — requires time travel or a
       hand-crafted task row with windowStart in the near future)
+
+### Task-done celebration (shipped 2026-04-16)
+
+Only the "Mark as done" button at the bottom of the step-by-step
+guide screen (`app/tree/guide/[taskId].tsx`) plays the celebration —
+the checkbox affordances on `PriorityTaskCard`, `LaterTaskList`, and
+`TaskCard` complete tasks silently. The celebration is a ~1.5s
+centered overlay: success haptic + the tree's fruit icon scales in
++ 8 leaf shapes drift upward and outward while fading. New deps:
+`expo-haptics`. Reduced-motion fallback skips the scene entirely
+(brief delay + haptic only, then `router.back()`).
+
+- [ ] Tree detail → tap "View Step-by-Step Guide" on the priority
+      task → guide loads → scroll to bottom → tap "Mark as done" →
+      celebration overlay plays centered on screen (fruit grows,
+      leaves drift), then screen pops back to tree detail. Task is
+      gone from priority slot.
+- [ ] Tap the priority task checkbox directly (without going through
+      the guide) → task completes silently, NO celebration
+- [ ] Same for "What to do later" rows → silent completion, NO
+      celebration
+- [ ] Calendar tab → tap "Mark done" on a `TaskCard` → silent
+      completion, NO celebration
+- [ ] iOS hardware: success haptic fires once on the guide-screen
+      "Mark as done" tap. Simulator may no-op silently.
+- [ ] Android hardware: vibration fires once on the guide-screen
+      "Mark as done" tap.
+- [ ] Rapid double-tap on guide-screen "Mark as done" does NOT fire
+      celebration twice (button disabled while `celebrating`)
+- [ ] Background the app mid-animation → return → no crash, task is
+      done, screen popped back
+- [ ] Settings → Accessibility → enable Reduce Motion → tap "Mark
+      as done" on guide → no leaves, no fruit growth; brief pause then
+      `router.back()`; haptic still fires
+- [ ] Web (if it loads): celebration overlay renders without crashing;
+      haptic silently no-ops (no console error)

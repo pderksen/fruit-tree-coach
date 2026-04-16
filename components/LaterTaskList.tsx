@@ -32,9 +32,7 @@ export function LaterTaskList({ tasks, onToggleDone }: LaterTaskListProps) {
             <View className="mr-3 mt-1.5 h-2.5 w-2.5 rounded-full bg-brand-500" />
           )}
           <View className="flex-1">
-            <Text
-              className="text-base font-semibold text-gray-900"
-            >
+            <Text className="text-base font-semibold text-gray-900">
               {task.title}
             </Text>
             {task.displayWindow || task.description ? (

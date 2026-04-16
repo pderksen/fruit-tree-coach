@@ -13,8 +13,10 @@ import {
 
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Screen } from "@/components/Screen";
+import { TaskDoneCelebration } from "@/components/TaskDoneCelebration";
 import { useGuideByCategory } from "@/hooks/use-guide";
 import { useTask, useToggleTask } from "@/hooks/use-tasks";
+import { successHaptic } from "@/lib/haptics";
 import type { Guide, ProductRecommendation } from "@/lib/types";
 
 export default function GuideScreen() {
@@ -25,6 +27,7 @@ export default function GuideScreen() {
   const task = taskQuery.data ?? null;
   const guideQuery = useGuideByCategory(task?.treeType, task?.category);
   const guide = guideQuery.data ?? undefined;
+  const [celebrating, setCelebrating] = useState(false);
 
   if (taskQuery.isLoading || guideQuery.isLoading) {
     return (
@@ -50,11 +53,15 @@ export default function GuideScreen() {
   }
 
   const handleMarkDone = () => {
-    if (!task) return;
-    toggleTask.mutate(
-      { task, done: true },
-      { onSuccess: () => router.back() },
-    );
+    if (!task || celebrating) return;
+    setCelebrating(true);
+    void successHaptic();
+    toggleTask.mutate({ task, done: true });
+  };
+
+  const handleCelebrationComplete = () => {
+    setCelebrating(false);
+    router.back();
   };
 
   return (
@@ -120,10 +127,10 @@ export default function GuideScreen() {
         {task ? (
           <Pressable
             onPress={handleMarkDone}
-            disabled={toggleTask.isPending}
+            disabled={toggleTask.isPending || celebrating}
             className="mt-6 flex-row items-center justify-center gap-2 rounded-2xl bg-brand-700 py-4 active:opacity-80"
           >
-            {toggleTask.isPending ? (
+            {toggleTask.isPending || celebrating ? (
               <ActivityIndicator color="#fff" />
             ) : (
               <>
@@ -140,6 +147,25 @@ export default function GuideScreen() {
           </Pressable>
         ) : null}
       </ScrollView>
+      {celebrating ? (
+        <View
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TaskDoneCelebration
+            fruitType={task?.treeType}
+            onComplete={handleCelebrationComplete}
+          />
+        </View>
+      ) : null}
     </Screen>
   );
 }
