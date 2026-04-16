@@ -130,33 +130,36 @@ export default function AddTreeScreen() {
             </Text>
           ) : null}
 
-          {/* Form card */}
-          <View
-            className="mt-6 rounded-3xl bg-white p-5"
-            onLayout={(e) => {
-              formCardYRef.current = e.nativeEvent.layout.y;
-            }}
-          >
-            <FormField<AddTreeForm>
-              control={control}
-              name="name"
-              label="Variety (optional)"
-              placeholder="e.g. Honeycrisp, Meyer, Elberta"
-            />
+          {/* Form card — only shown once a fruit type is picked */}
+          {selectedType ? (
+            <View
+              className="mt-6 rounded-3xl bg-white p-5"
+              onLayout={(e) => {
+                formCardYRef.current = e.nativeEvent.layout.y;
+              }}
+            >
+              <FormField<AddTreeForm>
+                control={control}
+                name="name"
+                label="Variety (optional)"
+                placeholder="e.g. Honeycrisp, Meyer, Elberta"
+              />
 
-            <AgePicker
-              label="Est. Age (Years)"
-              value={watch("ageBracket") as AgeBracket | null || null}
-              onChange={handleAgeChange}
-            />
-          </View>
+              <AgePicker
+                label="Growth stage"
+                value={watch("ageBracket") as AgeBracket | null || null}
+                onChange={handleAgeChange}
+              />
+            </View>
+          ) : null}
 
           {/* Actions */}
+          {/* TODO: rename "Add to My Orchard" once multi-orchard support ships */}
           <View className="mt-6">
             <PrimaryButton
               title={createTree.isPending ? "Adding…" : "Add to My Orchard"}
               onPress={handleSubmit(onSubmit)}
-              disabled={createTree.isPending}
+              disabled={createTree.isPending || !defaultOrchard}
             />
           </View>
         </ScrollView>
