@@ -28,14 +28,6 @@ export function PriorityTaskCard({
           onPress={onToggleDone}
           disabled={!onToggleDone}
         >
-          {onToggleDone ? (
-            <Ionicons
-              name="ellipse-outline"
-              size={22}
-              color="#9ca3af"
-              style={{ marginTop: 2 }}
-            />
-          ) : null}
           <View className="flex-1">
             <Text
               className="text-lg font-bold text-gray-900"
