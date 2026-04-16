@@ -110,6 +110,12 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Each (tree_type, task_category) pair gets at most one row, enforced
   by the partial unique index from migration
   `20260412230000_guides_approval_and_lookup.sql`
+- Per-task guides (e.g. `Peach × pruning`) are the preferred shape —
+  the guide screen is opened from a specific task, so content should
+  cover only that task. Tree-wide `overview` rows are a fallback for
+  trees without per-task coverage yet; `lib/services/guide-service.ts`
+  prefers the per-task row and falls back to overview. Coverage is
+  rolled out one tree at a time
 - The `approved` column gates RLS visibility. Batches can ship with
   `approved = true` after developer review of the SQL diff, or
   `approved = false` if a second dashboard review is wanted before
