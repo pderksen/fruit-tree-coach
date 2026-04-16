@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { DevTools } from "@/components/DevTools";
 import { ErrorState } from "@/components/ErrorState";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { OrchardStats } from "@/components/OrchardStats";
 import { SeasonalForecast } from "@/components/SeasonalForecast";
 import { TreeCard } from "@/components/TreeCard";
 import { WateringInfoCard } from "@/components/WateringInfoCard";
@@ -23,20 +22,6 @@ export default function HomeScreen() {
   const trees = treesQuery.data ?? [];
   const tasksQuery = useAllTasks(orchard?.id);
   const pendingTasks = tasksQuery.data ?? [];
-
-  const lateTreeIds = new Set(
-    pendingTasks
-      .filter((t) => t.status === "late" || t.status === "urgent")
-      .map((t) => t.treeId),
-  );
-  const activeTreeIds = new Set(
-    pendingTasks.filter((t) => t.status === "active").map((t) => t.treeId),
-  );
-  const lateCount = trees.filter((t) => lateTreeIds.has(t.id)).length;
-  const readyCount = trees.filter(
-    (t) => !lateTreeIds.has(t.id) && activeTreeIds.has(t.id),
-  ).length;
-  const waitingCount = trees.length - lateCount - readyCount;
 
   const isRefreshing = treesQuery.isRefetching || tasksQuery.isRefetching;
   const onRefresh = useCallback(() => {
@@ -89,13 +74,12 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Orchard Stats */}
+        {/* Home Header Image */}
         <View className="px-5 pt-3">
-          <OrchardStats
-            trees={trees.length}
-            ready={readyCount}
-            late={lateCount}
-            waiting={waitingCount}
+          <Image
+            source={require("@/assets/images/fruit-tree-coach-home-header.png")}
+            style={{ width: "100%", height: 110 }}
+            resizeMode="cover"
           />
         </View>
 
