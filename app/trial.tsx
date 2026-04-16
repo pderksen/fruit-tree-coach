@@ -9,7 +9,7 @@ const logo = require("@/assets/images/fruit-tree-coach-logo.png") as number;
 type Plan = "monthly" | "yearly";
 
 const FEATURES = [
-  "Personalised weekly care plans",
+  "Personalized weekly care plans",
   "Location-aware seasonal guidance",
   "Step-by-step pruning, fertilizing & thinning guides",
   "Expert tips from university extension sources",

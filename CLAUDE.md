@@ -155,6 +155,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Tailwind classes via NativeWind, no inline StyleSheet unless unavoidable
 - Files stay under ~200 lines, split when they grow past that
 - User-facing copy is plain English, no jargon without a tooltip
+- User-facing copy is American English (personalized, color, organize) — app is US-only for v1. Same rule for guide content; see migration `20260412224911_fix_guides_american_english.sql` for the DB-side check
 - Care recommendations must cite their source in a code comment
   (extension service, university guide, etc.) so claims stay defensible
 - Use `Partial<Record<K, V>>` for mock data maps that don't need entries for every union member
