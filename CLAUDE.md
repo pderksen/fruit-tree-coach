@@ -91,6 +91,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - `app.json` Expo app config
 
 ## Guide content sourcing
+- Scope boundary: task *templates* (`lib/care/task-templates/*.ts`) own the schedule — which tasks exist per tree, when they fire, short `why`/`description`. The `guides` table owns the long-form tutorial opened on tap. Templates stay in code (offline-first, type-safe, small); guides stay in the DB (editorial volume, `approved` gate, future affiliate links). Do not move templates to the DB
 - Guides are generated in batches by running a Claude Code session
   that reads extension-service pages from `docs/fruit_tree_care_resources.md`
   and writes each guide as an INSERT row in a new migration file.
@@ -116,6 +117,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
   trees without per-task coverage yet; `lib/services/guide-service.ts`
   prefers the per-task row and falls back to overview. Coverage is
   rolled out one tree at a time
+- Once per-task coverage ships for all 25 trees, retire the overview fallback: delete `task_category = 'overview'` rows via migration and drop the fallback branch in `lib/services/guide-service.ts`
 - The `approved` column gates RLS visibility. Batches can ship with
   `approved = true` after developer review of the SQL diff, or
   `approved = false` if a second dashboard review is wanted before
