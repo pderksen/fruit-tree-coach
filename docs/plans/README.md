@@ -15,3 +15,6 @@ folder once the work ships; git preserves the record.
   Expo Go onto an EAS-built custom dev client so `expo-location` (and
   future native modules) can run. Triggered when manual-ZIP onboarding
   feels clunky or the next native-module need lands.
+- [pre-launch-checklist](pre-launch-checklist.md) — small items that
+  need to happen before public launch but don't warrant their own
+  plan folder (e.g. Supabase dashboard toggles).
