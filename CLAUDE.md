@@ -70,7 +70,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - `lib/` shared logic, helpers, and app services
 - `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
 - `lib/schemas.ts` Zod schemas for parsing Supabase responses (runtime boundary)
-- `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `TREE_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
+- `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `FRUIT_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
 - `lib/supabase.ts` Supabase client init
 - `lib/auth.ts` auth helpers
 - `lib/query-client.ts` TanStack Query client config

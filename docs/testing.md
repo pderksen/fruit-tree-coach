@@ -24,7 +24,7 @@ file under test (`foo.ts` → `foo.test.ts`).
   offline-fallback path when the API is unreachable.
 - **`lib/fruit-tree-data.ts` lookup integrity** — every
   `FruitTreeType` union member has an entry in `TREE_EMOJI`,
-  `TREE_CATEGORY_MAP`, and `SCIENTIFIC_NAME_MAP`. One test that
+  `FRUIT_CATEGORY_MAP`, and `SCIENTIFIC_NAME_MAP`. One test that
   iterates the union catches a whole class of mistakes.
 - **TanStack Query hook reducers / select functions** — if a hook in
   `hooks/use-*.ts` transforms data after fetch, test the transform as

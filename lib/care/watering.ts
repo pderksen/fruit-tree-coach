@@ -1,5 +1,5 @@
 /**
- * Watering guidance per fruit tree category.
+ * Watering guidance per fruit category.
  *
  * Sources:
  * - UC Davis Fruit & Nut Research and Information Center
