@@ -9,19 +9,14 @@ grouped into reviewable phases.
 ## Where we are today
 - `FRUIT_TREE_TYPES` (`lib/fruit-tree-data.ts`) has 25 species
 - Overview guides: 25 / 25 (all approved; done in earlier phases)
-- Per-task guides: **Peach, Apple, Lemon, Fig, Cherry, Plum, Apricot,
-  Nectarine, Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine,
-  Kumquat, Pear, Pomegranate, Persimmon, Avocado, Olive** — 84 rows
+- Per-task guides: **all 25 trees shipped** — 101 rows total
   (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5, Plum 5, Apricot 5,
   Nectarine 5, Orange 4, Lime 4, Grapefruit 3, Mandarin 4, Tangelo 4,
   Tangerine 4, Kumquat 3, Pear 4, Pomegranate 4, Persimmon 3,
-  Avocado 5, Olive 4). Phases A, B, C, D complete
+  Avocado 5, Olive 4, Date 4, Mango 4, Guava 4, Mulberry 3, Pawpaw 2).
+  Phases A, B, C, D, E all complete
 - Task templates (`lib/care/task-templates/<species>.ts` + barrel):
-  Apple, Peach, Lemon, Fig, Cherry, Plum, Apricot, Nectarine, Orange,
-  Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat, Pear,
-  Pomegranate, Persimmon, Avocado, Olive. The remaining 5 trees
-  (Date, Mango, Guava, Mulberry, Pawpaw — Phase E) still need
-  templates before their per-task guides can ship
+  all 25 species have templates
 
 ## How each tree reaches "done"
 For every species:
@@ -181,15 +176,65 @@ Rehabilitation of Freeze-Damaged Citrus and Avocado Trees), UC ANR
 (Olive Production Manual, Publication 3353/3485), UF/IFAS EDIS
 (Avocado Growing in the Florida Home Landscape).
 
-### Phase E — Tropical + berry (5 trees)
-Date, Mango, Guava, Mulberry, Pawpaw.
-Thinnest US-extension coverage — Mulberry and Pawpaw already flagged
-in `all-phases.md`'s Revisit section. Lean on UF/IFAS (mango, guava),
-Texas A&M (date, mulberry), Kentucky State / Ohio State (pawpaw).
-If extension coverage for a category is thin, ship fewer guides
-rather than invent advice — overview guide already serves as the
-fallback.
-Expected: 5 template entries, ~12 new guide rows.
+### Phase E — Tropical + berry (5 trees) (DONE)
+Date, Mango, Guava, Mulberry, Pawpaw. All five got templates +
+per-task guides. Category coverage varies more than other phases
+because US-extension coverage for this group is the thinnest — we
+deliberately shipped fewer categories rather than invent advice:
+- **Date** (4 guides): pruning, feeding, monitoring (hand
+  pollination + strand thinning + bagging), harvesting — three
+  distinctive home-grower jobs collapse into one monitoring guide;
+  bunch-cut vs. thinning-harvest by variety
+- **Mango** (4 guides): pruning, feeding, monitoring, harvesting —
+  post-harvest pruning timing, low-N/high-K bearing-tree feeding,
+  anthracnose + powdery mildew copper/sulfur at 1/4-panicle bloom,
+  shoulder-and-nose harvest test with off-tree ripening at 70–75°F
+- **Guava** (4 guides): pruning, feeding, monitoring, harvesting —
+  aggressive size-control pruning tolerance, paper-bag Caribbean
+  fruit fly control at 1-inch fruit size, variety-color harvest
+  (pink/red yellows; white stays green)
+- **Mulberry** (3 guides): pruning, feeding, harvesting — skipped
+  monitoring (white peach scale handled by dormant oil during the
+  winter-pruning visit); literal ''shake-the-tree'' harvest
+- **Pawpaw** (2 guides): monitoring, harvesting — skipped pruning,
+  feeding, protection because US-extension sources don''t provide
+  home-orchard cadences for those tasks, and shipping guides we
+  can''t cite would violate project rules. Hand pollination between
+  two different cultivars is the #1 home-grower lever
+
+Per-tree quirks captured:
+- **Date**: dioecious (female trees need pollen source); never
+  prune above horizontal ("pencil pointing" risk); Medjool thinning-
+  harvest in 2–3 October passes vs. bunch-cut for Halawy/Khadrawy
+- **Mango**: sap-dermatitis warning (Anacardiaceae family); resistant
+  varieties (Tommy Atkins, Kent, Keitt) need fewer bloom sprays than
+  Haden; stop copper at golf-ball fruit size to prevent russeting
+- **Guava**: withhold-water-then-prune trick forces off-season
+  flowering; prune year-round except Nov–Feb (frost sensitivity)
+- **Mulberry**: juice stains are permanent on clothing and concrete;
+  birds take the top canopy no matter what; freeze pulp for long-
+  term storage because fresh fruit keeps only 2–3 days
+- **Pawpaw**: self-incompatible — two cultivars of the same variety
+  don''t pollinate; flowers smell like rotting meat to attract fly
+  pollinators; ripe fruit may develop black skin blotches (normal);
+  seeds contain alkaloids (spit them out); freeze pulp for storage
+
+Shipped: 5 migrations, +17 guide rows (Date 4, Mango 4, Guava 4,
+Mulberry 3, Pawpaw 2), 5 template files. Backup
+`backups/phase-e-tropical-berry-2026-04-17.json`. Sources: UNR
+Extension (Date Palm Gardening Guide for Southern Nevada FS-02-99;
+PubID 3217), UA Cooperative Extension (Arizona Landscape Palms
+az1021; az2021), UF/IFAS EDIS (HS2/MG216 Mango Growing in the
+Florida Home Landscape; ENH563/ST404 Mangifera indica; HS4/MG045
+Guava Growing in the Florida Home Landscape; ENY-412/IG072 Guava
+Pests and Beneficial Insects), UF/IFAS Extension St. Lucie County
+(Managing Anthracnose and Powdery Mildew on Mango Tree; Common
+Problems of Mango in the Florida Home Landscape), UGA Extension
+(B992 Minor Fruits and Nuts in Georgia), Clemson HGIC (Red vs. White
+Mulberry in South Carolina), Ohio State Ohioline (ANR-0187 Pawpaws:
+An Alternative Fruit Crop in the Midwest), Penn State Extension (The
+Native Pawpaw Tree; Pawpaw Fruit in the Garden and the Kitchen),
+Purdue Extension (Pawpaw – the Indiana Banana?).
 
 ## Process per phase
 1. Write a short plan file in this folder (`phase-b-stone-fruit.md`

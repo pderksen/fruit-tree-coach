@@ -46,15 +46,23 @@ to `approved = true` in the same migration.
 
 This phase is complete and already pushed to the remote DB.
 
-## Per-task guide rollout across all 25 trees (CURRENT)
+## Per-task guide rollout across all 25 trees (DONE)
 See [per-task-rollout.md](per-task-rollout.md) — one plan, phased A–E.
 Phase A (Apple / Lemon / Fig), Phase B (Cherry / Plum / Apricot /
 Nectarine), Phase C (Citrus — Orange, Lime, Grapefruit, Mandarin,
 Tangelo, Tangerine, Kumquat), and Phase D (Pome + subtropical — Pear,
 Pomegranate, Persimmon, Avocado, Olive) shipped 2026-04-16. Phase E
-(Tropical + berry — Date, Mango, Guava, Mulberry, Pawpaw) is next.
-Those remaining 5 trees still need task templates added before their
-per-task guides can ship.
+(Tropical + berry — Date, Mango, Guava, Mulberry, Pawpaw) shipped
+2026-04-17. All 25 trees in `FRUIT_TREE_TYPES` now have task templates
+and per-task guides.
+
+**Next step:** retire the `task_category = 'overview'` fallback (per
+CLAUDE.md: "Once per-task coverage ships for all 25 trees, retire
+the overview fallback"). This is a follow-up migration to delete the
+overview rows + code change in `lib/services/guide-service.ts`,
+tracked as a separate piece of work. Once that ships, delete this
+entire `docs/plans/batch-generated-guides/` folder — git preserves
+the history.
 
 ## Phase 2: Pilot guide + template (CURRENT)
 Generate one guide end-to-end to prove the pattern works:
