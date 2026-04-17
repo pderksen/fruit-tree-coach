@@ -32,25 +32,25 @@ export function TreeDetailHeader({ tree }: TreeDetailHeaderProps) {
       <FruitIcon type={tree.type} size={72} />
 
       {/* Row 1: Tree name */}
-      <Text className="mt-3 text-2xl font-bold text-gray-900">
+      <Text className="mt-3 text-center text-2xl font-bold text-gray-900">
         {tree.name}
       </Text>
 
       {/* Row 2: Scientific name */}
-      <Text className="mt-2 text-sm text-gray-500">
+      <Text className="mt-2 text-center text-sm text-gray-500">
         Scientific Name:{" "}
         <Text className="italic">{scientificName}</Text>
       </Text>
 
       {/* Row 3: Age */}
       {ageDisplay ? (
-        <Text className="mt-1 text-sm text-gray-500">
+        <Text className="mt-1 text-center text-sm text-gray-500">
           Age: {ageDisplay}
         </Text>
       ) : null}
 
       {/* Row 4: Fruit category */}
-      <Text className="mt-1 text-sm text-gray-500">
+      <Text className="mt-1 text-center text-sm text-gray-500">
         Fruit category: {category}
       </Text>
 
