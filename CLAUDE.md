@@ -118,7 +118,8 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
   trees without per-task coverage yet; `lib/services/guide-service.ts`
   prefers the per-task row and falls back to overview. Coverage is
   rolled out one tree at a time
-- Once per-task coverage ships for all 25 trees, retire the overview fallback: delete `task_category = 'overview'` rows via migration and drop the fallback branch in `lib/services/guide-service.ts`
+- Per-task coverage shipped for all 25 trees (2026-04-17). Overview-fallback retirement is the next piece of work — delete `task_category = 'overview'` rows via migration and drop the fallback branch in `lib/services/guide-service.ts`
+- If a tree's extension-source coverage can't defend a task-category guide (e.g. no US extension publishes a home-orchard cadence for that task), ship fewer guides for that tree rather than invent advice — the overview guide still serves as the fallback. Flag the omission in the migration file's header comment
 - The `approved` column gates RLS visibility. Batches can ship with
   `approved = true` after developer review of the SQL diff, or
   `approved = false` if a second dashboard review is wanted before
@@ -263,3 +264,5 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - A commit hook may auto-commit file edits mid-task. If `git log` shows a commit you didn't explicitly create, check the diff — it's likely your own in-progress work. Use `git reset --soft HEAD~1` to unstage if you want to fold it into a later commit
 - NativeWind fixed-width classes (`w-24`, `w-28`) are unreliable on `Pressable` — use inline `style={{ flexBasis, flexGrow, maxWidth }}` for grid layouts instead
 - Stack screens reached via `<Redirect>` (e.g. a tab file that redirects to `/tree/new`) have no back history, so `canGoBack` is false and the global `headerLeft` won't render — add an explicit `headerLeft` on that `Stack.Screen` in `app/_layout.tsx` using `router.replace("/(tabs)")`
+- WebFetch on extension-service PDFs returns unreadable binary (e.g. UA `extension.arizona.edu/.../*.pdf`) — use WebSearch to find an HTML equivalent, or switch to a different extension source (UNR and UC ANR publish as HTML)
+- EDIS URLs at `edis.ifas.ufl.edu/publication/<id>` 301-redirect to `ask.ifas.ufl.edu/publication/<id>` — first WebFetch reports the redirect, second call with the new URL succeeds
