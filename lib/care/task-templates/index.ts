@@ -32,6 +32,11 @@ import { mandarin } from "./mandarin";
 import { tangelo } from "./tangelo";
 import { tangerine } from "./tangerine";
 import { kumquat } from "./kumquat";
+import { pear } from "./pear";
+import { pomegranate } from "./pomegranate";
+import { persimmon } from "./persimmon";
+import { avocado } from "./avocado";
+import { olive } from "./olive";
 
 export interface TaskTemplate {
   id: string;
@@ -61,6 +66,11 @@ export const TASK_TEMPLATES: Partial<Record<FruitTreeType, TaskTemplate[]>> = {
   Tangelo: tangelo,
   Tangerine: tangerine,
   Kumquat: kumquat,
+  Pear: pear,
+  Pomegranate: pomegranate,
+  Persimmon: persimmon,
+  Avocado: avocado,
+  Olive: olive,
 };
 
 export function getTemplatesForFruitType(fruitType: FruitTreeType): TaskTemplate[] {

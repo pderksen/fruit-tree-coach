@@ -49,10 +49,11 @@ This phase is complete and already pushed to the remote DB.
 ## Per-task guide rollout across all 25 trees (CURRENT)
 See [per-task-rollout.md](per-task-rollout.md) — one plan, phased A–E.
 Phase A (Apple / Lemon / Fig), Phase B (Cherry / Plum / Apricot /
-Nectarine), and Phase C (Citrus — Orange, Lime, Grapefruit, Mandarin,
-Tangelo, Tangerine, Kumquat) shipped 2026-04-16. Phase D (Pome +
-subtropical — Pear, Pomegranate, Persimmon, Avocado, Olive) is next.
-The remaining 10 trees still need task templates added before their
+Nectarine), Phase C (Citrus — Orange, Lime, Grapefruit, Mandarin,
+Tangelo, Tangerine, Kumquat), and Phase D (Pome + subtropical — Pear,
+Pomegranate, Persimmon, Avocado, Olive) shipped 2026-04-16. Phase E
+(Tropical + berry — Date, Mango, Guava, Mulberry, Pawpaw) is next.
+Those remaining 5 trees still need task templates added before their
 per-task guides can ship.
 
 ## Phase 2: Pilot guide + template (CURRENT)

@@ -11,15 +11,17 @@ grouped into reviewable phases.
 - Overview guides: 25 / 25 (all approved; done in earlier phases)
 - Per-task guides: **Peach, Apple, Lemon, Fig, Cherry, Plum, Apricot,
   Nectarine, Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine,
-  Kumquat** — 64 rows (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5,
-  Plum 5, Apricot 5, Nectarine 5, Orange 4, Lime 4, Grapefruit 3,
-  Mandarin 4, Tangelo 4, Tangerine 4, Kumquat 3). Phases A, B, C
-  complete
+  Kumquat, Pear, Pomegranate, Persimmon, Avocado, Olive** — 84 rows
+  (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5, Plum 5, Apricot 5,
+  Nectarine 5, Orange 4, Lime 4, Grapefruit 3, Mandarin 4, Tangelo 4,
+  Tangerine 4, Kumquat 3, Pear 4, Pomegranate 4, Persimmon 3,
+  Avocado 5, Olive 4). Phases A, B, C, D complete
 - Task templates (`lib/care/task-templates/<species>.ts` + barrel):
   Apple, Peach, Lemon, Fig, Cherry, Plum, Apricot, Nectarine, Orange,
-  Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. The
-  remaining 10 trees still need templates before their per-task
-  guides can ship
+  Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat, Pear,
+  Pomegranate, Persimmon, Avocado, Olive. The remaining 5 trees
+  (Date, Mango, Guava, Mulberry, Pawpaw — Phase E) still need
+  templates before their per-task guides can ship
 
 ## How each tree reaches "done"
 For every species:
@@ -124,21 +126,60 @@ the Home Landscape, Minneola Tangelo HS171/CH072, Alternaria Brown
 Spot PP-147/CG021, Kumquat FOR300/FR368), Clemson HGIC (In-Ground +
 Container Citrus Production).
 
-### Phase D — Pome + subtropical (5 trees)
-Pear, Pomegranate, Persimmon, Avocado, Olive.
-- **Pear** close to Apple — pruning, fireblight watch, thinning,
-  harvest (picked unripe, ripens off tree — opposite of Peach)
-- **Pomegranate** — minimal pruning, sun-scald monitoring, split-fruit
-  harvest cue
-- **Persimmon** — astringent vs. non-astringent harvest logic is the
-  headline
-- **Avocado** — frost protection (zone 9b+), sparse pruning, bloom-drop
-  monitoring
-- **Olive** — alternate bearing, pruning for fruit, olive fruit fly
-  monitoring in CA
+### Phase D — Pome + subtropical (5 trees) (DONE)
+Pear, Pomegranate, Persimmon, Avocado, Olive. All five got templates
++ per-task guides. Category coverage varies:
+- **Pear** (4 guides): pruning, feeding, monitoring (fireblight +
+  thinning), harvesting — dormant pruning, fireblight 12-inch cut
+  rule, lift-twist maturity test with off-tree ripening
+- **Pomegranate** (4 guides): pruning, feeding, monitoring, harvesting
+  — sucker removal, 2–3 year old fruiting wood, split-fruit
+  prevention, metallic-sound ripeness test
+- **Persimmon** (3 guides): pruning, feeding, harvesting — skipped
+  monitoring and protection (easygoing tree); astringent vs
+  non-astringent rule is the headline
+- **Avocado** (5 guides): pruning, feeding, monitoring, protection,
+  harvesting — full coverage including frost protection (the defining
+  winter task in 9b) and the one-sample-off-tree harvest test
+- **Olive** (4 guides): pruning, feeding, monitoring, harvesting —
+  skipped protection; alternate-bearing pruning balance, olive fruit
+  fly monitoring for CA/West, green-vs-black harvest by end use
 
-Sources: UC ANR, UF/IFAS, Texas A&M, UGA Extension, Clemson HGIC.
-Expected: 5 template entries, ~17 new guide rows.
+Per-tree quirks captured:
+- **Pear**: fireblight (shepherd''s crook) + cut 12 inches below
+  damage + sterilize between cuts; off-tree ripening rule (tree-
+  ripened pears go mealy)
+- **Pomegranate**: fruits on 2–3 year old wood so pruning stays
+  light; split fruit is a consistent-watering problem; leaffooted
+  bug flick-into-soapy-water
+- **Persimmon**: shape-based variety ID (acorn = astringent, tomato
+  = non-astringent); ''frost required'' is a misconception — frost
+  damages immature fruit
+- **Avocado**: never cut into bare older wood (doesn''t regenerate);
+  wait 6–8 months before pruning frost damage; harvest test is off-
+  tree softening, not squeeze
+- **Olive**: scale pruning to the alternate-bearing rhythm (harder
+  in heavy year, lighter in light year); olive fruit fly is CA/West-
+  primary; harvest color depends entirely on end use (oil vs green
+  cure vs black cure)
+
+Shipped: 5 migrations, +20 guide rows (Pear 4, Pomegranate 4,
+Persimmon 3, Avocado 5, Olive 4), 5 template files. Backup
+`backups/phase-d-pome-subtropical-2026-04-16.json`. Sources: Penn
+State Extension (Apple and Pear Disease: Fire Blight), UMN Extension
+(Growing Pears in the Home Garden), OSU Extension PNW 400, UC ANR
+Marin Master Gardeners (Pruning Pomegranate; FRUIT TREES
+Pomegranate), UGA Extension (Pomegranate Production; Home Garden
+Persimmons), Clemson HGIC (Pomegranate; How to Grow Persimmons in
+SC), UC ANR Master Gardeners Contra Costa County (Sweet or
+Astringent), UF/IFAS EDIS HS1483 (Alleviating Astringency in
+Persimmon Fruit), UC IPM (Training and Pruning Avocado Trees;
+Avocado; Olive Fruit Fly — Home and Landscape; Olive), UC ANR
+Ventura Cooperative Extension (Protecting Avocados from Frost;
+Methods of Frost Protection; Answers to FAQs about Avocados;
+Rehabilitation of Freeze-Damaged Citrus and Avocado Trees), UC ANR
+(Olive Production Manual, Publication 3353/3485), UF/IFAS EDIS
+(Avocado Growing in the Florida Home Landscape).
 
 ### Phase E — Tropical + berry (5 trees)
 Date, Mango, Guava, Mulberry, Pawpaw.
