@@ -15,8 +15,3 @@ folder once the work ships; git preserves the record.
   Expo Go onto an EAS-built custom dev client so `expo-location` (and
   future native modules) can run. Triggered when manual-ZIP onboarding
   feels clunky or the next native-module need lands.
-- [batch-generated-guides](batch-generated-guides/all-phases.md) —
-  generate the remaining ~60–80 (tree type, task category) care guides
-  in reviewable SQL migration batches. Phases A (Apple/Lemon/Fig),
-  B (stone fruit), and C (citrus — 7 trees) shipped 2026-04-16. Phase
-  D (pome + subtropical) is next.

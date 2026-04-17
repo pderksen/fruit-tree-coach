@@ -112,14 +112,14 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Each (tree_type, task_category) pair gets at most one row, enforced
   by the partial unique index from migration
   `20260412230000_guides_approval_and_lookup.sql`
-- Per-task guides (e.g. `Peach × pruning`) are the preferred shape —
-  the guide screen is opened from a specific task, so content should
-  cover only that task. Tree-wide `overview` rows are a fallback for
-  trees without per-task coverage yet; `lib/services/guide-service.ts`
-  prefers the per-task row and falls back to overview. Coverage is
-  rolled out one tree at a time
-- Per-task coverage shipped for all 25 trees (2026-04-17). Overview-fallback retirement is the next piece of work — delete `task_category = 'overview'` rows via migration and drop the fallback branch in `lib/services/guide-service.ts`
-- If a tree's extension-source coverage can't defend a task-category guide (e.g. no US extension publishes a home-orchard cadence for that task), ship fewer guides for that tree rather than invent advice — the overview guide still serves as the fallback. Flag the omission in the migration file's header comment
+- Per-task guides (e.g. `Peach × pruning`) are the only shape — the
+  guide screen is opened from a specific task, so content covers only
+  that task. Per-task coverage shipped for all 25 trees on 2026-04-17
+  and the `task_category = 'overview'` fallback was retired the same
+  day (migration `20260417155254_retire_overview_guide_fallback.sql`).
+  `lib/services/guide-service.ts` returns `null` when no per-task row
+  matches; the UI shows "Guide not available yet."
+- If a tree's extension-source coverage can't defend a task-category guide (e.g. no US extension publishes a home-orchard cadence for that task), ship fewer guides for that tree rather than invent advice — users will see "Guide not available yet." for uncovered tasks. Flag the omission in the migration file's header comment
 - The `approved` column gates RLS visibility. Batches can ship with
   `approved = true` after developer review of the SQL diff, or
   `approved = false` if a second dashboard review is wanted before
