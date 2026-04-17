@@ -138,6 +138,13 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
   fetch-friendliness, and content stability. Prefer tightening the
   list rather than swapping sources out wholesale
 
+## Affiliate product recommendations
+- Amazon affiliate products live in code, not the DB: `data/amazon-affiliate-links.csv` (Cori-editable source of truth) → hand-synced into `lib/care/product-recommendations.ts` (typed lookup by `FruitCategory`). Tracking ID `fruittreecoach-20` is baked into every `amzn.to` short link
+- Before committing any new `amzn.to` link, run `curl -sIL <url> | grep -i ^location:` and confirm (a) the resolved URL contains `tag=fruittreecoach-20` and (b) use the real product name from the resolved URL as the UI label — never generic labels like "Fertilizer #1"
+- Guide screen filters products by task category: `pruning` → pruning tool, `feeding` → fertilizer, `protection` → pest control, `monitoring`/`harvesting` → no products. Mapping is in `getProductsForTask()`
+- Considered moving to the `guides.productRecommendations` JSON column and rejected for v1 (only ~15 rows, no per-tree variation, admin-edit workflow not needed yet). Revisit if: products vary per (tree, task), A/B testing is needed, non-devs need to edit, or partners expand beyond Amazon
+- `guide.toolsNeeded` (DB strings like "Pruning shears") and affiliate products (code-driven, clickable) can coexist on the same guide — not a duplication bug
+
 ## Domain concepts
 - **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
 - **Task**: a recommended action for a tree, such as pruning, fertilizing, thinning, or waiting
@@ -267,3 +274,4 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Expo Router tab screens stay mounted after first visit — `useState(new Date())` captures once at mount and goes stale after backgrounding. For values that should refresh on tab re-entry, use `useFocusEffect` (imported from `expo-router`) with a `hasFocusedOnce` ref if the refresh should only happen on the first focus per app launch
 - WebFetch on extension-service PDFs returns unreadable binary (e.g. UA `extension.arizona.edu/.../*.pdf`) — use WebSearch to find an HTML equivalent, or switch to a different extension source (UNR and UC ANR publish as HTML)
 - EDIS URLs at `edis.ifas.ufl.edu/publication/<id>` 301-redirect to `ask.ifas.ufl.edu/publication/<id>` — first WebFetch reports the redirect, second call with the new URL succeeds
+- `ProductRecommendation.category` union values are hyphenated: `"fertilizer" | "pruning-tool" | "pest-control" | "other"` — not `"pest-spray"` or `"pest_control"`. `CategoryIcon` accepts the same values plus `"tip"` and `"tool"`
