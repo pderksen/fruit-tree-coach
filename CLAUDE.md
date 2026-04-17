@@ -144,6 +144,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Guide screen filters products by task category: `pruning` → pruning tool, `feeding` → fertilizer, `protection`/`monitoring` → pest control, `harvesting` → no products. Mapping is in `getProductsForTask()`
 - Considered moving to the `guides.productRecommendations` JSON column and rejected for v1 (only ~15 rows, no per-tree variation, admin-edit workflow not needed yet). Revisit if: products vary per (tree, task), A/B testing is needed, non-devs need to edit, or partners expand beyond Amazon
 - `guide.toolsNeeded` (DB strings like "Pruning shears") and affiliate products (code-driven, clickable) can coexist on the same guide — not a duplication bug
+- Product thumbnails deferred to post-launch: guide cards use Ionicons (`nutrition-outline`, `bug-outline`, `cut-outline`) via `components/CategoryIcon.tsx`, not real product photos. Revisit once Amazon PA-API access is qualified (requires sales) — never hot-link `m.media-amazon.com/...` or scrape product pages (ToS violation)
 
 ## Domain concepts
 - **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety

@@ -6,8 +6,8 @@ const CATEGORY_ICONS: Record<IconCategory, keyof typeof Ionicons.glyphMap> = {
   tip: "leaf",
   "pruning-tool": "cut-outline",
   tool: "build-outline",
-  fertilizer: "leaf-outline",
-  "pest-control": "leaf-outline",
+  fertilizer: "nutrition-outline",
+  "pest-control": "bug-outline",
   other: "leaf-outline",
 };
 
