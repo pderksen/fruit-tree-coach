@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 
@@ -41,6 +42,16 @@ export default function CalendarScreen() {
   const today = useMemo(() => new Date(), []);
   const [selectedDate, setSelectedDate] = useState(today);
   const scrollRef = useRef<ScrollView>(null);
+  // Snap to today on the first focus per app launch; subsequent focuses
+  // preserve whatever date the user last navigated to.
+  const hasFocusedOnce = useRef(false);
+  useFocusEffect(
+    useCallback(() => {
+      if (hasFocusedOnce.current) return;
+      hasFocusedOnce.current = true;
+      setSelectedDate(new Date());
+    }, []),
+  );
   const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
   const [showNotifModal, setShowNotifModal] = useState(!hasSeenPrompt);
   const orchard = useDefaultOrchard();
