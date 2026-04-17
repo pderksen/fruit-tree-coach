@@ -10,11 +10,15 @@ grouped into reviewable phases.
 - `FRUIT_TREE_TYPES` (`lib/fruit-tree-data.ts`) has 25 species
 - Overview guides: 25 / 25 (all approved; done in earlier phases)
 - Per-task guides: **Peach, Apple, Lemon, Fig, Cherry, Plum, Apricot,
-  Nectarine** — 34 rows (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5,
-  Plum 5, Apricot 5, Nectarine 5). Phases A and B complete
+  Nectarine, Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine,
+  Kumquat** — 64 rows (Peach 4, Apple 5, Lemon 3, Fig 2, Cherry 5,
+  Plum 5, Apricot 5, Nectarine 5, Orange 4, Lime 4, Grapefruit 3,
+  Mandarin 4, Tangelo 4, Tangerine 4, Kumquat 3). Phases A, B, C
+  complete
 - Task templates (`lib/care/task-templates/<species>.ts` + barrel):
-  Apple, Peach, Lemon, Fig, Cherry, Plum, Apricot, Nectarine. The
-  remaining 17 trees still need templates before their per-task
+  Apple, Peach, Lemon, Fig, Cherry, Plum, Apricot, Nectarine, Orange,
+  Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. The
+  remaining 10 trees still need templates before their per-task
   guides can ship
 
 ## How each tree reaches "done"
@@ -87,24 +91,38 @@ rows, 4 template files. Backup
 (PNW 667), UC IPM, USU Extension, UGA Extension, PSU Extension, UMN
 Extension, Clemson HGIC, UC ANR, University of Maryland Extension.
 
-### Phase C — Citrus (7 trees) (NEXT)
-Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. Care
-pattern close to Lemon; harvest timing is where trees actually
-diverge.
-- `feeding` — 3–4× per year; same content across citrus (likely one
-  shared guide body, per-tree IDs)
-- `monitoring` — scale / aphid / citrus leafminer inspection
-- `protection` — frost protection where zones matter (Kumquat most
-  cold-hardy; Lime least)
-- `harvesting` — per-species cues. Navel vs. Valencia windows differ;
-  Kumquat eaten skin-on
+### Phase C — Citrus (7 trees) (DONE)
+Orange, Lime, Grapefruit, Mandarin, Tangelo, Tangerine, Kumquat. All
+seven got templates + per-task guides. Category coverage varies:
+Orange, Lime, Mandarin, Tangelo, Tangerine ship feeding + monitoring
++ protection + harvesting; Grapefruit and Kumquat skip protection
+(cold-hardy enough in typical zones to defer to the overview).
 
-Sources: UC IPM, UC ANR Home Orchard, Texas A&M AgriLife,
-Clemson HGIC.
-Expected: 7 template entries, ~20 new guide rows (feeding shared
-content but rows-per-tree because of the unique index; consider
-whether to use separate IDs with the same JSON body or a thinner
-"see citrus feeding" message — decide in the phase's own plan file).
+Per-tree quirks captured:
+- **Orange**: variety-staggered harvest windows (Hamlin Nov–Feb,
+  Valencia Apr–Jul), Valencia re-greening note
+- **Lime**: most cold-sensitive common citrus; Persian vs Key
+  harvest cues (green-at-size vs yellow-at-ripe)
+- **Grapefruit**: sweetens with time on tree; Nov–Apr holding window
+- **Mandarin**: rind may stay green when fruit is ripe — taste over
+  color (satsumas especially)
+- **Tangelo**: Minneola-specific Alternaria brown spot management
+  (preventive copper fungicide at each spring flush); pollenizer
+  dependence called out in overview
+- **Tangerine**: heavy-year fruit thinning to smooth alternate
+  bearing
+- **Kumquat**: whole-fruit harvest (eaten skin and all); half-rate
+  feeding vs other citrus
+
+Shipped: 7 migrations, +26 guide rows (Orange 4, Lime 4, Grapefruit
+3, Mandarin 4, Tangelo 4, Tangerine 4, Kumquat 3), 7 template files.
+Backup `backups/phase-c-citrus-2026-04-16.json`. Sources: UC IPM
+(ACP/HLB, Citrus Pest Management, Freezing/Frost Damage), UC ANR
+(Publication 8100 frost protection, taste-over-rind-color), UC
+Master Gardeners Santa Clara County, UF/IFAS EDIS (Citrus Culture in
+the Home Landscape, Minneola Tangelo HS171/CH072, Alternaria Brown
+Spot PP-147/CG021, Kumquat FOR300/FR368), Clemson HGIC (In-Ground +
+Container Citrus Production).
 
 ### Phase D — Pome + subtropical (5 trees)
 Pear, Pomegranate, Persimmon, Avocado, Olive.
