@@ -455,7 +455,9 @@ category and the tree's fruit category. Data lives in
 - [ ] Open a protection task guide → section shows Bonide Captain
       Jack's Deadbug Brew (hidden for Tropical / Subtropical until a
       pick is made)
-- [ ] Open a monitoring task guide → no "Recommended Products" section
+- [ ] Open a monitoring task guide → section shows Bonide Captain
+      Jack's Deadbug Brew (same visibility rules as protection —
+      hidden for Tropical / Subtropical)
 - [ ] Open a harvesting task guide → no "Recommended Products" section
 - [ ] Tap a product card → device browser opens the Amazon product page
       and the URL contains `tag=fruittreecoach-20`

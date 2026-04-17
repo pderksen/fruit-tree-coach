@@ -141,7 +141,7 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 ## Affiliate product recommendations
 - Amazon affiliate products live in code, not the DB: `data/amazon-affiliate-links.csv` (Cori-editable source of truth) → hand-synced into `lib/care/product-recommendations.ts` (typed lookup by `FruitCategory`). Tracking ID `fruittreecoach-20` is baked into every `amzn.to` short link
 - Before committing any new `amzn.to` link, run `curl -sIL <url> | grep -i ^location:` and confirm (a) the resolved URL contains `tag=fruittreecoach-20` and (b) use the real product name from the resolved URL as the UI label — never generic labels like "Fertilizer #1"
-- Guide screen filters products by task category: `pruning` → pruning tool, `feeding` → fertilizer, `protection` → pest control, `monitoring`/`harvesting` → no products. Mapping is in `getProductsForTask()`
+- Guide screen filters products by task category: `pruning` → pruning tool, `feeding` → fertilizer, `protection`/`monitoring` → pest control, `harvesting` → no products. Mapping is in `getProductsForTask()`
 - Considered moving to the `guides.productRecommendations` JSON column and rejected for v1 (only ~15 rows, no per-tree variation, admin-edit workflow not needed yet). Revisit if: products vary per (tree, task), A/B testing is needed, non-devs need to edit, or partners expand beyond Amazon
 - `guide.toolsNeeded` (DB strings like "Pruning shears") and affiliate products (code-driven, clickable) can coexist on the same guide — not a duplication bug
 

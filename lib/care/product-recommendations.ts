@@ -18,11 +18,12 @@ export type Product = {
 };
 
 // Which product kinds are relevant to each task category.
-// monitoring and harvesting intentionally show no products.
+// harvesting intentionally shows no products.
 const KINDS_BY_TASK_CATEGORY: Partial<Record<TaskCategory, ProductKind[]>> = {
   pruning: ["pruning-tool"],
   feeding: ["fertilizer"],
   protection: ["pest-control"],
+  monitoring: ["pest-control"],
 };
 
 export function getProductsForTask(
