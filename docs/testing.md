@@ -435,3 +435,29 @@ to the Varietal/Age form on select, "Save as Draft" removed.
       Orchard" button
 - [ ] Form still submits end-to-end: pick type → fill varietal → pick
       age → "Add to My Orchard" → lands on home with the new tree
+
+### Guide screen recommended products (shipped 2026-04-17)
+
+Guide screen now shows Amazon affiliate products filtered by the task's
+category and the tree's fruit category. Data lives in
+`lib/care/product-recommendations.ts`; wiring in
+`app/tree/guide/[taskId].tsx`.
+
+- [ ] Open a pruning task guide → "Recommended Products" section shows
+      exactly one pruning tool matching the tree's fruit category
+      (Citrus → Fiskars Power Tooth Folding Pruning Saw; Pome Fruit →
+      Fiskars Bypass Pruning Shears; Stone Fruit → Fiskars Bypass
+      Loppers). Tropical / Subtropical and Other show no pruning tool
+      yet → section hidden
+- [ ] Open a feeding task guide → section shows both fertilizer options
+      for that fruit category (e.g. Citrus: Espoma Citrus-tone + Dr.
+      Earth Organic Fruit Tree Fertilizer)
+- [ ] Open a protection task guide → section shows Bonide Captain
+      Jack's Deadbug Brew (hidden for Tropical / Subtropical until a
+      pick is made)
+- [ ] Open a monitoring task guide → no "Recommended Products" section
+- [ ] Open a harvesting task guide → no "Recommended Products" section
+- [ ] Tap a product card → device browser opens the Amazon product page
+      and the URL contains `tag=fruittreecoach-20`
+- [ ] Affiliate disclaimer renders below the product list whenever at
+      least one product has a link

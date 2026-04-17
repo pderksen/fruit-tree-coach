@@ -18,7 +18,12 @@ import { useGuideByCategory } from "@/hooks/use-guide";
 import { useTask, useToggleTask } from "@/hooks/use-tasks";
 import { successHaptic } from "@/lib/haptics";
 import { TREE_EMOJI } from "@/lib/fruit-tree-data";
-import type { Guide, ProductRecommendation, TaskCategory } from "@/lib/types";
+import {
+  getProductsForTask,
+  type Product,
+  type ProductKind,
+} from "@/lib/care/product-recommendations";
+import type { Guide, ProductRecommendation } from "@/lib/types";
 
 export default function GuideScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
@@ -121,18 +126,23 @@ export default function GuideScreen() {
           </View>
         </View>
 
-        {/* Product recommendations */}
-        {guide.productRecommendations.length > 0 && (
-          <View className="mt-6">
-            <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
-              Recommended Products
-            </Text>
-            {guide.productRecommendations.map((product, i) => (
-              <ProductCard key={i} product={product} />
-            ))}
-            <AffiliateDisclaimer products={guide.productRecommendations} />
-          </View>
-        )}
+        {/* Product recommendations (from lib/care/product-recommendations.ts) */}
+        {task?.treeType && task.category ? (() => {
+          const products = getProductsForTask(task.treeType, task.category)
+            .map(toProductRecommendation);
+          if (products.length === 0) return null;
+          return (
+            <View className="mt-6">
+              <Text className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
+                Recommended Products
+              </Text>
+              {products.map((product, i) => (
+                <ProductCard key={i} product={product} />
+              ))}
+              <AffiliateDisclaimer products={products} />
+            </View>
+          );
+        })() : null}
 
         {/* Source attribution */}
         <Text className="mt-6 text-xs text-gray-400">
@@ -268,6 +278,21 @@ function ResearchNotes({ notes }: { notes: string }) {
   );
 }
 
+const PRODUCT_KIND_TO_CATEGORY: Record<ProductKind, ProductRecommendation["category"]> = {
+  fertilizer: "fertilizer",
+  "pest-control": "pest-control",
+  "pruning-tool": "pruning-tool",
+};
+
+function toProductRecommendation(product: Product): ProductRecommendation {
+  return {
+    name: product.label,
+    category: PRODUCT_KIND_TO_CATEGORY[product.kind],
+    description: "",
+    affiliateUrl: product.url,
+  };
+}
+
 function ProductCard({ product }: { product: ProductRecommendation }) {
   const handlePress = () => {
     if (product.affiliateUrl) {
@@ -283,9 +308,11 @@ function ProductCard({ product }: { product: ProductRecommendation }) {
           {product.name}
         </Text>
       </View>
-      <Text className="mt-1 text-xs leading-4 text-gray-500">
-        {product.description}
-      </Text>
+      {product.description ? (
+        <Text className="mt-1 text-xs leading-4 text-gray-500">
+          {product.description}
+        </Text>
+      ) : null}
       {product.affiliateUrl && (
         <View className="mt-2 flex-row items-center gap-1">
           <Ionicons name="open-outline" size={12} color="#16a34a" />
