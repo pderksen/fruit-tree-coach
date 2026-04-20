@@ -81,13 +81,13 @@ export function CalendarHeader({
   const monthScrollRef = useRef<ScrollView>(null);
   const weekListRef = useRef<FlatList<Date>>(null);
   const [weekRowWidth, setWeekRowWidth] = useState(0);
+  // `today` and `anchorMonday` are captured at mount. The parent owns
+  // re-mounting via a `key` prop whenever it needs the strip to snap back
+  // to the current day, so freezing them per-mount is fine — no churn
+  // during the user's normal interactions.
   const today = useMemo(() => new Date(), []);
   const currentMonth = selectedDate.getMonth();
-
-  // Anchor Monday is frozen on mount — the FlatList indexes from it. Tapping
-  // a month pill jumps via `scrollToIndex` rather than moving the anchor, so
-  // the virtualized list stays stable.
-  const anchorMonday = useRef(getWeekStart(selectedDate)).current;
+  const anchorMonday = useRef(getWeekStart(new Date())).current;
 
   const monthLabel = selectedDate.toLocaleDateString("en-US", {
     month: "long",

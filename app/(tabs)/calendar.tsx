@@ -39,17 +39,30 @@ function groupByWeek(tasks: DatedTask[]) {
 }
 
 export default function CalendarScreen() {
-  const today = useMemo(() => new Date(), []);
-  const [selectedDate, setSelectedDate] = useState(today);
+  // Initialize to today. Tab screens stay mounted for the life of the app,
+  // so this initializer only runs once per JS process — the focus effect
+  // below handles re-snapping on subsequent fresh opens.
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  // Bumped whenever we want CalendarHeader to remount against today. Its
+  // anchor Monday and `today` highlight are captured at mount, so updating
+  // `selectedDate` alone doesn't shake them loose.
+  const [headerKey, setHeaderKey] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
-  // Snap to today on the first focus per app launch; subsequent focuses
-  // preserve whatever date the user last navigated to.
-  const hasFocusedOnce = useRef(false);
+  // Snap to today on the first calendar focus per calendar day. Tracks the
+  // last-snapped day (YYYY-MM-DD); if today differs, snap and update. This
+  // covers cold start, background→foreground after midnight, and any other
+  // path where the screen gains focus on a new day.
+  const lastSnapDayRef = useRef<string | null>(null);
+  const todayStr = (d: Date) =>
+    `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
   useFocusEffect(
     useCallback(() => {
-      if (hasFocusedOnce.current) return;
-      hasFocusedOnce.current = true;
-      setSelectedDate(new Date());
+      const now = new Date();
+      const key = todayStr(now);
+      if (lastSnapDayRef.current === key) return;
+      lastSnapDayRef.current = key;
+      setSelectedDate(now);
+      setHeaderKey((k) => k + 1);
     }, []),
   );
   const hasSeenPrompt = useSettingsStore((s) => s.hasSeenNotificationPrompt);
@@ -85,7 +98,7 @@ export default function CalendarScreen() {
 
   const groups = useMemo(() => groupByWeek(filteredTasks), [filteredTasks]);
 
-  const currentWeekKey = getWeekKey(today);
+  const currentWeekKey = getWeekKey(new Date());
 
   const handleDismissNotif = useCallback(() => {
     setShowNotifModal(false);
@@ -102,6 +115,7 @@ export default function CalendarScreen() {
       </View>
 
       <CalendarHeader
+        key={headerKey}
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
       />
