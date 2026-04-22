@@ -224,6 +224,9 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - `npm run test:watch` run Vitest in watch mode
 - `npm run lint` ESLint
 - `npm run format` Prettier format all files
+- `npx expo-doctor` full SDK health check (17 rules incl. dep version mismatches)
+- `npx expo install --check` preview which deps don't match SDK pins (use `--fix` to apply)
+- `npm update` safely bump in-range minors; respects the SDK's `^`/`~` pins so won't cross Expo/RN/Tailwind boundaries
 - `npx supabase migration new <name>` create a new migration file
 - `npx supabase db push` apply pending local migrations to the linked remote DB
 - `npx supabase migration list` show local vs remote migration history
@@ -277,4 +280,5 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - EDIS URLs at `edis.ifas.ufl.edu/publication/<id>` 301-redirect to `ask.ifas.ufl.edu/publication/<id>` — first WebFetch reports the redirect, second call with the new URL succeeds
 - `ProductRecommendation.category` union values are hyphenated: `"fertilizer" | "pruning-tool" | "pest-control" | "other"` — not `"pest-spray"` or `"pest_control"`. `CategoryIcon` accepts the same values plus `"tip"` and `"tool"`
 - Fresh Claude Code worktrees have an empty `node_modules` and no `nativewind-env.d.ts` (both gitignored generated files). `npm run typecheck` inside a worktree shows hundreds of false `className` errors until you copy `nativewind-env.d.ts` from the main checkout. For end-to-end Expo testing, merge the worktree back into `dev` and run from the main checkout rather than populating a second `node_modules`
-- `git worktree remove` may need `-f -f` if a Claude agent's lock file persists after the agent finishes — first `-f` unlocks, second removes
+- `git worktree remove` may need `-f -f` if a Claude agent's lock file persists after the agent finishes — first `-f` unlocks, second removes. Even after git unregisters the worktree, Windows may still lock the empty directory (VSCode file watcher, Search Indexer) — restart VSCode, then `Remove-Item -Recurse -Force` succeeds
+- `npm install` writes `node_modules/.package-lock.json` only on successful completion. If `node_modules/` exists but that file is missing, the install was interrupted (Ctrl+C, OS reboot, antivirus, EPERM) — `npm outdated` will show "MISSING" in Current for most direct deps. Fix: `rm -rf node_modules && npm install` (keep the top-level `package-lock.json` — it's intact)
