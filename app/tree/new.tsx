@@ -49,16 +49,10 @@ export default function AddTreeScreen() {
 
   const [requestModalVisible, setRequestModalVisible] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
-  const formCardYRef = useRef(0);
-
   const hasScrolledToFormRef = useRef(false);
 
   function handleTypeSelect(t: FruitTreeType) {
     typeField.field.onChange(t);
-    if (!hasScrolledToFormRef.current) {
-      hasScrolledToFormRef.current = true;
-      scrollRef.current?.scrollTo({ y: formCardYRef.current, animated: true });
-    }
   }
 
   function handleAgeChange(age: AgeBracket) {
@@ -135,7 +129,12 @@ export default function AddTreeScreen() {
             <View
               className="mt-6 rounded-3xl bg-white p-5"
               onLayout={(e) => {
-                formCardYRef.current = e.nativeEvent.layout.y;
+                if (hasScrolledToFormRef.current) return;
+                hasScrolledToFormRef.current = true;
+                scrollRef.current?.scrollTo({
+                  y: e.nativeEvent.layout.y,
+                  animated: true,
+                });
               }}
             >
               <FormField<AddTreeForm>
