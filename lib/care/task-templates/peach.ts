@@ -45,6 +45,9 @@ export const peach: TaskTemplate[] = [
     description:
       "Once fruit reaches marble size, thin to leave 6–8 inches between peaches. Remove any doubles and smaller fruit first.",
     category: "monitoring",
+    // Fruit-thinning is physical (hand-thinning), not pest-related — opt out of
+    // the category "monitoring" → pest-control product default.
+    productKinds: [],
     windowStart: { month: 4, day: 1 },
     windowEnd: { month: 4, day: 14 },
     source: "Clemson Cooperative Extension — Peach Thinning",

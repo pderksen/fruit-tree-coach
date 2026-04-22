@@ -463,3 +463,26 @@ category and the tree's fruit category. Data lives in
       and the URL contains `tag=fruittreecoach-20`
 - [ ] Affiliate disclaimer renders below the product list whenever at
       least one product has a link
+
+### Fruit-thinning task product opt-out (shipped 2026-04-21)
+
+`TaskTemplate` gains an optional `productKinds` override, and the six
+fruit-thinning templates (`apple-thinning`, `apricot-fruit-thinning`,
+`nectarine-fruit-thinning`, `peach-bloom-thinning`, `plum-fruit-thinning`,
+`tangerine-fruit-thinning`) set `productKinds: []` so they no longer inherit
+the category "monitoring" → pest-control product. Other monitoring tasks
+(e.g. peach `peach-bud-monitoring`) still get pest-control as before.
+
+- [ ] Peach → "Bloom and fruit thinning" task guide → "Recommended
+      Products" section is hidden (no Bonide Captain Jack's Deadbug Brew)
+- [ ] Nectarine → "Fruit thinning" task guide → no "Recommended Products"
+      section
+- [ ] Apple → "Thinning fruits" → no "Recommended Products" section
+- [ ] Apricot → "Fruit thinning" → no "Recommended Products" section
+- [ ] Plum → "Fruit thinning" → no "Recommended Products" section
+- [ ] Tangerine → "Heavy-year thinning" → no "Recommended Products" section
+- [ ] Peach → "Peach tree pruning" (pruning task) → "Recommended Products"
+      still shows Fiskars Bypass Loppers (stone-fruit pruning tool)
+- [ ] Peach → "Bud monitoring" (monitoring task, not a thinning task) →
+      "Recommended Products" still shows Bonide Captain Jack's Deadbug Brew
+      (regression check — default monitoring mapping unchanged)

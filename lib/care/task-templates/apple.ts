@@ -44,6 +44,9 @@ export const apple: TaskTemplate[] = [
     description:
       "Remove excess fruit to prevent branch breakage and ensure the remaining fruit grows larger and sweeter.",
     category: "monitoring",
+    // Fruit-thinning is physical (hand-thinning), not pest-related — opt out of
+    // the category "monitoring" → pest-control product default.
+    productKinds: [],
     windowStart: { month: 5, day: 20 },
     windowEnd: { month: 6, day: 2 },
     source: "University of Minnesota Extension — apple thinning guide",

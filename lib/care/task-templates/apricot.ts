@@ -50,6 +50,9 @@ export const apricot: TaskTemplate[] = [
     description:
       "Two to three weeks after bloom, when fruit is grape-sized, thin to one apricot every 3–5 inches. Pick off doubles and the smallest fruit first.",
     category: "monitoring",
+    // Fruit-thinning is physical (hand-thinning), not pest-related — opt out of
+    // the category "monitoring" → pest-control product default.
+    productKinds: [],
     windowStart: { month: 4, day: 14 },
     windowEnd: { month: 5, day: 5 },
     source: "USU Extension — Apricots in the Home Garden; UC ANR Fruit Thinning",

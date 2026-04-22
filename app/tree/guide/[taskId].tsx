@@ -23,6 +23,7 @@ import {
   type Product,
   type ProductKind,
 } from "@/lib/care/product-recommendations";
+import { getTemplateProductKinds } from "@/lib/care/task-templates";
 import type { Guide, ProductRecommendation } from "@/lib/types";
 
 export default function GuideScreen() {
@@ -128,8 +129,11 @@ export default function GuideScreen() {
 
         {/* Product recommendations (from lib/care/product-recommendations.ts) */}
         {task?.treeType && task.category ? (() => {
-          const products = getProductsForTask(task.treeType, task.category)
-            .map(toProductRecommendation);
+          const products = getProductsForTask(
+            task.treeType,
+            task.category,
+            getTemplateProductKinds(task.templateId),
+          ).map(toProductRecommendation);
           if (products.length === 0) return null;
           return (
             <View className="mt-6">

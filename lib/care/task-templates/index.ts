@@ -16,6 +16,7 @@
 
 import type { FruitTreeType, TaskCategory } from "@/lib/types";
 import { computeTaskStatus, type MonthDay } from "@/lib/care/task-windows";
+import type { ProductKind } from "@/lib/care/product-recommendations";
 
 import { apple } from "./apple";
 import { peach } from "./peach";
@@ -53,6 +54,14 @@ export interface TaskTemplate {
   windowStart: MonthDay;
   windowEnd: MonthDay;
   source: string;
+  /**
+   * Optional override for product recommendations. When set (even to an
+   * empty array), takes precedence over the category-based default in
+   * `getProductsForTask`. Use this when a template's TaskCategory is
+   * overloaded — e.g. fruit-thinning tasks use `category: "monitoring"`
+   * but shouldn't surface pest-control products.
+   */
+  productKinds?: ProductKind[];
 }
 
 export const TASK_TEMPLATES: Partial<Record<FruitTreeType, TaskTemplate[]>> = {
@@ -85,6 +94,23 @@ export const TASK_TEMPLATES: Partial<Record<FruitTreeType, TaskTemplate[]>> = {
 
 export function getTemplatesForFruitType(fruitType: FruitTreeType): TaskTemplate[] {
   return TASK_TEMPLATES[fruitType] ?? [];
+}
+
+/**
+ * Look up a template by its `id` and return its `productKinds` override if set.
+ * Returns undefined when no template matches or the matched template has no
+ * override — callers should fall back to the category-based default.
+ */
+export function getTemplateProductKinds(
+  templateId: string | undefined,
+): ProductKind[] | undefined {
+  if (!templateId) return undefined;
+  for (const templates of Object.values(TASK_TEMPLATES)) {
+    if (!templates) continue;
+    const match = templates.find((t) => t.id === templateId);
+    if (match) return match.productKinds;
+  }
+  return undefined;
 }
 
 /**

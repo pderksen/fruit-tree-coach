@@ -29,10 +29,15 @@ const KINDS_BY_TASK_CATEGORY: Partial<Record<TaskCategory, ProductKind[]>> = {
 export function getProductsForTask(
   treeType: FruitTreeType,
   taskCategory: TaskCategory | undefined,
+  templateOverride?: ProductKind[],
 ): Product[] {
-  if (!taskCategory) return [];
-  const kinds = KINDS_BY_TASK_CATEGORY[taskCategory];
-  if (!kinds) return [];
+  // A template-level override (including an empty array) takes precedence
+  // over the category default — this is how fruit-thinning tasks opt out
+  // of the category "monitoring" → pest-control mapping.
+  const kinds =
+    templateOverride ??
+    (taskCategory ? KINDS_BY_TASK_CATEGORY[taskCategory] : undefined);
+  if (!kinds || kinds.length === 0) return [];
   const fruitCategory = FRUIT_CATEGORY_MAP[treeType];
   return PRODUCTS_BY_FRUIT_CATEGORY[fruitCategory].filter((p) =>
     kinds.includes(p.kind),

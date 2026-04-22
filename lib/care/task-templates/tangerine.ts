@@ -38,6 +38,9 @@ export const tangerine: TaskTemplate[] = [
     description:
       "In June, if the tree has set an unusually heavy crop, remove about 1 in 4 fruitlets. Pick the smallest and any double fruit. This prevents limb breakage and pulls the tree out of a heavy/light bearing cycle.",
     category: "monitoring",
+    // Fruit-thinning is physical (hand-thinning), not pest-related — opt out of
+    // the category "monitoring" → pest-control product default.
+    productKinds: [],
     windowStart: { month: 6, day: 1 },
     windowEnd: { month: 6, day: 28 },
     source: "UF/IFAS EDIS — Citrus Culture in the Home Landscape",
