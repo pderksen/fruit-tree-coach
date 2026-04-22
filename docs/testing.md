@@ -486,3 +486,22 @@ the category "monitoring" → pest-control product. Other monitoring tasks
 - [ ] Peach → "Bud monitoring" (monitoring task, not a thinning task) →
       "Recommended Products" still shows Bonide Captain Jack's Deadbug Brew
       (regression check — default monitoring mapping unchanged)
+
+### Zone info screen (shipped 2026-04-21)
+
+New `app/zone-info.tsx` explains USDA hardiness zones. Reached by
+tapping the "My Gardening Zone" pill on the Home tab, which is now a
+`Pressable` with an info icon and chevron.
+
+- [ ] Home → the zone pill shows an info icon next to the label and
+      a chevron next to the zone — visibly tappable
+- [ ] Tap the pill → navigates to "Gardening Zones" screen
+- [ ] Header title reads "Gardening Zones" with a black back chevron
+      on the top left (no back-button text label)
+- [ ] Current zone renders in the brand-green hero card, with the
+      user's ZIP shown below it when set
+- [ ] User with no ZIP yet (skipped onboarding) → hero card instead
+      reads "Set your ZIP code to see your zone."
+- [ ] Tap the back chevron → returns to Home with scroll position
+      preserved
+- [ ] iOS back-swipe gesture also returns to Home

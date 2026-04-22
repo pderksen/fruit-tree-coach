@@ -63,16 +63,32 @@ export default function HomeScreen() {
         </View>
 
         {/* Gardening Zone */}
-        <View className="mx-5 mt-3 flex-row items-center justify-between rounded-2xl bg-brand-50 px-4 py-3">
-          <Text className="text-sm font-medium text-brand-800">
-            My Gardening Zone
-          </Text>
-          <View className="rounded-full bg-brand-700 px-3 py-1">
-            <Text className="text-sm font-bold text-white">
-              Zone {gardeningZone}
+        <Pressable
+          onPress={() => router.push("/zone-info")}
+          className="mx-5 mt-3 flex-row items-center justify-between rounded-2xl bg-brand-50 px-4 py-3 active:opacity-80"
+          accessibilityRole="button"
+          accessibilityLabel={`My gardening zone, Zone ${gardeningZone}. Tap to learn more.`}
+          accessibilityHint="Opens an explanation of USDA gardening zones"
+        >
+          <View className="flex-row items-center gap-1.5">
+            <Text className="text-sm font-medium text-brand-800">
+              My Gardening Zone
             </Text>
+            <Ionicons
+              name="information-circle-outline"
+              size={16}
+              color="#15803d"
+            />
           </View>
-        </View>
+          <View className="flex-row items-center gap-1">
+            <View className="rounded-full bg-brand-700 px-3 py-1">
+              <Text className="text-sm font-bold text-white">
+                Zone {gardeningZone}
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color="#15803d" />
+          </View>
+        </Pressable>
 
         {/* Home Header Image */}
         <View className="px-5 pt-3">

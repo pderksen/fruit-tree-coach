@@ -152,6 +152,10 @@ export default function RootLayout() {
           options={{ title: "Watering Guide" }}
         />
         <Stack.Screen
+          name="zone-info"
+          options={{ title: "Gardening Zones" }}
+        />
+        <Stack.Screen
           name="onboarding-zip"
           options={{ headerShown: false, gestureEnabled: false }}
         />
