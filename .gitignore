@@ -42,6 +42,7 @@ supabase/.temp/
 # Claude Code
 skills-lock.json
 .claude/settings.local.json
+.claude/worktrees/
 
 # OS
 .DS_Store
