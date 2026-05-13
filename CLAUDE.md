@@ -1,9 +1,7 @@
 # Project: Fruit Tree Coach
 
-## Scope: US-only for v1
-Version 1 targets US users only. USDA hardiness zones, ZIP codes, and US extension-service sources are the basis for all care guidance — extending to other countries means per-country zone datasets and regional horticultural sources, which is post-v1 work. The app should make this scope visible to users (e.g. "Currently available for US locations" on the ZIP prompt and in marketing copy) so non-US users aren't misled.
+## Project
 
-## What this is
 A mobile app that helps people know exactly when and how to care for
 their fruit trees each week. It gives simple, location-aware guidance
 for pruning, fertilizing, thinning fruit, and seasonal maintenance.
@@ -13,6 +11,9 @@ simple and practical, intended for iOS and Android App Store release.
 The app should feel like a personal fruit tree care coach: easy to
 understand, action-oriented, and focused on telling the user what to
 do this week, what to wait on, and how to avoid common mistakes.
+
+### Scope: US-only for v1
+Version 1 targets US users only. USDA hardiness zones, ZIP codes, and US extension-service sources are the basis for all care guidance — extending to other countries means per-country zone datasets and regional horticultural sources, which is post-v1 work. The app should make this scope visible to users (e.g. "Currently available for US locations" on the ZIP prompt and in marketing copy) so non-US users aren't misled.
 
 ## Stack
 - Expo SDK 54 with React Native (pinned — see Gotchas)
@@ -27,6 +28,86 @@ do this week, what to wait on, and how to avoid common mistakes.
 - Expo Location for location-aware guidance
 - `@react-native-community/datetimepicker` for native date pickers
 - ESLint (latest stable) + Prettier for linting and formatting
+
+## Commands
+
+### Launch the app (the one command)
+`npm run dev` — starts the Expo dev server. Press `i` for iOS simulator (Mac), `a` for Android emulator, or scan the QR with Expo Go on a physical device.
+
+### First-time setup
+1. `npm install`
+2. Copy `.env.example` to `.env` and fill in:
+   - `EXPO_PUBLIC_SUPABASE_URL`
+   - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+3. `npm run dev`
+
+### Day-to-day
+- `npm run dev` start Expo dev server
+- `npm run android` run on Android emulator
+- `npm run ios` run on iOS simulator (Mac only)
+- `npm run typecheck` TypeScript check
+- `npm test` run Vitest
+- `npm run test:watch` run Vitest in watch mode
+- `npm run lint` ESLint
+- `npm run format` Prettier format all files
+
+### Dependency / SDK health
+- `npx expo-doctor` full SDK health check (17 rules incl. dep version mismatches)
+- `npx expo install --check` preview which deps don't match SDK pins (use `--fix` to apply)
+- `npm update` safely bump in-range minors; respects the SDK's `^`/`~` pins so won't cross Expo/RN/Tailwind boundaries
+
+### Supabase migrations
+- `npx supabase migration new <name>` create a new migration file
+- `npx supabase db push` apply pending local migrations to the linked remote DB
+- `npx supabase migration list` show local vs remote migration history
+
+### Builds
+- `eas build --profile preview` cloud build for testing
+- `eas build --profile production` production build
+
+## Architecture
+
+### Project structure
+- `app/` screens and navigation
+- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering)
+- `app/profile.tsx` user profile/account screen (stack, not tab)
+- `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
+- `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts`, `hooks/use-session.ts`, `hooks/use-guide.ts` TanStack Query hooks backed by `lib/services/`
+- `docs/plans/<slug>/` active planning docs, one folder per initiative (no dates in folder names — git tracks that), each containing an `all-phases.md` roadmap + per-phase files. Index at `docs/plans/README.md`. Delete a plan folder once the work ships — git preserves history
+- `docs/testing.md` test scope (Vitest) + manual smoke checklist + per-phase QA history
+- `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
+- `app/tree/` tree detail, creation, and step-by-step guide routes
+- `components/` reusable UI components
+- `lib/` shared logic, helpers, and app services
+- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
+- `lib/schemas.ts` Zod schemas for parsing Supabase responses (runtime boundary)
+- `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `FRUIT_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
+- `lib/supabase.ts` Supabase client init
+- `lib/auth.ts` auth helpers
+- `lib/query-client.ts` TanStack Query client config
+- `lib/notifications.ts` push notification setup
+- `lib/fruit-icons.ts` fruit icon mapping
+- `lib/date-utils.ts` date formatting and calculation helpers
+- `lib/zone-lookup.ts` USDA zone / climate lookup
+- `lib/mocks/` hardcoded mock data for UI development
+- `lib/care/` care logic — `task-templates/` (per-tree schedules), `task-windows.ts` (urgency thresholds), `watering.ts`, `season-order.ts`, `expert-tips.ts`, `coach-tips.ts`, `research-sources.ts`
+- `hooks/` custom React hooks (TanStack Query wrappers for server state)
+- `stores/` local app state (device-only, e.g. notification settings)
+
+### Key files
+- `app/_layout.tsx` root layout (global nav options, stack screen registration)
+- `app/(tabs)/_layout.tsx` tab bar config (visible/hidden tabs)
+- `global.css` Tailwind/NativeWind base styles
+- `tailwind.config.js` custom colors (`brand-*`, `cream-*`), font config
+- `metro.config.js` Metro bundler config with NativeWind plugin
+- `app.json` Expo app config
+
+### Domain concepts
+- **Tree**: a user's fruit tree, including tree type, location, and optional details like age or variety
+- **Task**: a recommended action for a tree, such as pruning, fertilizing, thinning, or waiting
+- **Care plan**: the set of recommended tasks and timing for a tree
+- **Location**: the user's area, used to adjust timing and recommendations
+- Tasks should clearly answer: what to do, when to do it, and why it matters
 
 ## Supabase schema changes (migrations)
 All schema changes must land as committed SQL files in `supabase/migrations/`
@@ -55,41 +136,6 @@ All schema changes must land as committed SQL files in `supabase/migrations/`
 
 ### Ad-hoc snapshot workflow
 When the user asks for a database backup or snapshot, save it to `backups/<short-reason>-<YYYY-MM-DD>.json` (e.g. `backups/new-fruit-list-2026-04-13.json`). Pick the `<short-reason>` slug from session context — what's about to change or what just changed — without asking. Use the Supabase MCP `execute_sql` tool with one query that `UNION ALL`s every public table as `SELECT '<tbl>' AS tbl, COALESCE(jsonb_agg(to_jsonb(x)), '[]'::jsonb) AS rows FROM <tbl> x`, wrapped in `jsonb_agg(t)`. Save the raw MCP response verbatim (the `tool-results/*.txt` file) — match the shape of existing files in `backups/`. The full-DB snapshot routinely exceeds the MCP response token cap; the error points to the saved `tool-results/*.txt` file — `cp` that file into `backups/<name>.json` verbatim. This is the expected path, not a failure.
-
-## Project structure
-- `app/` screens and navigation
-- `app/(tabs)/` tab-based screens (home, calendar, new-tree, orchard, watering)
-- `app/profile.tsx` user profile/account screen (stack, not tab)
-- `stores/settings-store.ts` notification and device-local app settings (stays local — see "Settings: local-device vs user-synced")
-- `hooks/use-trees.ts`, `hooks/use-orchards.ts`, `hooks/use-tasks.ts`, `hooks/use-profile.ts`, `hooks/use-session.ts`, `hooks/use-guide.ts` TanStack Query hooks backed by `lib/services/`
-- `docs/plans/<slug>/` active planning docs, one folder per initiative (no dates in folder names — git tracks that), each containing an `all-phases.md` roadmap + per-phase files. Index at `docs/plans/README.md`. Delete a plan folder once the work ships — git preserves history
-- `docs/testing.md` test scope (Vitest) + manual smoke checklist + per-phase QA history
-- `app/splash.tsx`, `app/trial.tsx`, `app/sign-in.tsx` onboarding flow
-- `app/tree/` tree detail, creation, and step-by-step guide routes
-- `components/` reusable UI components
-- `lib/` shared logic, helpers, and app services
-- `lib/types.ts` shared domain types (Tree, Task, FruitTreeType, ExpertTip, SeasonStage, AgeBracket)
-- `lib/schemas.ts` Zod schemas for parsing Supabase responses (runtime boundary)
-- `lib/fruit-tree-data.ts` lookup tables (`FRUIT_TREE_TYPES`, `TREE_EMOJI`, `FRUIT_CATEGORY_MAP`, `SCIENTIFIC_NAME_MAP`)
-- `lib/supabase.ts` Supabase client init
-- `lib/auth.ts` auth helpers
-- `lib/query-client.ts` TanStack Query client config
-- `lib/notifications.ts` push notification setup
-- `lib/fruit-icons.ts` fruit icon mapping
-- `lib/date-utils.ts` date formatting and calculation helpers
-- `lib/zone-lookup.ts` USDA zone / climate lookup
-- `lib/mocks/` hardcoded mock data for UI development
-- `lib/care/` care logic — `task-templates/` (per-tree schedules), `task-windows.ts` (urgency thresholds), `watering.ts`, `season-order.ts`, `expert-tips.ts`, `coach-tips.ts`, `research-sources.ts`
-- `hooks/` custom React hooks (TanStack Query wrappers for server state)
-- `stores/` local app state (device-only, e.g. notification settings)
-
-## Key files
-- `app/_layout.tsx` root layout (global nav options, stack screen registration)
-- `app/(tabs)/_layout.tsx` tab bar config (visible/hidden tabs)
-- `global.css` Tailwind/NativeWind base styles
-- `tailwind.config.js` custom colors (`brand-*`, `cream-*`), font config
-- `metro.config.js` Metro bundler config with NativeWind plugin
-- `app.json` Expo app config
 
 ## Guide content sourcing
 - Scope boundary: task *templates* (`lib/care/task-templates/*.ts`) own the schedule — which tasks exist per tree, when they fire, short `why`/`description`. The `guides` table owns the long-form tutorial opened on tap. Templates stay in code (offline-first, type-safe, small); guides stay in the DB (editorial volume, `approved` gate, future affiliate links). Do not move templates to the DB
@@ -145,13 +191,6 @@ When the user asks for a database backup or snapshot, save it to `backups/<short
 - Considered moving to the `guides.productRecommendations` JSON column and rejected for v1 (only ~15 rows, no per-tree variation, admin-edit workflow not needed yet). Revisit if: products vary per (tree, task), A/B testing is needed, non-devs need to edit, or partners expand beyond Amazon
 - `guide.toolsNeeded` (DB strings like "Pruning shears") and affiliate products (code-driven, clickable) can coexist on the same guide — not a duplication bug
 - Product thumbnails deferred to post-launch: guide cards use Ionicons (`nutrition-outline`, `bug-outline`, `cut-outline`) via `components/CategoryIcon.tsx`, not real product photos. Revisit once Amazon PA-API access is qualified (requires sales) — never hot-link `m.media-amazon.com/...` or scrape product pages (ToS violation)
-
-## Domain concepts
-- **Tree**: a user’s fruit tree, including tree type, location, and optional details like age or variety
-- **Task**: a recommended action for a tree, such as pruning, fertilizing, thinning, or waiting
-- **Care plan**: the set of recommended tasks and timing for a tree
-- **Location**: the user’s area, used to adjust timing and recommendations
-- Tasks should clearly answer: what to do, when to do it, and why it matters
 
 ## Offline strategy (target state — lands in Phase 9)
 - Offline is a first-class use case (yard work, spotty connections), not an edge case
@@ -215,24 +254,6 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - Prefer the boring, idiomatic solution over the clever one
 - Match process weight to feature size. Mock UIs and throwaway scaffolding don't need spec docs, implementation plans, or QA checklist updates — just build it and test manually. Reserve heavier planning for features with real complexity or durable behavior
 
-## Useful commands
-- `npm run dev` start Expo dev server
-- `npm run android` run on Android emulator
-- `npm run ios` run on iOS simulator (Mac only)
-- `npm run typecheck` TypeScript check
-- `npm test` run Vitest
-- `npm run test:watch` run Vitest in watch mode
-- `npm run lint` ESLint
-- `npm run format` Prettier format all files
-- `npx expo-doctor` full SDK health check (17 rules incl. dep version mismatches)
-- `npx expo install --check` preview which deps don't match SDK pins (use `--fix` to apply)
-- `npm update` safely bump in-range minors; respects the SDK's `^`/`~` pins so won't cross Expo/RN/Tailwind boundaries
-- `npx supabase migration new <name>` create a new migration file
-- `npx supabase db push` apply pending local migrations to the linked remote DB
-- `npx supabase migration list` show local vs remote migration history
-- `eas build --profile preview` cloud build for testing
-- `eas build --profile production` production build
-
 ## Claude Code tooling updates (monthly)
 - Plugins and skills are git-backed and do not auto-update. Check roughly once a month.
 - Marketplace plugins: run `/plugin` → update any with a newer version available.
@@ -240,13 +261,6 @@ See `docs/testing.md` for the full automated-test scope and manual smoke checkli
 - If the user asks "check for Claude Code updates" or similar, run the above and report which repos had changes — do not auto-pull destructively if there are local modifications.
 - `/plugin` install defaults to `local` scope (project-only). For plugins that should be available everywhere, choose `user` scope explicitly. Check with `cat ~/.claude/plugins/installed_plugins.json`.
 - Installed skill files can live in: `~/.claude/plugins/cache/<marketplace>/<plugin>/<ver>/skills/` (plugin-bundled), `~/.claude/skills/` (user standalone), project `.claude/skills/` and `.agents/skills/` (project standalone, sometimes symlinked). When removing a skill, check all four.
-
-## Environment setup
-1. `npm install`
-2. Copy `.env.example` to `.env` and fill in:
-   - `EXPO_PUBLIC_SUPABASE_URL`
-   - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
-3. `npm run dev` to start
 
 ## Gotchas
 - ESLint 9+ flat config: use `eslint.config.js`, not `.eslintrc.*`
