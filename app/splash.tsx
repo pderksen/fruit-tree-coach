@@ -15,7 +15,7 @@ export default function SplashPage() {
           className="mb-6 h-40 w-40"
           resizeMode="contain"
         />
-        <Text className="mb-2 text-2xl font-bold text-brand-700">
+        <Text className="mb-2 font-serif text-2xl font-semibold tracking-tight text-brand-700">
           Fruit Tree Coach
         </Text>
         <Text className="mb-10 text-center text-base text-gray-500">
