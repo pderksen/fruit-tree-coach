@@ -3,6 +3,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const logo = require("@/assets/images/fruit-tree-coach-logo.png") as number;
+const wordmark = require("@/assets/images/fruit-tree-coach-text-logo.png") as number;
 
 export default function SplashPage() {
   const router = useRouter();
@@ -15,9 +16,11 @@ export default function SplashPage() {
           className="mb-6 h-40 w-40"
           resizeMode="contain"
         />
-        <Text className="mb-2 font-serif text-2xl font-semibold tracking-tight text-brand-700">
-          Fruit Tree Coach
-        </Text>
+        <Image
+          source={wordmark}
+          className="mb-2 h-10 w-72"
+          resizeMode="contain"
+        />
         <Text className="mb-10 text-center text-base text-gray-500">
           Know exactly what your fruit trees need, every week.
         </Text>
